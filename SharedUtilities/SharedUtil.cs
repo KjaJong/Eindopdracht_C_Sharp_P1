@@ -14,7 +14,6 @@ namespace SharedUtilities
             StreamReader stream = new StreamReader(client.GetStream(), Encoding.ASCII);
             string line = stream.ReadLine();
 
-
             return line;
         }
 
@@ -42,11 +41,13 @@ namespace SharedUtilities
             return Encoding.Unicode.GetString(buffer, 0, totalRead);
         }
 
-        public static void SendMessage(TcpClient client, string message)
+        public static void SendMessage(TcpClient client, dynamic message)
         {
             //make sure the other end decodes with the same format!
             byte[] bytes = Encoding.Unicode.GetBytes(message);
             client.GetStream().Write(bytes, 0, bytes.Length);
         }
+
+
     }
 }

@@ -49,11 +49,13 @@ namespace ChoHanClient
                 return;
             }
             ConfirmAnswer = true;
+            Client.sendMessage(ConfirmAnswer);
         }
 
         private void Leavebutton_Click(object sender, EventArgs e)
         {
-
+            Client.TCPClient.Close();
+            Environment.Exit(1);
         }
 
         public void Update(bool answerPlayerTwo, bool RightAnswerPlayerOne, bool RightAnswerPlayerTwo, int scorePlayerOne, int scorePlayerTwo)

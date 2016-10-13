@@ -16,7 +16,6 @@ namespace ChoHan
         //TODO maybe start tracking points in the player and write the players of a session to json.
         //TODO negate every error, we'll work on it
         List<PlayerForm> _activeClients = new List<PlayerForm>();
-        private bool[] _awnsers;
         private IPAddress _currentId;
         private TcpListener _listner;
 
@@ -49,7 +48,7 @@ namespace ChoHan
         private void CheckForPlayers(TcpClient client)
         {
             //TODO it now uses two players. Maybe add more (like a room of eight?)
-            _activeClients.Add(new PlayerForm(new Client()));
+            _activeClients.Add(new PlayerForm(new Client(client)));
 
             if (_activeClients.Count == 2)
             {
@@ -70,7 +69,7 @@ namespace ChoHan
             {
                 foreach (var e in players) { SharedUtil.WriteTextMessage(e.Client.TCPClient, "Chose Cho (even) or Han (odd)."); }
                 //TODO Sends client gui a promt to enter the bet
-                while (_awnsers.Length <= 2) { }
+                while (!p1.ConfirmAnswer || !p2.ConfirmAnswer){}
                 foreach (var e in players) { SharedUtil.WriteTextMessage(e.Client.TCPClient, "Thowing the dice..."); }
                 //TODO Throws dice and updates the receiving gui's.
                 bool result = game.ThrowDice();
@@ -78,17 +77,12 @@ namespace ChoHan
                 //TODO Displays the result of the throw and annouces win or lose.
 
                 //Can't remember what this code does.
-                int awnserCount = 0;
+                //Menno plz
+
                 foreach (var e in players)
                 {
-                    _awnsers.SetValue(e.Answer, awnserCount);
-                    awnserCount++;
-                }
-                awnserCount = 0;
-                foreach (var e in players)
-                {
-                    bool awnserGiven = _awnsers.ElementAt(awnserCount);
-                    if (awnserGiven.Equals(result))
+                    bool? awnserGiven = e.Answer;
+                    if (awnserGiven == result)
                     {
                         if (awnserGiven.Equals(p1.Answer))
                         {

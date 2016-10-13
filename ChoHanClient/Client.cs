@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+using SharedUtilities;
 
 namespace ChoHanClient
 {
@@ -11,9 +11,14 @@ namespace ChoHanClient
     {
         public TcpClient TCPClient { get; set; }
 
-        public Client()
+        public Client(TcpClient client)
         {
+            TCPClient = client;
+        }
 
+        public void sendMessage(dynamic message)
+        {
+            SharedUtil.SendMessage(TCPClient, message);
         }
     }
 }
