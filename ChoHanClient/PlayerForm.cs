@@ -29,6 +29,7 @@ namespace ChoHanClient
             {
                 Answer = true;
                 YourChoiceLabel.Text = "You choose: even";
+                Console.WriteLine(Answer.ToString());
             }
         }
 
@@ -49,7 +50,7 @@ namespace ChoHanClient
                 return;
             }
             ConfirmAnswer = true;
-            Client.sendMessage(ConfirmAnswer);
+            Client.SendMessage(ConfirmAnswer.ToString());
         }
 
         private void Leavebutton_Click(object sender, EventArgs e)

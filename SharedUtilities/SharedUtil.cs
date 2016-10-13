@@ -41,13 +41,20 @@ namespace SharedUtilities
             return Encoding.Unicode.GetString(buffer, 0, totalRead);
         }
 
-        public static void SendMessage(TcpClient client, dynamic message)
+        public static void SendMessage(TcpClient client, string message)
         {
             //make sure the other end decodes with the same format!
             byte[] bytes = Encoding.Unicode.GetBytes(message);
             client.GetStream().Write(bytes, 0, bytes.Length);
         }
 
-
+        public static void SendMessages(TcpClient client, string[] message)
+        {
+            foreach (var s in message)
+            {
+                byte[] bytes = Encoding.Unicode.GetBytes(s);
+                client.GetStream().Write(bytes, 0, bytes.Length);
+            }
+        }
     }
 }

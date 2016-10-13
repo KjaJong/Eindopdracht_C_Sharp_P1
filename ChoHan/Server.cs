@@ -11,17 +11,19 @@ using System.Threading.Tasks;
 
 namespace ChoHan
 {
-    class Server
+    class Server : IComparer<int>
     {
         //TODO maybe start tracking points in the player and write the players of a session to json.
         //TODO negate every error, we'll work on it
-        List<PlayerForm> _activeClients = new List<PlayerForm>();
+        
         private IPAddress _currentId;
         private TcpListener _listner;
+        
 
         public Server()
         {
             IPAddress localIP = GetLocalIpAddress();
+            
 
             bool IpOk = IPAddress.TryParse(localIP.ToString(), out _currentId);
             if (!IpOk)
@@ -35,105 +37,105 @@ namespace ChoHan
 
             while (true)
             {
-                Console.WriteLine("Waiting for connection");
-                TcpClient client = listner.AcceptTcpClient();
-
-                CheckForPlayers(client);
-
                 Thread thread = new Thread(HandleClientThread);
-                thread.Start(client);
+                thread.Start(CheckForPlayers(listner));
             }
         }
 
-        private void CheckForPlayers(TcpClient client)
+        private List<TcpClient> CheckForPlayers(TcpListener listner)
         {
             //TODO it now uses two players. Maybe add more (like a room of eight?)
-            _activeClients.Add(new PlayerForm(new Client(client)));
 
-            if (_activeClients.Count == 2)
+            List<TcpClient> _activeClients = new List<TcpClient>();
+            while (_activeClients.Count != 2)
             {
-                StartGame(_activeClients);
+                Console.WriteLine("Waiting for player1");
+                TcpClient client = listner.AcceptTcpClient();
+                _activeClients.Add(client);
             }
+
+            return _activeClients;
         }
 
-        private void StartGame(List<PlayerForm> players)
+        private void StartGame(List<TcpClient> players)
         {
-            PlayerForm p1 = players.ElementAt(0);
-            PlayerForm p2 = players.ElementAt(1);
+            List<int> scores =  new List<int>();
+            List<string> answers = new List<string>();
             int roundCount = 0;
             ChoHan game = new ChoHan();
-            int p1Score = 0;
-            int p2Score = 0;
 
+            int count;
             while (roundCount > 5)
             {
-                foreach (var e in players) { SharedUtil.WriteTextMessage(e.Client.TCPClient, "Chose Cho (even) or Han (odd)."); }
-                //TODO Sends client gui a promt to enter the bet
-                while (!p1.ConfirmAnswer || !p2.ConfirmAnswer){}
-                foreach (var e in players) { SharedUtil.WriteTextMessage(e.Client.TCPClient, "Thowing the dice..."); }
-                //TODO Throws dice and updates the receiving gui's.
-                bool result = game.ThrowDice();
-                foreach (var e in players) { SharedUtil.WriteTextMessage(e.Client.TCPClient, "Results are in."); }
-                //TODO Displays the result of the throw and annouces win or lose.
 
-                //Can't remember what this code does.
-                //Menno plz
-
-                foreach (var e in players)
+                int answercount = 0;
+                //Waits for every client to choose a answer
+                while (answercount != players.Count)
                 {
-                    bool? awnserGiven = e.Answer;
-                    if (awnserGiven == result)
+                    answercount = 0;
+                    foreach (var c in players)
                     {
-                        if (awnserGiven.Equals(p1.Answer))
+                        if (SharedUtil.ReadMessage(c).Contains("True"))
                         {
-                            p1Score++;
-                        }
-                        else if (awnserGiven.Equals(p2.Answer))
-                        {
-                            p2Score++;
+                            answercount += 1;
+                            scores.Add(0);
                         }
                     }
+                }
+                //TODO Displays the result of the throw and annouces win or lose.
+                //send every client a message that they can send their answer
+                game.ThrowDice();
+                count = 0;
+                foreach (var c in players)
+                {
+                    SharedUtil.SendMessage(c, "1");
+                    string answer = (SharedUtil.ReadMessage(c));
+                    if (answer.Contains("True"))
+                    {
+                        if(game.CheckResult(true))
+                            scores.Insert(count, scores.ElementAt(count) + 1);
+                    }
+                    else
+                    {
+                        if (game.CheckResult(false))
+                            scores.Insert(count, scores.ElementAt(count) + 1);
+                    }
+                    string[] message = new []{}
+
+
                 }
                 roundCount++;
             }
 
-            // TODO Needs to be reworked to allow more players
-            switch (p1Score - p2Score)
+            scores.Sort();
+
+            //Has to work for more clients.
+            switch (scores.ElementAt(0) - scores.ElementAt(1))
             {
-                case -1:
-                    foreach (PlayerForm e in players)
-                    {
-                        SharedUtil.WriteTextMessage(e.Client.TCPClient, "Player 2 won.");
-                    }
+                case 1:
+                    SharedUtil.SendMessage(players.ElementAt(0), "You win");
+                    SharedUtil.SendMessage(players.ElementAt(1), "You lose");
                     break;
 
                 case 0:
-                    foreach (var e in players)
-                    {
-                        SharedUtil.WriteTextMessage(e.Client.TCPClient, "Nobody won.");
-                    }
+                    SharedUtil.SendMessage(players.ElementAt(0), "You tied");
+                    SharedUtil.SendMessage(players.ElementAt(1), "You tied");
                     break;
 
-                case 1:
-                    foreach (var e in players)
-                    {
-                        SharedUtil.WriteTextMessage(e.Client.TCPClient, "Player 1 won.");
-                    }
-                    break;
-
-                default:
-                    Console.WriteLine("Why are you here ffs");
+                case -1:
+                    SharedUtil.SendMessage(players.ElementAt(1), "You win");
+                    SharedUtil.SendMessage(players.ElementAt(0), "You lose");
                     break;
             }
-            //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
-            foreach (var e in players)
+                //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
+                foreach (var c in players)
             {
-                SharedUtil.WriteTextMessage(e.Client.TCPClient, "Thanks for playing.");
+                SharedUtil.WriteTextMessage(c, "Thanks for playing.");
             }
 
-            foreach (var e in players)
+            foreach (var c in players)
             {
-                e.Client.TCPClient.Close();
+                c.Close();
             }
         }
 
@@ -146,23 +148,16 @@ namespace ChoHan
             throw new Exception("Local IP Address Not Found!");
         }
 
-        private void HandleClientThread(object obj)
+        private void HandleClientThread()
         {
-            TcpClient client = obj as TcpClient;
-
-            int ID = _activeClients.Count;
-            bool done = false;
-            while (!done)
-            {
-                string received = SharedUtil.ReadTextMessage(client);
-                Console.WriteLine("Received: {0}", received);
-                done = received.Equals("bye");
-                if (done) SharedUtil.WriteTextMessage(client, "BYE");
-                else SharedUtil.WriteTextMessage(client, "OK");
-
-            }
-            client.Close();
+            StartGame(clients);
             Console.WriteLine("Connection closed");
+        }
+
+        public int Compare(int x, int y)
+        {
+            return x - y;
+            
         }
     }
 }
