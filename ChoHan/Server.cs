@@ -15,28 +15,23 @@ namespace ChoHan
     {
         //TODO maybe start tracking points in the player and write the players of a session to json.
         //TODO negate every error, we'll work on it
-        List<PlayerForm> activeClients = new List<PlayerForm>();
-        private bool[] awnsers;
-        private IPAddress currentId;
-        private TcpListener listner;
-
-        static void Main(string[] args)
-        {
-            new Server();
-        }
+        List<PlayerForm> _activeClients = new List<PlayerForm>();
+        private bool[] _awnsers;
+        private IPAddress _currentId;
+        private TcpListener _listner;
 
         public Server()
         {
-            IPAddress localhost;
+            IPAddress localIP = GetLocalIpAddress();
 
-            bool IpOk = IPAddress.TryParse("145.102.71.135", out localhost);
+            bool IpOk = IPAddress.TryParse(localIP.ToString(), out _currentId);
             if (!IpOk)
             {
                 Console.WriteLine("Couldn't parse the ip address. Exiting code.");
                 Environment.Exit(1);
             }
 
-            TcpListener listner = new TcpListener(localhost, 1337);
+            TcpListener listner = new TcpListener(_currentId, 1337);
             listner.Start();
 
             while (true)
@@ -54,11 +49,11 @@ namespace ChoHan
         private void CheckForPlayers(TcpClient client)
         {
             //TODO it now uses two players. Maybe add more (like a room of eight?)
-            activeClients.Add(new PlayerForm(new Client()));
+            _activeClients.Add(new PlayerForm(new Client()));
 
-            if (activeClients.Count == 2)
+            if (_activeClients.Count == 2)
             {
-                StartGame(activeClients);
+                StartGame(_activeClients);
             }
         }
 
@@ -75,7 +70,7 @@ namespace ChoHan
             {
                 foreach (var e in players) { SharedUtil.WriteTextMessage(e.Client.TCPClient, "Chose Cho (even) or Han (odd)."); }
                 //TODO Sends client gui a promt to enter the bet
-                while (awnsers.Length <= 2) { }
+                while (_awnsers.Length <= 2) { }
                 foreach (var e in players) { SharedUtil.WriteTextMessage(e.Client.TCPClient, "Thowing the dice..."); }
                 //TODO Throws dice and updates the receiving gui's.
                 bool result = game.ThrowDice();
@@ -86,13 +81,13 @@ namespace ChoHan
                 int awnserCount = 0;
                 foreach (var e in players)
                 {
-                    awnsers.SetValue(e.Answer, awnserCount);
+                    _awnsers.SetValue(e.Answer, awnserCount);
                     awnserCount++;
                 }
                 awnserCount = 0;
                 foreach (var e in players)
                 {
-                    bool awnserGiven = awnsers.ElementAt(awnserCount);
+                    bool awnserGiven = _awnsers.ElementAt(awnserCount);
                     if (awnserGiven.Equals(result))
                     {
                         if (awnserGiven.Equals(p1.Answer))
@@ -148,11 +143,20 @@ namespace ChoHan
             }
         }
 
+        public static IPAddress GetLocalIpAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    return ip;
+            throw new Exception("Local IP Address Not Found!");
+        }
+
         private void HandleClientThread(object obj)
         {
             TcpClient client = obj as TcpClient;
 
-            int ID = activeClients.Count;
+            int ID = _activeClients.Count;
             bool done = false;
             while (!done)
             {
