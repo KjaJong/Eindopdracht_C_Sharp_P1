@@ -1,0 +1,9 @@
+F:\Programs\ChoHan\ChoHan\ChoHanClient\obj\Debug\ChoHanClient.csprojResolveAssemblyReference.cache
+F:\Programs\ChoHan\ChoHan\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
+F:\Programs\ChoHan\ChoHan\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache
+F:\Programs\ChoHan\ChoHan\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+F:\Programs\ChoHan\ChoHan\ChoHanClient\bin\Debug\ChoHanClient.exe
+F:\Programs\ChoHan\ChoHan\ChoHanClient\bin\Debug\ChoHanClient.pdb
+F:\Programs\ChoHan\ChoHan\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
+F:\Programs\ChoHan\ChoHan\ChoHanClient\obj\Debug\ChoHanClient.exe
+F:\Programs\ChoHan\ChoHan\ChoHanClient\obj\Debug\ChoHanClient.pdb

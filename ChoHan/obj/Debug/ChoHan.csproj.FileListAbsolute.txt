@@ -1,0 +1,2 @@
+F:\Programs\ChoHan\ChoHan\ChoHan\bin\Debug\ChoHan.exe.config
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.exe.config
