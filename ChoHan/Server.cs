@@ -100,7 +100,7 @@ namespace ChoHan
                         if (game.CheckResult(false))
                             scores.Insert(count, scores.ElementAt(count) + 1);
                     }
-                    string[] message = new []{}
+                   // string[] message = new[] {};
 
 
                 }
