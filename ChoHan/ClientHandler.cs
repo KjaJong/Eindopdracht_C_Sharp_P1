@@ -38,9 +38,9 @@ namespace ChoHan
                     answercount = 0;
                     foreach (var c in players)
                     {
-                      if (SharedUtil.ReadMessage(c.Key).Contains("True"))
+                      if (SharedUtil.ReadMessage(c.Key).Equals("True"))
                         {
-                            _sessionLog.AddLogEntry(c.Key.ToString(), " gave a awnser");
+                            _sessionLog.AddLogEntry(c.Key.ToString(), " gave an awnser");
                             answercount++;
                         }
                     }
