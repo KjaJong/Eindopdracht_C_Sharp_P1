@@ -48,6 +48,7 @@
       <Link>SharedUtil.cs</Link>
     </Compile>
     <Compile Include="ChoHan.cs" />
+    <Compile Include="ClientHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
