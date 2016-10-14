@@ -53,6 +53,8 @@ namespace ChoHanClient
             List<string> messages = new List<string>();
             while (!done)
             {
+                if (form.ConfirmAnswer)
+                { 
                 SharedUtil.WriteTextMessage(client, form.ConfirmAnswer.ToString());
                 
                 switch (SharedUtil.ReadMessage(client))
@@ -72,6 +74,8 @@ namespace ChoHanClient
                     default:
                         Console.WriteLine("OI, The fuck you doing here m8");
                         break;
+                }
+                    
                 }
             }
         }

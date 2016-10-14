@@ -83,7 +83,6 @@
             this.WrongPlayerOneLabel.TabIndex = 22;
             this.WrongPlayerOneLabel.Text = "Wrong";
             this.WrongPlayerOneLabel.Visible = false;
-            this.WrongPlayerOneLabel.Click += new System.EventHandler(this.WrongPlayerOneLabel_Click);
             // 
             // RightPlayerOneLabel
             // 
