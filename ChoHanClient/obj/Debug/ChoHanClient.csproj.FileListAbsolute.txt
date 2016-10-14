@@ -21,3 +21,11 @@ C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanCl
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.pdb
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.dll
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\ChoHanClient.exe
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\ChoHanClient.pdb
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.csprojResolveAssemblyReference.cache
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache

@@ -9,3 +9,12 @@ D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHanC
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\Newtonsoft.Json.dll
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHanClient.pdb
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.exe
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.pdb
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHanClient.exe
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHanClient.pdb
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHanServer.csprojResolveAssemblyReference.cache
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.exe
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.pdb

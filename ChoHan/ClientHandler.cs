@@ -33,14 +33,14 @@ namespace ChoHan
                 //Waits for every client to choose an answer
                 while (answercount != _dictionary.Count)
                 {
-                    _sessionLog.AddLogEntry("Asked for awnsers");
+                    _sessionLog.AddLogEntry("Asked for attendence");
                     //TODO check if the code isn't the same as down below (from rule 51)
                     answercount = 0;
                     foreach (var c in _dictionary)
                     {
                       if (SharedUtil.ReadMessage(c.Key).Equals("True"))
                         {
-                            _sessionLog.AddLogEntry(c.Key.ToString(), " gave an awnser");
+                            _sessionLog.AddLogEntry(c.Key.ToString(), " resonded");
                             answercount++;
                         }
                     }
