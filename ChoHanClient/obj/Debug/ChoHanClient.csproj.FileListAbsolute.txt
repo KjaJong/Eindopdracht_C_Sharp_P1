@@ -16,3 +16,6 @@ D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\C
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.exe
 D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.pdb
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.exe
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.pdb
