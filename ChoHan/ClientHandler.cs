@@ -9,6 +9,7 @@ namespace ChoHanServer
 {
     public class ClientHandler
     {
+        //TODO implement logging
         private readonly Dictionary<TcpClient, int> _dictionary;
 
         public ClientHandler(Dictionary<TcpClient, int> dictionary)
@@ -45,6 +46,7 @@ namespace ChoHanServer
                 foreach (var c in players)
                 {
                     SharedUtil.SendMessage(c.Key, "give/answer");
+
                     string answer = (SharedUtil.ReadMessage(c.Key));
                     string[] message;
                     if (answer.Equals("True"))
