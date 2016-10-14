@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using SharedUtilities;
 
 namespace ChoHanClient
@@ -11,11 +12,14 @@ namespace ChoHanClient
     public class Client
     {
         public TcpClient TCPClient { get; set; }
+        public PlayerForm form { get; set; }
         private IPAddress _currentId;
+        private TcpClient client;
 
-        public Client(TcpClient client)
+        public Client()
         {
             TCPClient = client;
+            form = new PlayerForm();
 
             IPAddress localIP = GetLocalIpAddress();
 
@@ -26,12 +30,12 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
 
-           // client.Connect(_currentId ,1337);
+          // client.Connect(_currentId ,1337);
         }
 
-        public void SendMessage(string message)
+        public void startLoop()
         {
-            SharedUtil.SendMessage(TCPClient, message);
+            
         }
 
         public static IPAddress GetLocalIpAddress()

@@ -14,11 +14,11 @@ namespace ChoHanClient
 
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PlayerForm(new Client(client)));
+            Client client = new Client();
+            Application.Run(client.form);
         }
     }
 }

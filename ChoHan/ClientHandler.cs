@@ -19,11 +19,10 @@ namespace ChoHan
 
         private void StartGame(Dictionary<TcpClient, int> players)
         {
-            List<string> answers = new List<string>();
             int roundCount = 0;
             ChoHan game = new ChoHan();
 
-            while (roundCount > 5)
+            while (roundCount < 5)
             {
 
                 int answercount = 0;
@@ -51,12 +50,12 @@ namespace ChoHan
                     {
                         if (game.CheckResult(true))
                         {
-                            _dictionary[c.Key] +=  1;
-                            message = new[] { c.Value.ToString(), "True" };
+                            _dictionary[c.Key] += 1;
+                            message = new[] {c.Value.ToString(), "True"};
                         }
                         else
                         {
-                            message = new[] { c.Value.ToString(), "False" };
+                            message = new[] {c.Value.ToString(), "False"};
                         }
                         SharedUtil.SendMessages(c.Key, message);
                     }
@@ -65,11 +64,11 @@ namespace ChoHan
                         if (game.CheckResult(false))
                         {
                             _dictionary[c.Key] += 1;
-                            message = new[] { c.Value.ToString(), "True" };
+                            message = new[] {c.Value.ToString(), "True"};
                         }
                         else
                         {
-                            message = new[] { c.Value.ToString(), "False" };
+                            message = new[] {c.Value.ToString(), "False"};
                         }
                         SharedUtil.SendMessages(c.Key, message);
                     }
@@ -90,7 +89,7 @@ namespace ChoHan
             {
                 if (c.Equals(list.ElementAt(0)))
                 {
-                     return;
+                    return;
                 }
 
                 switch (c.Value - list.ElementAt(0).Value)
@@ -109,17 +108,10 @@ namespace ChoHan
                         Console.WriteLine("ffs are you here?!");
                         break;
                 }
-                    
+
             }
 
-            if (playerOneWin)
-            {
-                SharedUtil.SendMessage(list.ElementAt(0).Key, "You win");
-            }
-            else
-            {
-                SharedUtil.SendMessage(list.ElementAt(0).Key, "You lose");
-            }
+            SharedUtil.SendMessage(list.ElementAt(0).Key, playerOneWin ? "You win" : "You lose");
 
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.

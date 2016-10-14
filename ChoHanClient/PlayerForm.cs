@@ -14,11 +14,9 @@ namespace ChoHanClient
     {
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
-        public Client Client { get; set; }
 
-        public PlayerForm(Client client)
+        public PlayerForm()
         {
-            Client = client;
             Answer = null;
             InitializeComponent();
         }
@@ -50,12 +48,10 @@ namespace ChoHanClient
                 return;
             }
             ConfirmAnswer = true;
-            Client.SendMessage(ConfirmAnswer.ToString());
         }
 
         private void Leavebutton_Click(object sender, EventArgs e)
         {
-            Client.TCPClient.Close();
             Environment.Exit(1);
         }
 
