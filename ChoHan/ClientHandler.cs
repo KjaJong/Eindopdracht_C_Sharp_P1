@@ -5,23 +5,26 @@ using System.Net.Sockets;
 using System.Runtime.Remoting.Messaging;
 using SharedUtilities;
 
-namespace ChoHanServer
+namespace ChoHan
 {
     public class ClientHandler
     {
         //TODO implement logging
         private readonly Dictionary<TcpClient, int> _dictionary;
+        private Log _sessionLog;
 
-        public ClientHandler(Dictionary<TcpClient, int> dictionary)
+        public ClientHandler(Dictionary<TcpClient, int> dictionary, Log sessionLog)
         {
             _dictionary = dictionary;
+            _sessionLog = sessionLog;
         }
 
         private void StartGame(Dictionary<TcpClient, int> players)
         {
+            _sessionLog.AddLogEntry("Started a game");
             int roundCount = 0;
             ChoHan game = new ChoHan();
-
+            
             while (roundCount < 5)
             {
 
@@ -30,11 +33,14 @@ namespace ChoHanServer
                 //Waits for every client to choose an answer
                 while (answercount != players.Count)
                 {
+                    _sessionLog.AddLogEntry("Asked for awnsers");
+                    //TODO check if the code isn't the same as down below (from rule 51)
                     answercount = 0;
                     foreach (var c in players)
                     {
                         if (SharedUtil.ReadMessage(c.Key).Contains("True"))
                         {
+                            _sessionLog.AddLogEntry(c.Key.ToString(), " gave a awnser");
                             answercount++;
                         }
                     }
@@ -78,6 +84,7 @@ namespace ChoHanServer
 
 
                 }
+                _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount + 1));
                 roundCount++;
             }
 
@@ -86,7 +93,7 @@ namespace ChoHanServer
             list.Sort(
                 (pair1, pair2) => pair1.Value.CompareTo(pair2.Value)
             );
-
+            _sessionLog.AddLogEntry("Determaning the winner of the game");
             bool playerOneWin = true;
 
             //starts looking for the ties and loses
@@ -125,6 +132,7 @@ namespace ChoHanServer
             //kills every client muhahaha
             foreach (var c in players)
             {
+                _sessionLog.AddLogEntry("Game is over, closing the game");
                 SharedUtil.SendMessage(c.Key, "closing");
                 SharedUtil.SendMessage(c.Key, "Thanks for playing.");
                 c.Key.Close();
