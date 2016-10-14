@@ -37,8 +37,9 @@ namespace SharedUtilities
                 totalRead += read;
                 Console.WriteLine("ReadMessage: " + read);
             } while (client.GetStream().DataAvailable);
-
-            return Encoding.Unicode.GetString(buffer, 0, totalRead);
+            string message = Encoding.Unicode.GetString(buffer, 0, totalRead);
+            Console.WriteLine(message);
+            return message;
         }
 
         public static void SendMessage(TcpClient client, string message)

@@ -54,15 +54,15 @@ namespace ChoHanClient
             List<string> messages = new List<string>();
             while (!done)
             {
-                if (!form.ConfirmAnswer)
+                if (form.ConfirmAnswer)
                 {
                     SharedUtil.SendMessage(client, form.ConfirmAnswer.ToString());
                     beginConfirm = true;
                 }
-
-
+                
                 if (beginConfirm)
                 {
+                
                     switch (SharedUtil.ReadMessage(client))
                     {
                         case "give/answer":
