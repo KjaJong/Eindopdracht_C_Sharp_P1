@@ -12,14 +12,16 @@ namespace ChoHanClient
 {
     public partial class PlayerForm : Form
     {
+        //answer can be null, the problem is. You cans stall the game
+        //TODO: make the game unstallable
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
-        public Client Client { get; set; }
+        public List<int> scoresOtherPLayers;
 
-        public PlayerForm(Client client)
+        public PlayerForm()
         {
-            Client = client;
             Answer = null;
+            scoresOtherPLayers = new List<int>();
             InitializeComponent();
         }
 
@@ -50,18 +52,17 @@ namespace ChoHanClient
                 return;
             }
             ConfirmAnswer = true;
-            Client.SendMessage(ConfirmAnswer.ToString());
         }
 
         private void Leavebutton_Click(object sender, EventArgs e)
         {
-            Client.TCPClient.Close();
             Environment.Exit(1);
         }
 
-        public void Update( bool RightAnswerPlayerOne, int scorePlayerOne)
+        public void Update(bool RightAnswerPlayerOne, List<int> scores )
         {
-            ScorePlayerOneLabel.Text = scorePlayerOne.ToString();
+            ScorePlayerOneLabel.Text = scores.ElementAt(0).ToString();
+            scoresOtherPLayers = scores;
             Answer = null;
             ConfirmAnswer = false;
 
