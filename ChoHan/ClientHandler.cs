@@ -39,7 +39,7 @@ namespace ChoHan
                     }
                 }
                 //TODO Displays the result of the throw and annouces win or lose.
-
+                //TODO Convert to fucking jason
                 //send every client a message that they can send their answer
                 game.ThrowDice();
                 foreach (var c in players)
@@ -95,7 +95,7 @@ namespace ChoHan
                     return;
                 }
 
-                SharedUtil.SendMessage(c.Key, "Recieve/answer");
+                SharedUtil.SendMessage(c.Key, "recieve/answer");
 
                 switch (c.Value - list.ElementAt(0).Value)
                 {
@@ -118,7 +118,6 @@ namespace ChoHan
 
             //checks if the highest score doesn't tie with another one
             SharedUtil.SendMessage(list.ElementAt(0).Key, playerOneWin ? "You win" : "You lose");
-
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
             //kills every client muhahaha

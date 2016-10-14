@@ -30,12 +30,50 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
 
-          // client.Connect(_currentId ,1337);
+            try
+            {
+                client.Connect(_currentId, 1337);
+                startLoop();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
         }
 
         public void startLoop()
         {
-            
+            bool done = false;
+            string message;
+            List<string> messages = new List<string>();
+            while (!done)
+            {
+                if (!form.ConfirmAnswer)
+                {
+                    return;
+                }
+                else
+                {
+                    SharedUtil.SendMessage(client, form.ConfirmAnswer.ToString());
+                }
+
+                switch (SharedUtil.ReadMessage(client))
+                {
+                    case "give/answer":
+                        SharedUtil.SendMessage(client, form.Answer.ToString());
+                        break;
+                    case "recieve/answer":
+
+
+                        break;
+                    case "closing":
+                        message = SharedUtil.ReadMessage(client);
+                        break;
+                    default:
+                        Console.WriteLine("OI, The fuck you doing her m8");
+                        break;
+                }
+            }
         }
 
         public static IPAddress GetLocalIpAddress()

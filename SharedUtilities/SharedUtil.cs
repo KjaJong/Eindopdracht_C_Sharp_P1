@@ -50,9 +50,13 @@ namespace SharedUtilities
 
         public static void SendMessages(TcpClient client, string[] message)
         {
+            string lengtMessage = message.Length.ToString();
+            byte[] bytes = Encoding.Unicode.GetBytes(lengtMessage);
+            client.GetStream().Write(bytes, 0, bytes.Length);
+
             foreach (var s in message)
             {
-                byte[] bytes = Encoding.Unicode.GetBytes(s);
+                bytes = Encoding.Unicode.GetBytes(s);
                 client.GetStream().Write(bytes, 0, bytes.Length);
             }
         }
