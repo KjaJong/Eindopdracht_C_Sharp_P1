@@ -63,7 +63,7 @@ namespace ChoHan
 
                 foreach (var logEntry in _dataLog)
                 {
-                    writer.Write(JsonConvert.SerializeObject(logEntry));
+                   writer.Write(JsonConvert.SerializeObject(logEntry));
                 }
 
                 writer.Close();

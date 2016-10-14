@@ -71,7 +71,7 @@ namespace ChoHanClient
                         message = SharedUtil.ReadMessage(client);
                         break;
                     default:
-                        Console.WriteLine("OI, The fuck you doing her m8");
+                        Console.WriteLine("OI, The fuck you doing here m8");
                         break;
                 }
             }

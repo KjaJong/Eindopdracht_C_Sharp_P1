@@ -42,7 +42,7 @@
             // 
             // Leavebutton
             // 
-            this.Leavebutton.Location = new System.Drawing.Point(104, 192);
+            this.Leavebutton.Location = new System.Drawing.Point(93, 139);
             this.Leavebutton.Name = "Leavebutton";
             this.Leavebutton.Size = new System.Drawing.Size(75, 23);
             this.Leavebutton.TabIndex = 25;
@@ -52,7 +52,7 @@
             // 
             // ConfirmButton
             // 
-            this.ConfirmButton.Location = new System.Drawing.Point(64, 163);
+            this.ConfirmButton.Location = new System.Drawing.Point(57, 110);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(75, 23);
             this.ConfirmButton.TabIndex = 24;
@@ -62,7 +62,7 @@
             // 
             // OddButton
             // 
-            this.OddButton.Location = new System.Drawing.Point(104, 134);
+            this.OddButton.Location = new System.Drawing.Point(93, 81);
             this.OddButton.Name = "OddButton";
             this.OddButton.Size = new System.Drawing.Size(75, 23);
             this.OddButton.TabIndex = 23;
@@ -73,7 +73,7 @@
             // WrongPlayerOneLabel
             // 
             this.WrongPlayerOneLabel.ForeColor = System.Drawing.Color.Red;
-            this.WrongPlayerOneLabel.Location = new System.Drawing.Point(79, 62);
+            this.WrongPlayerOneLabel.Location = new System.Drawing.Point(12, 45);
             this.WrongPlayerOneLabel.Name = "WrongPlayerOneLabel";
             this.WrongPlayerOneLabel.Size = new System.Drawing.Size(43, 17);
             this.WrongPlayerOneLabel.TabIndex = 22;
@@ -83,7 +83,7 @@
             // RightPlayerOneLabel
             // 
             this.RightPlayerOneLabel.ForeColor = System.Drawing.Color.Green;
-            this.RightPlayerOneLabel.Location = new System.Drawing.Point(79, 62);
+            this.RightPlayerOneLabel.Location = new System.Drawing.Point(12, 45);
             this.RightPlayerOneLabel.Name = "RightPlayerOneLabel";
             this.RightPlayerOneLabel.Size = new System.Drawing.Size(43, 17);
             this.RightPlayerOneLabel.TabIndex = 19;
@@ -92,7 +92,7 @@
             // 
             // ScorePlayerOneLabel
             // 
-            this.ScorePlayerOneLabel.Location = new System.Drawing.Point(96, 45);
+            this.ScorePlayerOneLabel.Location = new System.Drawing.Point(79, 28);
             this.ScorePlayerOneLabel.Name = "ScorePlayerOneLabel";
             this.ScorePlayerOneLabel.Size = new System.Drawing.Size(43, 17);
             this.ScorePlayerOneLabel.TabIndex = 17;
@@ -100,7 +100,7 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(79, 29);
+            this.label2.Location = new System.Drawing.Point(12, 29);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 16);
             this.label2.TabIndex = 15;
@@ -116,7 +116,7 @@
             // 
             // EvenButton
             // 
-            this.EvenButton.Location = new System.Drawing.Point(23, 134);
+            this.EvenButton.Location = new System.Drawing.Point(12, 81);
             this.EvenButton.Name = "EvenButton";
             this.EvenButton.Size = new System.Drawing.Size(75, 23);
             this.EvenButton.TabIndex = 13;
@@ -126,7 +126,7 @@
             // 
             // YourChoiceLabel
             // 
-            this.YourChoiceLabel.Location = new System.Drawing.Point(79, 90);
+            this.YourChoiceLabel.Location = new System.Drawing.Point(12, 62);
             this.YourChoiceLabel.Name = "YourChoiceLabel";
             this.YourChoiceLabel.Size = new System.Drawing.Size(140, 16);
             this.YourChoiceLabel.TabIndex = 26;
@@ -136,7 +136,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(204, 229);
+            this.ClientSize = new System.Drawing.Size(180, 186);
             this.Controls.Add(this.YourChoiceLabel);
             this.Controls.Add(this.Leavebutton);
             this.Controls.Add(this.ConfirmButton);

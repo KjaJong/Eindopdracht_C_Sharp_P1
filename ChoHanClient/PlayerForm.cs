@@ -16,12 +16,12 @@ namespace ChoHanClient
         //TODO: make the game unstallable
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
-        public List<int> scoresOtherPLayers;
+        public List<int> ScoresOtherPLayers;
 
         public PlayerForm()
         {
             Answer = null;
-            scoresOtherPLayers = new List<int>();
+            ScoresOtherPLayers = new List<int>();
             InitializeComponent();
         }
 
@@ -62,7 +62,7 @@ namespace ChoHanClient
         public void Update(bool RightAnswerPlayerOne, List<int> scores )
         {
             ScorePlayerOneLabel.Text = scores.ElementAt(0).ToString();
-            scoresOtherPLayers = scores;
+            ScoresOtherPLayers = scores;
             Answer = null;
             ConfirmAnswer = false;
 
