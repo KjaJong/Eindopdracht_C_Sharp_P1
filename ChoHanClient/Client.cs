@@ -30,10 +30,11 @@ namespace ChoHanClient
                 Console.WriteLine("Couldn't parse the ip address. Exiting code.");
                 Environment.Exit(1);
             }
-
+            Console.WriteLine(localIP);
             try
             {
-                client.Connect(_currentId, 1337);
+
+                client.Connect(localIP, 1337);
                 startLoop();
             }
             catch (Exception e)
