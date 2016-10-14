@@ -19,24 +19,24 @@ namespace ChoHan
             _sessionLog = sessionLog;
         }
 
-        private void StartGame(Dictionary<TcpClient, int> players)
+        private void StartGame()
         {
             _sessionLog.AddLogEntry("Started a game");
             int roundCount = 0;
             ChoHan game = new ChoHan();
+            int answercount = 0;
             
             while (roundCount < 5)
             {
-
-                int answercount = 0;
+                answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
-                while (answercount != players.Count)
+                while (answercount != _dictionary.Count)
                 {
                     _sessionLog.AddLogEntry("Asked for awnsers");
                     //TODO check if the code isn't the same as down below (from rule 51)
                     answercount = 0;
-                    foreach (var c in players)
+                    foreach (var c in _dictionary)
                     {
                       if (SharedUtil.ReadMessage(c.Key).Equals("True"))
                         {
@@ -50,7 +50,7 @@ namespace ChoHan
                 //TODO Convert to fucking jason
                 //send every client a message that they can send their answer
                 game.ThrowDice();
-                foreach (var c in players)
+                foreach (var c in _dictionary)
                 {
                     SharedUtil.SendMessage(c.Key, "give/answer");
 
@@ -90,7 +90,7 @@ namespace ChoHan
                 _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount + 1));
                 roundCount++;
             }
-
+            Console.WriteLine("Error");
             //sorts the dictionary on score
             List<KeyValuePair<TcpClient, int>> list = _dictionary.ToList();
             list.Sort(
@@ -133,7 +133,7 @@ namespace ChoHan
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
             //kills every client muhahaha
-            foreach (var c in players)
+            foreach (var c in _dictionary)
             {
                 _sessionLog.AddLogEntry("Game is over, closing the game");
                 SharedUtil.SendMessage(c.Key, "closing");
@@ -146,7 +146,7 @@ namespace ChoHan
         public void HandleClientThread()
         {
             //starts the game
-            StartGame(_dictionary);
+            StartGame();
             Console.WriteLine("Connection closed");
         }
     }
