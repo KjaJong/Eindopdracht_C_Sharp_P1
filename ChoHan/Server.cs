@@ -23,6 +23,7 @@ namespace ChoHan
 
         public Server()
         {
+            //looking for ip
             IPAddress localIP = GetLocalIpAddress();
             _handlers = new List<ClientHandler>();
 
@@ -36,6 +37,7 @@ namespace ChoHan
             TcpListener listener = new TcpListener(_currentId, 1337);
             listener.Start();
 
+            //making client handlers and adding them to the list
             while (true)
             {
                 ClientHandler handler = new ClientHandler(CheckForPlayers(listener));
@@ -45,22 +47,21 @@ namespace ChoHan
             }
         }
         private Dictionary<TcpClient, int> CheckForPlayers(TcpListener listner)
-        {
-            //TODO it now uses two players. Maybe add more (like a room of eight?)
+        { 
 
             Dictionary<TcpClient, int> _activeClients = new Dictionary<TcpClient, int>();
             while (_activeClients.Count != 2)
             {
-                Console.WriteLine("Waiting for player1");
+                //Looking for players
+                Console.WriteLine("Waiting for player");
                 TcpClient client = listner.AcceptTcpClient();
+                Console.WriteLine("Player connected!!");
                 _activeClients.Add(client, 0);
             }
 
             return _activeClients;
         }
-
-
-
+        
         public static IPAddress GetLocalIpAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());

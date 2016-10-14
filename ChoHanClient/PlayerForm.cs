@@ -12,6 +12,8 @@ namespace ChoHanClient
 {
     public partial class PlayerForm : Form
     {
+        //answer can be null, the problem is. You cans stall the game
+        //TODO: make the game unstallable
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
 

@@ -13,7 +13,6 @@ namespace ChoHan
 
         public ClientHandler(Dictionary<TcpClient, int> dictionary)
         {
-
             _dictionary = dictionary;
         }
 
@@ -26,7 +25,8 @@ namespace ChoHan
             {
 
                 int answercount = 0;
-                //Waits for every client to choose a answer
+
+                //Waits for every client to choose an answer
                 while (answercount != players.Count)
                 {
                     answercount = 0;
@@ -34,16 +34,17 @@ namespace ChoHan
                     {
                         if (SharedUtil.ReadMessage(c.Key).Contains("True"))
                         {
-                            answercount += 1;
+                            answercount++;
                         }
                     }
                 }
                 //TODO Displays the result of the throw and annouces win or lose.
+
                 //send every client a message that they can send their answer
                 game.ThrowDice();
                 foreach (var c in players)
                 {
-                    SharedUtil.SendMessage(c.Key, "1");
+                    SharedUtil.SendMessage(c.Key, "give/answer");
                     string answer = (SharedUtil.ReadMessage(c.Key));
                     string[] message;
                     if (answer.Equals("True"))
@@ -78,6 +79,7 @@ namespace ChoHan
                 roundCount++;
             }
 
+            //sorts the dictionary on score
             List<KeyValuePair<TcpClient, int>> list = _dictionary.ToList();
             list.Sort(
                 (pair1, pair2) => pair1.Value.CompareTo(pair2.Value)
@@ -85,12 +87,15 @@ namespace ChoHan
 
             bool playerOneWin = true;
 
+            //starts looking for the ties and loses
             foreach (var c in list)
             {
                 if (c.Equals(list.ElementAt(0)))
                 {
                     return;
                 }
+
+                SharedUtil.SendMessage(c.Key, "Recieve/answer");
 
                 switch (c.Value - list.ElementAt(0).Value)
                 {
@@ -111,19 +116,23 @@ namespace ChoHan
 
             }
 
+            //checks if the highest score doesn't tie with another one
             SharedUtil.SendMessage(list.ElementAt(0).Key, playerOneWin ? "You win" : "You lose");
 
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
+            //kills every client muhahaha
             foreach (var c in players)
             {
-                SharedUtil.WriteTextMessage(c.Key, "Thanks for playing.");
+                SharedUtil.SendMessage(c.Key, "closing");
+                SharedUtil.SendMessage(c.Key, "Thanks for playing.");
                 c.Key.Close();
             }
         }
 
         public void HandleClientThread()
         {
+            //starts the game
             StartGame(_dictionary);
             Console.WriteLine("Connection closed");
         }
