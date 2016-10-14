@@ -136,6 +136,7 @@ namespace ChoHan
                 SharedUtil.SendMessage(c.Key, "closing");
                 SharedUtil.SendMessage(c.Key, "Thanks for playing.");
                 c.Key.Close();
+                _sessionLog.PrintLog();
             }
         }
 
