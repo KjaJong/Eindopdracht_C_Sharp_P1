@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoHan", "ChoHan\ChoHan.csproj", "{93062F32-85AA-40AC-ADEA-AAF740F65CBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoHanServer", "ChoHan\ChoHanServer.csproj", "{93062F32-85AA-40AC-ADEA-AAF740F65CBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoHanClient", "ChoHanClient\ChoHanClient.csproj", "{5AE4F916-840D-4978-9281-74FE1B2EEF40}"
 EndProject

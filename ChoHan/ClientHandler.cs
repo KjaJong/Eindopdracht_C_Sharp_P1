@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Runtime.Remoting.Messaging;
 using SharedUtilities;
 
-namespace ChoHan
+namespace ChoHanServer
 {
     public class ClientHandler
     {
