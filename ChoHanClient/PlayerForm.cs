@@ -59,23 +59,11 @@ namespace ChoHanClient
             Environment.Exit(1);
         }
 
-        public void Update(bool answerPlayerTwo, bool RightAnswerPlayerOne, bool RightAnswerPlayerTwo, int scorePlayerOne, int scorePlayerTwo)
+        public void Update( bool RightAnswerPlayerOne, int scorePlayerOne)
         {
             ScorePlayerOneLabel.Text = scorePlayerOne.ToString();
-            ScorePlayerTwoLabel.Text = scorePlayerTwo.ToString();
             Answer = null;
             ConfirmAnswer = false;
-
-            switch (answerPlayerTwo)
-            {
-                case true:
-                    PlayerTwoChoiceLabel.Text = "Player two choose: even";
-                    break;
-
-                case false:
-                    PlayerTwoChoiceLabel.Text = "Player two choose: odd";
-                    break;
-            }
 
             switch (RightAnswerPlayerOne)
             {
@@ -89,20 +77,7 @@ namespace ChoHanClient
                     RightPlayerOneLabel.Visible = false;
                     break;
             }
-
-
-            switch (RightAnswerPlayerTwo)
-            {
-                case true:
-                    RightPlayerTwoLabel.Visible = true;
-                    WrongPlayerTwoLabel.Visible = false;
-                    break;
-
-                case false:
-                    WrongPlayerTwoLabel.Visible = true;
-                    RightPlayerTwoLabel.Visible = false;
-                    break;
-            }
+            
         }
 
         public void UpdateMessageLabel(string text)

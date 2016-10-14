@@ -90,26 +90,43 @@ namespace ChoHan
                 {
                     SharedUtil.SendMessage(c, "1");
                     string answer = (SharedUtil.ReadMessage(c));
-                    if (answer.Contains("True"))
+                    string[] message;
+                    if (answer.Equals("True"))
                     {
-                        if(game.CheckResult(true))
+                        if (game.CheckResult(true))
+                        {
                             scores.Insert(count, scores.ElementAt(count) + 1);
+                            message = new[] { scores.ElementAt(count).ToString(), "True"};
+                        }
+                        else
+                        {
+                            message = new[] { scores.ElementAt(count).ToString(), "False" };
+                        }
+                       SharedUtil.SendMessages(c, message);
                     }
                     else
                     {
                         if (game.CheckResult(false))
+                        {
                             scores.Insert(count, scores.ElementAt(count) + 1);
+                            message = new[] { scores.ElementAt(count).ToString(), "True" };
+                        }
+                        else
+                        {
+                            message = new[] { scores.ElementAt(count).ToString(), "False" };
+                        }
+                      SharedUtil.SendMessages(c,message);
                     }
-                   // string[] message = new[] {};
+                    count++;
 
 
                 }
                 roundCount++;
             }
 
-            scores.Sort();
+            //scores.Sort();
 
-            //Has to work for more clients.
+            //TODO: Has to work for more clients.
             switch (scores.ElementAt(0) - scores.ElementAt(1))
             {
                 case 1:
