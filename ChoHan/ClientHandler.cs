@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using SharedUtilities;
 
-namespace ChoHan
+namespace ChoHanServer
 {
     public class ClientHandler
     {
