@@ -38,7 +38,7 @@ namespace ChoHan
                     answercount = 0;
                     foreach (var c in players)
                     {
-                      if (SharedUtil.ReadTextMessage(c.Key).Contains("True"))
+                      if (SharedUtil.ReadMessage(c.Key).Contains("True"))
                         {
                             _sessionLog.AddLogEntry(c.Key.ToString(), " gave a awnser");
                             answercount++;
@@ -80,6 +80,7 @@ namespace ChoHan
                         {
                             message = new[] {c.Value.ToString(), "False"};
                         }
+                        SharedUtil.SendMessage(c.Key, "recieve/answer");
                         SharedUtil.SendMessages(c.Key, message);
                     }
                     Console.WriteLine("#NinaBootyBestBooty");
@@ -106,7 +107,7 @@ namespace ChoHan
                     break;
                 }
 
-                SharedUtil.SendMessage(c.Key, "recieve/answer");
+                SharedUtil.SendMessage(c.Key, "recieve/answer/final");
 
                 switch (c.Value - list.ElementAt(0).Value)
                 {

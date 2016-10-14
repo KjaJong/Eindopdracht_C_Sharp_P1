@@ -59,21 +59,21 @@ namespace ChoHanClient
             Environment.Exit(1);
         }
 
-        public void Update(bool RightAnswerPlayerOne, List<int> scores )
+        public void Update(string RightAnswerPlayerOne, string score )
         {
-            ScorePlayerOneLabel.Text = scores.ElementAt(0).ToString();
-            ScoresOtherPLayers = scores;
+        //    ScorePlayerOneLabel.Text = scores.ElementAt(0).ToString();
+        //    ScoresOtherPLayers = scores;
             Answer = null;
             ConfirmAnswer = false;
 
             switch (RightAnswerPlayerOne)
             {
-                case true:
+                case "True":
                     RightPlayerOneLabel.Visible = true;
                     WrongPlayerOneLabel.Visible = false;
                     break;
 
-                case false:
+                case "False":
                     WrongPlayerOneLabel.Visible = true;
                     RightPlayerOneLabel.Visible = false;
                     break;
