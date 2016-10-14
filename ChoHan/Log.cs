@@ -51,6 +51,7 @@ namespace ChoHan
         //Prints the log to a file. Uses a filename dependent on the given name of the log. The if-else automaticly decides to append or create a newe file.
         public void PrintLog()
         {
+            //TODO something should start double logging here i think
             string filepath = ($@"..\..\LogMap/LogFile{_logName}");
 
             if (!File.Exists(filepath))

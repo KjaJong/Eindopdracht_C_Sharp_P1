@@ -33,14 +33,14 @@ namespace ChoHan
                 //Waits for every client to choose an answer
                 while (answercount != players.Count)
                 {
-                    _sessionLog.AddLogEntry("Asked for awnsers");
+                    _sessionLog.AddLogEntry("Asked for attendence");
                     //TODO check if the code isn't the same as down below (from rule 51)
                     answercount = 0;
                     foreach (var c in players)
                     {
                       if (SharedUtil.ReadMessage(c.Key).Contains("True"))
                         {
-                            _sessionLog.AddLogEntry(c.Key.ToString(), " gave a awnser");
+                            _sessionLog.AddLogEntry(c.Key.ToString(), " resonded");
                             answercount++;
                         }
                     }
