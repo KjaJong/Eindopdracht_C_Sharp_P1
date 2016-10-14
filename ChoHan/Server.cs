@@ -34,6 +34,8 @@ namespace ChoHan
                 Environment.Exit(1);
             }
 
+            Console.WriteLine(_currentId);
+
             TcpListener listener = new TcpListener(_currentId, 1337);
             listener.Start();
 
@@ -44,6 +46,7 @@ namespace ChoHan
                 Thread thread = new Thread(handler.HandleClientThread);
                 thread.Start();
                 _handlers.Add(handler);
+                Console.WriteLine($"There are now {_handlers.Count} games running" );
             }
         }
         private Dictionary<TcpClient, int> CheckForPlayers(TcpListener listner)
@@ -59,6 +62,7 @@ namespace ChoHan
                 _activeClients.Add(client, 0);
             }
 
+            Console.WriteLine("The game has started");
             return _activeClients;
         }
         

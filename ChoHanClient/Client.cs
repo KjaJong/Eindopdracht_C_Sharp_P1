@@ -11,7 +11,6 @@ namespace ChoHanClient
 {
     public class Client
     {
-        public TcpClient TCPClient { get; set; }
         public PlayerForm form { get; set; }
         private IPAddress _currentId;
         private TcpClient client;
@@ -19,7 +18,6 @@ namespace ChoHanClient
 
         public Client()
         {
-            TCPClient = client;
             form = new PlayerForm();
 
             IPAddress localIP = GetLocalIpAddress();
@@ -30,12 +28,17 @@ namespace ChoHanClient
                 Console.WriteLine("Couldn't parse the ip address. Exiting code.");
                 Environment.Exit(1);
             }
-            Console.WriteLine(localIP);
+            client = new TcpClient();
+          
+        }
+
+        public void TryConnection()
+        {
             try
             {
-
-                client.Connect(localIP, 1337);
-                startLoop();
+                client.Connect(_currentId, 1337);
+                Thread thread = new Thread(StartLoop);
+                thread.Start();
             }
             catch (Exception e)
             {
@@ -43,22 +46,15 @@ namespace ChoHanClient
             }
         }
 
-        public void startLoop()
+        public void StartLoop()
         {
             bool done = false;
             string message;
             List<string> messages = new List<string>();
             while (!done)
             {
-                if (!form.ConfirmAnswer)
-                {
-                    return;
-                }
-                else
-                {
-                    SharedUtil.SendMessage(client, form.ConfirmAnswer.ToString());
-                }
-
+                SharedUtil.WriteTextMessage(client, form.ConfirmAnswer.ToString());
+                
                 switch (SharedUtil.ReadMessage(client))
                 {
                     case "give/answer":

@@ -26,19 +26,20 @@ namespace ChoHan
             {
 
                 int answercount = 0;
-
+                Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
                 while (answercount != players.Count)
                 {
                     answercount = 0;
                     foreach (var c in players)
                     {
-                        if (SharedUtil.ReadMessage(c.Key).Contains("True"))
+                      if (SharedUtil.ReadTextMessage(c.Key).Contains("True"))
                         {
                             answercount++;
                         }
                     }
                 }
+                Console.WriteLine("Gimmy dat answer");
                 //TODO Displays the result of the throw and annouces win or lose.
                 //TODO Convert to fucking jason
                 //send every client a message that they can send their answer
@@ -75,6 +76,7 @@ namespace ChoHan
                         }
                         SharedUtil.SendMessages(c.Key, message);
                     }
+                    Console.WriteLine("#NinaBootyBestBooty");
 
 
                 }
@@ -94,7 +96,7 @@ namespace ChoHan
             {
                 if (c.Equals(list.ElementAt(0)))
                 {
-                    return;
+                    break;
                 }
 
                 SharedUtil.SendMessage(c.Key, "recieve/answer");
