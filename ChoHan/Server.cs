@@ -9,8 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ChoHanServer
-{
+namespace ChoHan
     class Server
     {
         //TODO maybe start tracking points in the player and write the players of a session to json.
@@ -34,7 +33,8 @@ namespace ChoHanServer
                 Environment.Exit(1);
             }
 
-            TcpListener listener = new TcpListener(_currentId, 1337);
+            Console.WriteLine(localIP);
+            TcpListener listener = new TcpListener(localIP, 1337);
             listener.Start();
 
             //making client handlers and adding them to the list
@@ -49,17 +49,17 @@ namespace ChoHanServer
         private Dictionary<TcpClient, int> CheckForPlayers(TcpListener listner)
         { 
 
-            Dictionary<TcpClient, int> _activeClients = new Dictionary<TcpClient, int>();
-            while (_activeClients.Count != 2)
+            Dictionary<TcpClient, int> activeClients = new Dictionary<TcpClient, int>();
+            while (activeClients.Count != 2)
             {
                 //Looking for players
                 Console.WriteLine("Waiting for player");
                 TcpClient client = listner.AcceptTcpClient();
                 Console.WriteLine("Player connected!!");
-                _activeClients.Add(client, 0);
+                activeClients.Add(client, 0);
             }
 
-            return _activeClients;
+            return activeClients;
         }
         
         public static IPAddress GetLocalIpAddress()

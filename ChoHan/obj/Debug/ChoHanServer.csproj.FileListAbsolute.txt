@@ -1,1 +1,5 @@
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.exe.config
+D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.exe.config
+D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.exe
+D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.pdb
+D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHanServer.csprojResolveAssemblyReference.cache

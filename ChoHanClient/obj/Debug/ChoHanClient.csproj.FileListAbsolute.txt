@@ -19,3 +19,5 @@ D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\C
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\ChoHanClient.exe.config
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.exe
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.pdb
+D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.dll
+D:\Gijs\Documenten\Avans\CSharp\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.xml
