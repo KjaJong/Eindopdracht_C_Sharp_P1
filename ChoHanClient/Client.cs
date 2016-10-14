@@ -15,6 +15,7 @@ namespace ChoHanClient
         public PlayerForm form { get; set; }
         private IPAddress _currentId;
         private TcpClient client;
+        private string name;
 
         public Client()
         {
@@ -70,7 +71,7 @@ namespace ChoHanClient
                         message = SharedUtil.ReadMessage(client);
                         break;
                     default:
-                        Console.WriteLine("OI, The fuck you doing her m8");
+                        Console.WriteLine("OI, The fuck you doing here m8");
                         break;
                 }
             }
