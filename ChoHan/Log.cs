@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
+
 
 namespace ChoHan
 {
-    class Log
+    public class Log
     {
         //The struct for a log entry. Using a struct here because an entry (once made) will never change
         public struct LogEntry
@@ -27,13 +27,23 @@ namespace ChoHan
             _logName = logName;
         }
 
-        //Adds a log entry to the log.
+        //Adds a log entry to the log. The second is for the server.
         public void AddLogEntry(string playerName, string playerAction)
         {
             _dataLog.Add(new LogEntry()
             {
                 TimeStamp = DateTime.Today + "/" + DateTime.Now,
                 PlayerName = playerName,
+                PlayerAction = playerAction
+            });
+        }
+
+        public void AddLogEntry(string playerAction)
+        {
+            _dataLog.Add(new LogEntry()
+            {
+                TimeStamp = DateTime.Today + "/" + DateTime.Now,
+                PlayerName = "SERVER",
                 PlayerAction = playerAction
             });
         }
@@ -63,7 +73,7 @@ namespace ChoHan
 
                 foreach (var logEntry in _dataLog)
                 {
-                   writer.Write(JsonConvert.SerializeObject(logEntry));
+                    writer.Write(JsonConvert.SerializeObject(logEntry));
                 }
 
                 writer.Close();
