@@ -15,6 +15,7 @@ namespace ChoHanClient
         public PlayerForm form { get; set; }
         private IPAddress _currentId;
         private TcpClient client;
+        private string name;
 
         public Client()
         {
