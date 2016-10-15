@@ -10,12 +10,12 @@ namespace ChoHan
     public class ClientHandler
     {
         //TODO implement logging
-        private readonly Dictionary<TcpClient, int> _dictionary;
         private Log _sessionLog;
+        private List<TcpClient> _clients;
 
-        public ClientHandler(Dictionary<TcpClient, int> dictionary, Log sessionLog)
+        public ClientHandler(List<TcpClient> clients , Log sessionLog)
         {
-            _dictionary = dictionary;
+            _clients = clients;
             _sessionLog = sessionLog;
         }
 
@@ -24,23 +24,25 @@ namespace ChoHan
             _sessionLog.AddLogEntry("Started a game");
             int roundCount = 0;
             ChoHan game = new ChoHan();
-            int answercount = 0;
-            
+            List<int> scores = new List<int>();
+            int count = 0;
+
             while (roundCount < 5)
             {
-                answercount = 0;
+                int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
-                while (answercount != _dictionary.Count)
+                while (answercount != _clients.Count)
                 {
                     _sessionLog.AddLogEntry("Asked for attendence");
                     //TODO check if the code isn't the same as down below (from rule 51)
                     answercount = 0;
-                    foreach (var c in _dictionary)
+                    foreach (var c in _clients)
                     {
-                      if (SharedUtil.ReadMessage(c.Key).Equals("True"))
+                      if (SharedUtil.ReadMessage(c).Equals("True"))
                         {
-                            _sessionLog.AddLogEntry(c.Key.ToString(), " resonded");
+                            _sessionLog.AddLogEntry(c.ToString(), " resonded");
+                            scores.Add(0);
                             answercount++;
                         }
                     }
@@ -50,41 +52,43 @@ namespace ChoHan
                 //TODO Convert to fucking jason
                 //send every client a message that they can send their answer
                 game.ThrowDice();
-                foreach (var c in _dictionary)
+              
+                foreach (var c in _clients)
                 {
-                    SharedUtil.SendMessage(c.Key, "give/answer");
+                    SharedUtil.SendMessage(c, "give/answer");
 
-                    string answer = (SharedUtil.ReadMessage(c.Key));
+                    string answer = (SharedUtil.ReadMessage(c));
                     string[] message;
+                    int newScore = scores.ElementAt(count);
                     if (answer.Equals("True"))
                     {
                         if (game.CheckResult(true))
                         {
-                            _dictionary[c.Key] += 1;
-                            message = new[] {c.Value.ToString(), "True"};
+                            scores.Insert(count, newScore++);
+                            message = new[] {scores.ElementAt(count).ToString(), "True"};
                         }
                         else
                         {
-                            message = new[] {c.Value.ToString(), "False"};
+                            message = new[] {scores.ElementAt(count).ToString(), "False"};
                         }
-                        SharedUtil.SendMessages(c.Key, message);
+                        SharedUtil.SendMessages(c, message);
                     }
                     else
                     {
                         if (game.CheckResult(false))
                         {
-                            _dictionary[c.Key] += 1;
-                            message = new[] {c.Value.ToString(), "True"};
+                            scores.Insert(count, newScore++);
+                            message = new[] {scores.ElementAt(count).ToString(), "True"};
                         }
                         else
                         {
-                            message = new[] {c.Value.ToString(), "False"};
+                            message = new[] {scores.ElementAt(count).ToString(), "False"};
                         }
-                        SharedUtil.SendMessage(c.Key, "recieve/answer");
-                        SharedUtil.SendMessages(c.Key, message);
+                        SharedUtil.SendMessage(c, "recieve/answer");
+                        SharedUtil.SendMessages(c, message);
                     }
                     Console.WriteLine("#NinaBootyBestBooty");
-
+                    count++;
 
                 }
                 _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount + 1));
@@ -92,7 +96,16 @@ namespace ChoHan
             }
             Console.WriteLine("Error");
             //sorts the dictionary on score
-            List<KeyValuePair<TcpClient, int>> list = _dictionary.ToList();
+            Dictionary<TcpClient, int> dictionary =  new Dictionary<TcpClient, int>();
+
+            count = 0;
+            foreach (var c in _clients)
+            {
+                dictionary.Add(c, scores.ElementAt(count));
+                count++;
+            }
+            List<KeyValuePair<TcpClient, int>> list = dictionary.ToList();
+
             list.Sort(
                 (pair1, pair2) => pair1.Value.CompareTo(pair2.Value)
             );
@@ -133,7 +146,7 @@ namespace ChoHan
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
             //kills every client muhahaha
-            foreach (var c in _dictionary)
+            foreach (var c in list)
             {
                 _sessionLog.AddLogEntry("Game is over, closing the game");
                 SharedUtil.SendMessage(c.Key, "closing");
