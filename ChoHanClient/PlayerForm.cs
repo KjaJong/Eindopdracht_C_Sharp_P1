@@ -41,6 +41,7 @@ namespace ChoHanClient
             {
                 Answer = false;
                 YourChoiceLabel.Text = "You choose: odd";
+                Console.WriteLine(Answer.ToString());
             }
         }
 
@@ -63,6 +64,7 @@ namespace ChoHanClient
         {
         //    ScorePlayerOneLabel.Text = scores.ElementAt(0).ToString();
         //    ScoresOtherPLayers = scores;
+        //TODO This doesn't seem to function
             Answer = null;
             ConfirmAnswer = false;
 
@@ -84,6 +86,11 @@ namespace ChoHanClient
         public void UpdateMessageLabel(string text)
         {
             CommentLabel.Text = text;
+        }
+
+        public void ResetChoiceLabel()
+        {
+            YourChoiceLabel.Text = "You choose: ";
         }
     }
 }
