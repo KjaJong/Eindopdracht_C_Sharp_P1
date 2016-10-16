@@ -49,9 +49,7 @@ namespace ChoHanClient
         public void StartLoop()
         {
             bool done = false;
-            string message;
             bool beginConfirm = false;
-            List<string> messages = new List<string>();
             while (!done)
             {
                 
@@ -73,11 +71,10 @@ namespace ChoHanClient
                             break;
                         case "recieve/answer/final":
                             form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
-                            beginConfirm = false;
                             //TODO check if the read message give back useable data
                             break;
                         case "closing":
-                            message = SharedUtil.ReadMessage(client);
+                            form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
                             break;
                         default:
                             Console.WriteLine("OI, The fuck you doing here m8");

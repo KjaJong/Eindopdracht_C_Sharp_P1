@@ -68,6 +68,8 @@ namespace ChoHanClient
             Answer = null;
             ConfirmAnswer = false;
 
+            YourChoiceLabel.Text = "You choose:";
+
             switch (RightAnswerPlayerOne)
             {
                 case "True":

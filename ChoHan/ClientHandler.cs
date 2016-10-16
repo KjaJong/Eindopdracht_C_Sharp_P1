@@ -12,11 +12,18 @@ namespace ChoHan
         //TODO implement logging
         private Log _sessionLog;
         private List<TcpClient> _clients;
+        private List<int> scores; 
 
         public ClientHandler(List<TcpClient> clients , Log sessionLog)
         {
             _clients = clients;
             _sessionLog = sessionLog;
+            scores = new List<int>();
+
+            foreach (var c in _clients)
+            {
+                scores.Add(0);
+            }
         }
 
         private void StartGame()
@@ -24,15 +31,15 @@ namespace ChoHan
             _sessionLog.AddLogEntry("Started a game");
             int roundCount = 0;
             ChoHan game = new ChoHan();
-            List<int> scores = new List<int>();
-            int count = 0;
+            int count; 
 
             while (roundCount < 5)
             {
+                count = 0;
                 int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
-                while (answercount != _clients.Count)
+                while (answercount < _clients.Count)
                 {
                     _sessionLog.AddLogEntry("Asked for attendence");
                     //TODO check if the code isn't the same as down below (from rule 51)
@@ -42,9 +49,8 @@ namespace ChoHan
                       SharedUtil.SendMessage(c, "give/confirmation");
                       if (SharedUtil.ReadMessage(c).Equals("True"))
                         {
-                            _sessionLog.AddLogEntry(c.ToString(), " responded");
-                            scores.Add(0);
                             answercount++;
+                           _sessionLog.AddLogEntry(c.ToString(), " responded");
                         }
                     }
                 }
@@ -58,8 +64,7 @@ namespace ChoHan
                 {
                     SharedUtil.SendMessage(c, "give/answer");
 
-                    string answer = (SharedUtil.ReadMessage(c));
-                    string[] message;
+                    string answer = SharedUtil.ReadMessage(c);
                     int newScore = scores.ElementAt(count);
                     SharedUtil.SendMessage(c, "recieve/answer");
                     if (answer.Equals("True"))
@@ -115,14 +120,11 @@ namespace ChoHan
             _sessionLog.AddLogEntry("Determaning the winner of the game");
             bool playerOneWin = true;
 
+
             //starts looking for the ties and loses
             foreach (var c in list)
             {
-                if (c.Equals(list.ElementAt(0)))
-                {
-                    break;
-                }
-
+                if (c.Equals(list.ElementAt(0))) continue;
                 SharedUtil.SendMessage(c.Key, "recieve/answer/final");
 
                 switch (c.Value - list.ElementAt(0).Value)
@@ -141,8 +143,8 @@ namespace ChoHan
                         Console.WriteLine("ffs are you here?!");
                         break;
                 }
-
             }
+            Console.WriteLine("Winner determined");
 
             //checks if the highest score doesn't tie with another one
             SharedUtil.SendMessage(list.ElementAt(0).Key, playerOneWin ? "You win" : "You lose");
@@ -154,9 +156,13 @@ namespace ChoHan
                 _sessionLog.AddLogEntry("Game is over, closing the game");
                 SharedUtil.SendMessage(c.Key, "closing");
                 SharedUtil.SendMessage(c.Key, "Thanks for playing.");
+
+                c.Key.GetStream().Close();
                 c.Key.Close();
+
                 _sessionLog.PrintLog();
             }
+            Console.WriteLine("Error4");
         }
 
         public void HandleClientThread()
