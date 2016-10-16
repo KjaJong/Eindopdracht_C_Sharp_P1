@@ -68,12 +68,17 @@ namespace ChoHanClient
                         case "give/answer":
                             SharedUtil.SendMessage(client, form.Answer.ToString());
                             break;
+                        case "clean":
+                            form.Answer = null;
+                            form.ConfirmAnswer = false;
+                            form.ResetChoiceLabel();
+                            break;
                         //TODO voeg acties en andere cases toe om te de GUI te beinvloeden
                         case "recieve/answer":
                             Console.WriteLine(SharedUtil.ReadMessage(client));
                             string rightAnswer = SharedUtil.ReadMessage(client);
                             string score = SharedUtil.ReadMessage(client);
-                            form.Update(rightAnswer, score);
+                            form.Update(rightAnswer, score); //TODO does this work?
                             //TODO check if the read message give back useable data
                             break;
                         case "recieve/answer/final":

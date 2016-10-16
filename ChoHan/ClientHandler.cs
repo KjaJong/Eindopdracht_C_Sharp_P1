@@ -29,21 +29,23 @@ namespace ChoHan
 
             while (roundCount < 5)
             {
+                Console.WriteLine("Send clickbait");
                 int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
-                while (answercount != _clients.Count)
+                while (answercount < _clients.Count)
                 {
                     _sessionLog.AddLogEntry("Asked for attendence");
                     //TODO check if the code isn't the same as down below (from rule 51)
-                    answercount = 0;
+                    //answercount = 0;
                     foreach (var c in _clients)
                     {
                       if (SharedUtil.ReadMessage(c).Equals("True"))
                         {
-                            _sessionLog.AddLogEntry(c.ToString(), " resonded");
+                            _sessionLog.AddLogEntry(c.ToString(), " responded");
                             scores.Add(0);
                             answercount++;
+                            Console.WriteLine("Got one client");
                         }
                     }
                 }
@@ -88,11 +90,12 @@ namespace ChoHan
                         SharedUtil.SendMessages(c, message);
                     }
                     Console.WriteLine("#NinaBootyBestBooty");
+                    SharedUtil.SendMessage(c, "clean");
                     count++;
-
                 }
                 _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount + 1));
                 roundCount++;
+                Console.WriteLine(roundCount);
             }
             Console.WriteLine("Error");
             //sorts the dictionary on score
