@@ -29,3 +29,14 @@ C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanCl
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache
+F:\Projects\Git\C#project periode 1\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+F:\Projects\Git\C#project periode 1\ChoHanClient\bin\Debug\ChoHanClient.exe
+F:\Projects\Git\C#project periode 1\ChoHanClient\bin\Debug\ChoHanClient.pdb
+F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.csprojResolveAssemblyReference.cache
+F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
+F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
+F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache
+F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.exe
+F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.pdb
+F:\Projects\Git\C#project periode 1\ChoHanClient\bin\Debug\Newtonsoft.Json.dll
+F:\Projects\Git\C#project periode 1\ChoHanClient\bin\Debug\Newtonsoft.Json.xml

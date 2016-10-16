@@ -18,3 +18,13 @@ C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\Newtonsoft.Jso
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHanServer.csprojResolveAssemblyReference.cache
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.exe
 C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.pdb
+F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\ChoHan.exe.config
+F:\Projects\Git\C#project periode 1\ChoHan\obj\Debug\ChoHanServer.csprojResolveAssemblyReference.cache
+F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\ChoHan.exe
+F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\ChoHan.pdb
+F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\ChoHanClient.exe
+F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\Newtonsoft.Json.dll
+F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\ChoHanClient.pdb
+F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\Newtonsoft.Json.xml
+F:\Projects\Git\C#project periode 1\ChoHan\obj\Debug\ChoHan.exe
+F:\Projects\Git\C#project periode 1\ChoHan\obj\Debug\ChoHan.pdb

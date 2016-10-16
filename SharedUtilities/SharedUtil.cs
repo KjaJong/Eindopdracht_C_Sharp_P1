@@ -48,18 +48,5 @@ namespace SharedUtilities
             byte[] bytes = Encoding.Unicode.GetBytes(message);
             client.GetStream().Write(bytes, 0, bytes.Length);
         }
-
-        public static void SendMessages(TcpClient client, string[] message)
-        {
-            string lengtMessage = message.Length.ToString();
-            byte[] bytes = Encoding.Unicode.GetBytes(lengtMessage);
-            client.GetStream().Write(bytes, 0, bytes.Length);
-
-            foreach (var s in message)
-            {
-                bytes = Encoding.Unicode.GetBytes(s);
-                client.GetStream().Write(bytes, 0, bytes.Length);
-            }
-        }
     }
 }

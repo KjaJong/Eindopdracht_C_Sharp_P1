@@ -54,25 +54,20 @@ namespace ChoHanClient
             List<string> messages = new List<string>();
             while (!done)
             {
-                if (form.ConfirmAnswer)
-                {
-                    SharedUtil.SendMessage(client, form.ConfirmAnswer.ToString());
-                    beginConfirm = true;
-                }
-                
-                if (beginConfirm)
-                {
                 
                     switch (SharedUtil.ReadMessage(client))
                     {
+                        case "give/confirmation":
+                            SharedUtil.SendMessage(client, form.ConfirmAnswer.ToString());
+                            break;
                         case "give/answer":
                             SharedUtil.SendMessage(client, form.Answer.ToString());
                             break;
-                        //TODO voeg acties en andere cases toe om te de GUI te beinvloeden
+                           //TODO voeg acties en andere cases toe om te de GUI te beinvloeden
                         case "recieve/answer":
-                            Console.WriteLine(SharedUtil.ReadMessage(client));
                             string rightAnswer = SharedUtil.ReadMessage(client);
                             string score = SharedUtil.ReadMessage(client);
+                            Console.WriteLine($"{rightAnswer} {score}");
                             form.Update(rightAnswer, score);
                             //TODO check if the read message give back useable data
                             break;
@@ -88,7 +83,7 @@ namespace ChoHanClient
                             Console.WriteLine("OI, The fuck you doing here m8");
                             break;
                     }
-                }
+                
             }
         }
 

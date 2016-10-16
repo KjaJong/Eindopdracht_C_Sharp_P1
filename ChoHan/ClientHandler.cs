@@ -39,9 +39,10 @@ namespace ChoHan
                     answercount = 0;
                     foreach (var c in _clients)
                     {
+                      SharedUtil.SendMessage(c, "give/confirmation");
                       if (SharedUtil.ReadMessage(c).Equals("True"))
                         {
-                            _sessionLog.AddLogEntry(c.ToString(), " resonded");
+                            _sessionLog.AddLogEntry(c.ToString(), " responded");
                             scores.Add(0);
                             answercount++;
                         }
@@ -60,34 +61,36 @@ namespace ChoHan
                     string answer = (SharedUtil.ReadMessage(c));
                     string[] message;
                     int newScore = scores.ElementAt(count);
+                    SharedUtil.SendMessage(c, "recieve/answer");
                     if (answer.Equals("True"))
                     {
                         if (game.CheckResult(true))
                         {
                             scores.Insert(count, newScore++);
-                            message = new[] {scores.ElementAt(count).ToString(), "True"};
+                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
+                            SharedUtil.SendMessage(c, "True");
                         }
                         else
                         {
-                            message = new[] {scores.ElementAt(count).ToString(), "False"};
+                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
+                            SharedUtil.SendMessage(c, "False");
                         }
-                        SharedUtil.SendMessages(c, message);
                     }
                     else
                     {
                         if (game.CheckResult(false))
                         {
                             scores.Insert(count, newScore++);
-                            message = new[] {scores.ElementAt(count).ToString(), "True"};
+                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
+                            SharedUtil.SendMessage(c, "True");
                         }
                         else
                         {
-                            message = new[] {scores.ElementAt(count).ToString(), "False"};
+                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
+                            SharedUtil.SendMessage(c, "False");
                         }
-                        SharedUtil.SendMessage(c, "recieve/answer");
-                        SharedUtil.SendMessages(c, message);
                     }
-                    Console.WriteLine("#NinaBootyBestBooty");
+                    Console.WriteLine("Scores send");
                     count++;
 
                 }
