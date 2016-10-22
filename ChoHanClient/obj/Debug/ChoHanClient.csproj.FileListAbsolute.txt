@@ -40,3 +40,6 @@ F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.exe
 F:\Projects\Git\C#project periode 1\ChoHanClient\obj\Debug\ChoHanClient.pdb
 F:\Projects\Git\C#project periode 1\ChoHanClient\bin\Debug\Newtonsoft.Json.dll
 F:\Projects\Git\C#project periode 1\ChoHanClient\bin\Debug\Newtonsoft.Json.xml
+F:\Git\C#projectClone\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+F:\Git\C#projectClone\ChoHanClient\obj\Debug\ChoHanClient.exe
+F:\Git\C#projectClone\ChoHanClient\obj\Debug\ChoHanClient.pdb
