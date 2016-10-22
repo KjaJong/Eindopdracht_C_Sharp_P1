@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChoHan
 {
-    class Player
+    public class Player
     {
         public TcpClient Client { get; set; }
         public string Naam { get; set; }

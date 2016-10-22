@@ -7,23 +7,16 @@ using SharedUtilities;
 
 namespace ChoHan
 {
-    public class ClientHandler
+    public class ClientHandler : IComparer<Player>
     {
         //TODO implement logging
         private Log _sessionLog;
-        private List<TcpClient> _clients;
-        private List<int> scores; 
+        private List<Player> _clients;
 
-        public ClientHandler(List<TcpClient> clients , Log sessionLog)
+        public ClientHandler(List<Player> clients , Log sessionLog)
         {
             _clients = clients;
             _sessionLog = sessionLog;
-            scores = new List<int>();
-
-            foreach (var c in _clients)
-            {
-                scores.Add(0);
-            }
         }
 
         private void StartGame()
@@ -46,8 +39,8 @@ namespace ChoHan
                     answercount = 0;
                     foreach (var c in _clients)
                     {
-                      SharedUtil.SendMessage(c, "give/confirmation");
-                      if (SharedUtil.ReadMessage(c).Equals("True"))
+                      SharedUtil.SendMessage(c.Client, "give/confirmation");
+                      if (SharedUtil.ReadMessage(c.Client).Equals("True"))
                         {
                             answercount++;
                            _sessionLog.AddLogEntry(c.ToString(), " responded");
@@ -62,37 +55,36 @@ namespace ChoHan
               
                 foreach (var c in _clients)
                 {
-                    SharedUtil.SendMessage(c, "give/answer");
+                    SharedUtil.SendMessage(c.Client, "give/answer");
 
-                    string answer = SharedUtil.ReadMessage(c);
-                    int newScore = scores.ElementAt(count);
+                    string answer = SharedUtil.ReadMessage(c.Client);
                     SharedUtil.SendMessage(c, "recieve/answer");
                     if (answer.Equals("True"))
                     {
                         if (game.CheckResult(true))
                         {
-                            scores.Insert(count, newScore++);
-                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
-                            SharedUtil.SendMessage(c, "True");
+                            c.Score++;
+                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
+                            SharedUtil.SendMessage(c.Client, "True");
                         }
                         else
                         {
-                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
-                            SharedUtil.SendMessage(c, "False");
+                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
+                            SharedUtil.SendMessage(c.Client, "False");
                         }
                     }
                     else
                     {
                         if (game.CheckResult(false))
                         {
-                            scores.Insert(count, newScore++);
-                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
-                            SharedUtil.SendMessage(c, "True");
+                            c.Score++;
+                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
+                            SharedUtil.SendMessage(c.Client, "True");
                         }
                         else
                         {
-                            SharedUtil.SendMessage(c, scores.ElementAt(count).ToString());
-                            SharedUtil.SendMessage(c, "False");
+                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
+                            SharedUtil.SendMessage(c.Client, "False");
                         }
                     }
                     Console.WriteLine("Scores send");
@@ -103,41 +95,30 @@ namespace ChoHan
                 roundCount++;
             }
             Console.WriteLine("Error");
-            //sorts the dictionary on score
-            Dictionary<TcpClient, int> dictionary =  new Dictionary<TcpClient, int>();
+            //sorts the list on score
 
-            count = 0;
-            foreach (var c in _clients)
-            {
-                dictionary.Add(c, scores.ElementAt(count));
-                count++;
-            }
-            List<KeyValuePair<TcpClient, int>> list = dictionary.ToList();
-
-            list.Sort(
-                (pair1, pair2) => pair1.Value.CompareTo(pair2.Value)
-            );
+            _clients.Sort();
             _sessionLog.AddLogEntry("Determaning the winner of the game");
             bool playerOneWin = true;
 
 
             //starts looking for the ties and loses
-            foreach (var c in list)
+            foreach (var c in _clients)
             {
-                if (c.Equals(list.ElementAt(0))) continue;
-                SharedUtil.SendMessage(c.Key, "recieve/answer/final");
+                if (c.Equals(_clients.ElementAt(0))) continue;
+                SharedUtil.SendMessage(c.Client, "recieve/answer/final");
 
-                switch (c.Value - list.ElementAt(0).Value)
+                switch (c.Score - _clients.ElementAt(0).Score)
                 {
                     case 1:
                         Console.WriteLine("Something went terribly wrong here");
                         break;
                     case 0:
-                        SharedUtil.SendMessage(c.Key, "You tied");
+                        SharedUtil.SendMessage(c.Client, "You tied");
                         playerOneWin = false;
                         break;
                     case -1:
-                        SharedUtil.SendMessage(c.Key, "You lose");
+                        SharedUtil.SendMessage(c.Client, "You lose");
                         break;
                     default:
                         Console.WriteLine("ffs are you here?!");
@@ -147,18 +128,18 @@ namespace ChoHan
             Console.WriteLine("Winner determined");
 
             //checks if the highest score doesn't tie with another one
-            SharedUtil.SendMessage(list.ElementAt(0).Key, playerOneWin ? "You win" : "You lose");
+            SharedUtil.SendMessage(_clients.ElementAt(0).Client, playerOneWin ? "You win" : "You lose");
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
             //kills every client muhahaha
-            foreach (var c in list)
+            foreach (var c in _clients)
             {
                 _sessionLog.AddLogEntry("Game is over, closing the game");
-                SharedUtil.SendMessage(c.Key, "closing");
-                SharedUtil.SendMessage(c.Key, "Thanks for playing.");
+                SharedUtil.SendMessage(c.Client, "closing");
+                SharedUtil.SendMessage(c.Client, "Thanks for playing.");
 
-                c.Key.GetStream().Close();
-                c.Key.Close();
+                c.Client.GetStream().Close();
+                c.Client.Close();
 
                 _sessionLog.PrintLog();
             }
@@ -170,6 +151,11 @@ namespace ChoHan
             //starts the game
             StartGame();
             Console.WriteLine("Connection closed");
+        }
+
+        public int Compare(Player x, Player y)
+        {
+            return x.Score - y.Score;
         }
     }
 }
