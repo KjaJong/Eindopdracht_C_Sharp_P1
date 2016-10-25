@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChoHan
 {
-    public class Player
+    public class Player : IComparable<Player>
     {
         public TcpClient Client { get; set; }
         public string Naam { get; set; }
@@ -18,6 +18,11 @@ namespace ChoHan
             Naam = naam;
             Client = client;
             Score = score;
+        }
+
+        public int CompareTo(Player other)
+        {
+            return Score.CompareTo(other.Score);
         }
     }
 }
