@@ -58,7 +58,7 @@ namespace ChoHan
                     SharedUtil.SendMessage(c.Client, "give/answer");
 
                     string answer = SharedUtil.ReadMessage(c.Client);
-                    SharedUtil.SendMessage(c, "recieve/answer");
+                    SharedUtil.SendMessage(c.Client, "recieve/answer");
                     if (answer.Equals("True"))
                     {
                         if (game.CheckResult(true))
