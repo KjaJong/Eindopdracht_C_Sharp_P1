@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using SharedUtilities;
+using Timer = System.Timers.Timer;
 
 namespace ChoHanClient
 {
@@ -29,7 +30,13 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
             client = new TcpClient();
-            TryConnection();
+
+            Timer t = new Timer(10);
+            t.Elapsed += (s, e) =>
+            {
+                TryConnection();
+            };
+
         }
 
         public void TryConnection()
@@ -69,7 +76,6 @@ namespace ChoHanClient
                             //TODO check if the read message give back useable data
                             break;
                         case "recieve/answer/final":
-                            Console.WriteLine("I'm here");
                             form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
                             //TODO check if the read message give back useable data
                             break;
