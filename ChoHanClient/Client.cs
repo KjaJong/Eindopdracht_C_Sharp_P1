@@ -29,7 +29,7 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
             client = new TcpClient();
-          
+            TryConnection();
         }
 
         public void TryConnection()
@@ -63,19 +63,20 @@ namespace ChoHanClient
                             break;
                            //TODO voeg acties en andere cases toe om te de GUI te beinvloeden
                         case "recieve/answer":
-                            string rightAnswer = SharedUtil.ReadMessage(client);
-                            string score = SharedUtil.ReadMessage(client);
-                            Console.WriteLine($"{rightAnswer} {score}");
-                            form.Update(rightAnswer, score);
+                            string answer =  SharedUtil.ReadMessage(client);
+                            string[] words = answer.Split(':');
+                            form.Update(words[1], words[0]);
                             //TODO check if the read message give back useable data
                             break;
                         case "recieve/answer/final":
+                            Console.WriteLine("I'm here");
                             form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
                             //TODO check if the read message give back useable data
                             break;
                         case "closing":
-                            form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
-                            break;
+                            client.GetStream().Close();
+                            client.Close();
+                            return;
                         default:
                             Console.WriteLine("OI, The fuck you doing here m8");
                             break;

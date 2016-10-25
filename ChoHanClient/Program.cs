@@ -18,7 +18,6 @@ namespace ChoHanClient
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Client client = new Client();
-            client.TryConnection();
             Application.Run(client.form);
         }
     }

@@ -46,3 +46,14 @@ F:\Git\C#projectClone\ChoHanClient\obj\Debug\ChoHanClient.pdb
 D:\Gijs\Documenten\Avans\CSharp\Clone eindopdracht\ChoHanClient\bin\Debug\ChoHanClient.exe.config
 D:\Gijs\Documenten\Avans\CSharp\Clone eindopdracht\ChoHanClient\obj\Debug\ChoHanClient.exe
 D:\Gijs\Documenten\Avans\CSharp\Clone eindopdracht\ChoHanClient\obj\Debug\ChoHanClient.pdb
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.exe
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.pdb
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\ChoHanClient.exe
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\ChoHanClient.pdb
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.dll
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\bin\Debug\Newtonsoft.Json.xml
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.csprojResolveAssemblyReference.cache
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache

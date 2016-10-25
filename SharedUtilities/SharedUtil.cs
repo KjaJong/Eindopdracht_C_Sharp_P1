@@ -35,10 +35,8 @@ namespace SharedUtilities
             {
                 int read = client.GetStream().Read(buffer, totalRead, buffer.Length - totalRead);
                 totalRead += read;
-                Console.WriteLine("ReadMessage: " + read);
             } while (client.GetStream().DataAvailable);
             string message = Encoding.Unicode.GetString(buffer, 0, totalRead);
-            Console.WriteLine(message);
             return message;
         }
 

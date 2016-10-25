@@ -58,7 +58,7 @@ namespace ChoHan
 
             List<Player> _activeClients = new List<Player>();
             int count = 1;
-            while (_activeClients.Count != 2)
+            while (_activeClients.Count != 3)
             {
                 //Looking for players
                 Console.WriteLine("Waiting for player");
