@@ -7,13 +7,13 @@ using SharedUtilities;
 
 namespace ChoHan
 {
-    public class ClientHandler : IComparer<Player>
+    public class ClientHandler
     {
         //TODO implement logging
         private Log _sessionLog;
         private List<Player> _clients;
 
-        public ClientHandler(List<Player> clients , Log sessionLog)
+        public ClientHandler(List<Player> clients, Log sessionLog)
         {
             _clients = clients;
             _sessionLog = sessionLog;
@@ -24,26 +24,25 @@ namespace ChoHan
             _sessionLog.AddLogEntry("Started a game");
             int roundCount = 0;
             ChoHan game = new ChoHan();
-            int count; 
 
             while (roundCount < 5)
             {
-                count = 0;
                 int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
+                Console.WriteLine(answercount);
+                Console.WriteLine(_clients.Count);
                 while (answercount < _clients.Count)
                 {
-                    _sessionLog.AddLogEntry("Asked for attendence");
                     //TODO check if the code isn't the same as down below (from rule 51)
                     answercount = 0;
                     foreach (var c in _clients)
                     {
-                      SharedUtil.SendMessage(c.Client, "give/confirmation");
-                      if (SharedUtil.ReadMessage(c.Client).Equals("True"))
+                        SharedUtil.SendMessage(c.Client, "give/confirmation");
+                        if (SharedUtil.ReadMessage(c.Client).Equals("True"))
                         {
                             answercount++;
-                           _sessionLog.AddLogEntry(c.ToString(), " responded");
+                            _sessionLog.AddLogEntry(c.Naam, " responded");
                         }
                     }
                 }
@@ -52,7 +51,7 @@ namespace ChoHan
                 //TODO Convert to fucking jason
                 //send every client a message that they can send their answer
                 game.ThrowDice();
-              
+
                 foreach (var c in _clients)
                 {
                     SharedUtil.SendMessage(c.Client, "give/answer");
@@ -88,7 +87,6 @@ namespace ChoHan
                         }
                     }
                     Console.WriteLine("Scores send");
-                    count++;
 
                 }
                 _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount + 1));
@@ -141,8 +139,9 @@ namespace ChoHan
                 c.Client.GetStream().Close();
                 c.Client.Close();
 
-                _sessionLog.PrintLog();
             }
+            //TODO: Menno plz fix
+            _sessionLog.PrintLog();
             Console.WriteLine("Error4");
         }
 
@@ -151,11 +150,6 @@ namespace ChoHan
             //starts the game
             StartGame();
             Console.WriteLine("Connection closed");
-        }
-
-        public int Compare(Player x, Player y)
-        {
-            return x.Score - y.Score;
         }
     }
 }
