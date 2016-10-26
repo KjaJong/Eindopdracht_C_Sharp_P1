@@ -31,7 +31,7 @@ namespace ChoHan
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
                 Console.WriteLine(answercount);
-                Console.WriteLine(_clients.Count);
+                Console.WriteLine(roundCount);
                 while (answercount < _clients.Count)
                 {
                     //TODO check if the code isn't the same as down below (from rule 51)
@@ -63,13 +63,11 @@ namespace ChoHan
                         if (game.CheckResult(true))
                         {
                             c.Score++;
-                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
-                            SharedUtil.SendMessage(c.Client, "True");
+                            SharedUtil.SendMessage(c.Client, $"{c.Score}:True");
                         }
                         else
                         {
-                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
-                            SharedUtil.SendMessage(c.Client, "False");
+                            SharedUtil.SendMessage(c.Client, $"{c.Score}:False");
                         }
                     }
                     else
@@ -77,56 +75,57 @@ namespace ChoHan
                         if (game.CheckResult(false))
                         {
                             c.Score++;
-                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
-                            SharedUtil.SendMessage(c.Client, "True");
+                            SharedUtil.SendMessage(c.Client, $"{c.Score}:True");
                         }
                         else
                         {
-                            SharedUtil.SendMessage(c.Client, c.Score.ToString());
-                            SharedUtil.SendMessage(c.Client, "False");
+                            SharedUtil.SendMessage(c.Client, $"{c.Score}:False");
                         }
                     }
                     Console.WriteLine("Scores send");
 
                 }
-                _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount + 1));
                 roundCount++;
+                _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount));
             }
-            Console.WriteLine("Error");
             //sorts the list on score
 
-            _clients.Sort();
+            _clients.Sort((x, y) => y.Score - x.Score);
+
             _sessionLog.AddLogEntry("Determaning the winner of the game");
             bool playerOneWin = true;
-
 
             //starts looking for the ties and loses
             foreach (var c in _clients)
             {
+                Console.WriteLine(c.Score - _clients.ElementAt(0).Score);
                 if (c.Equals(_clients.ElementAt(0))) continue;
+                Console.WriteLine("error");
                 SharedUtil.SendMessage(c.Client, "recieve/answer/final");
 
-                switch (c.Score - _clients.ElementAt(0).Score)
+                if (c.Score - _clients.ElementAt(0).Score == 0)
                 {
-                    case 1:
-                        Console.WriteLine("Something went terribly wrong here");
-                        break;
-                    case 0:
-                        SharedUtil.SendMessage(c.Client, "You tied");
-                        playerOneWin = false;
-                        break;
-                    case -1:
-                        SharedUtil.SendMessage(c.Client, "You lose");
-                        break;
-                    default:
-                        Console.WriteLine("ffs are you here?!");
-                        break;
+                    SharedUtil.SendMessage(c.Client, "You tied");
+                    playerOneWin = false;
+                }
+
+                else if (c.Score - _clients.ElementAt(0).Score < 0)
+                {
+                    SharedUtil.SendMessage(c.Client, "You lose");
+                }
+
+                else
+                {
+                    Console.WriteLine("ffs are you here?!");
+                    SharedUtil.SendMessage(c.Client, "Something went wrong here");
                 }
             }
             Console.WriteLine("Winner determined");
 
             //checks if the highest score doesn't tie with another one
-            SharedUtil.SendMessage(_clients.ElementAt(0).Client, playerOneWin ? "You win" : "You lose");
+            SharedUtil.SendMessage(_clients.ElementAt(0).Client, "recieve/answer/final");
+            Console.WriteLine("Is there a winner?");
+            SharedUtil.SendMessage(_clients.ElementAt(0).Client, playerOneWin ? "You win" : "You tied");
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
             //kills every client muhahaha
@@ -134,15 +133,13 @@ namespace ChoHan
             {
                 _sessionLog.AddLogEntry("Game is over, closing the game");
                 SharedUtil.SendMessage(c.Client, "closing");
-                SharedUtil.SendMessage(c.Client, "Thanks for playing.");
 
                 c.Client.GetStream().Close();
                 c.Client.Close();
 
             }
             //TODO: Menno plz fix
-            _sessionLog.PrintLog();
-            Console.WriteLine("Error4");
+            //_sessionLog.PrintLog();
         }
 
         public void HandleClientThread()

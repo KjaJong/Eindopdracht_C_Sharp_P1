@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using SharedUtilities;
+using Timer = System.Timers.Timer;
 
 namespace ChoHanClient
 {
@@ -29,7 +30,13 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
             client = new TcpClient();
-          
+
+            Timer t = new Timer(10);
+            t.Elapsed += (s, e) =>
+            {
+                TryConnection();
+            };
+
         }
 
         public void TryConnection()
@@ -62,17 +69,25 @@ namespace ChoHanClient
                             SharedUtil.SendMessage(client, form.Answer.ToString());
                             break;
                         case "recieve/answer":
+<<<<<<< HEAD
                             string rightAnswer = SharedUtil.ReadMessage(client);
                             string score = SharedUtil.ReadMessage(client);
                             Console.WriteLine($"{rightAnswer} {score}");
                             form.Update(rightAnswer, score);
+=======
+                            string answer =  SharedUtil.ReadMessage(client);
+                            string[] words = answer.Split(':');
+                            form.Update(words[1], words[0]);
+                            //TODO check if the read message give back useable data
+>>>>>>> 2be37171eb55d964674a024f9e5a551602e4c2a5
                             break;
                         case "recieve/answer/final":
                             form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
                             break;
                         case "closing":
-                            form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
-                            break;
+                            client.GetStream().Close();
+                            client.Close();
+                            return;
                         default:
                             Console.WriteLine("OI, The fuck you doing here m8");
                             break;

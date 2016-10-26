@@ -28,3 +28,13 @@ F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\ChoHanClient.pdb
 F:\Projects\Git\C#project periode 1\ChoHan\bin\Debug\Newtonsoft.Json.xml
 F:\Projects\Git\C#project periode 1\ChoHan\obj\Debug\ChoHan.exe
 F:\Projects\Git\C#project periode 1\ChoHan\obj\Debug\ChoHan.pdb
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.exe.config
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.exe
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHan.pdb
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.exe
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHan.pdb
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHanClient.exe
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\Newtonsoft.Json.dll
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\ChoHanClient.pdb
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\bin\Debug\Newtonsoft.Json.xml
+D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHan\obj\Debug\ChoHanServer.csprojResolveAssemblyReference.cache

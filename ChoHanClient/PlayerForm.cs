@@ -16,12 +16,15 @@ namespace ChoHanClient
         //TODO: make the game unstallable
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
-        public List<int> ScoresOtherPLayers;
+
+        delegate void SetTextCallback(string text, string score);
+
+        delegate void SetCommentCallBack(string text);
+
 
         public PlayerForm()
         {
             Answer = null;
-            ScoresOtherPLayers = new List<int>();
             InitializeComponent();
         }
 
@@ -60,37 +63,56 @@ namespace ChoHanClient
             Environment.Exit(1);
         }
 
-        public void Update(string RightAnswerPlayerOne, string score )
+        public void Update(string rightAnswerPlayerOne, string score )
         {
-        //    ScorePlayerOneLabel.Text = scores.ElementAt(0).ToString();
-        //    ScoresOtherPLayers = scores;
-        //TODO This doesn't seem to function
-            Answer = null;
-            ConfirmAnswer = false;
-
-            YourChoiceLabel.Text = "You choose:";
-
-            switch (RightAnswerPlayerOne)
+            if (this.ScorePlayerOneLabel.InvokeRequired)
             {
-                case "True":
-                    RightPlayerOneLabel.Visible = true;
-                    WrongPlayerOneLabel.Visible = false;
-                    break;
-
-                case "False":
-                    WrongPlayerOneLabel.Visible = true;
-                    RightPlayerOneLabel.Visible = false;
-                    break;
+                SetTextCallback d = new SetTextCallback(Update);
+                this.Invoke(d, rightAnswerPlayerOne, score);
             }
-            
+            else
+            {
+
+                ScorePlayerOneLabel.Text = score;
+
+                //TODO This doesn't seem to function
+                Answer = null;
+                ConfirmAnswer = false;
+
+                switch (rightAnswerPlayerOne)
+                {
+                    case "True":
+                        RightPlayerOneLabel.Visible = true;
+                        WrongPlayerOneLabel.Visible = false;
+                        break;
+                        
+                    case "False":
+                        WrongPlayerOneLabel.Visible = true;
+                        RightPlayerOneLabel.Visible = false;
+                        break;
+                }
+
+                ResetChoiceLabel();
+
+            }
+
         }
+
 
         public void UpdateMessageLabel(string text)
         {
-            CommentLabel.Text = text;
+            if (this.CommentLabel.InvokeRequired)
+            {
+                SetCommentCallBack d = new SetCommentCallBack(UpdateMessageLabel);
+                this.Invoke(d, new object[] {text});
+            }
+            else
+            {
+                CommentLabel.Text = text;
+            }
         }
 
-        public void ResetChoiceLabel()
+        private void ResetChoiceLabel()
         {
             YourChoiceLabel.Text = "You choose: ";
         }
