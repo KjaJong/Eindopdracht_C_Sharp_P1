@@ -61,17 +61,14 @@ namespace ChoHanClient
                         case "give/answer":
                             SharedUtil.SendMessage(client, form.Answer.ToString());
                             break;
-                           //TODO voeg acties en andere cases toe om te de GUI te beinvloeden
                         case "recieve/answer":
                             string rightAnswer = SharedUtil.ReadMessage(client);
                             string score = SharedUtil.ReadMessage(client);
                             Console.WriteLine($"{rightAnswer} {score}");
                             form.Update(rightAnswer, score);
-                            //TODO check if the read message give back useable data
                             break;
                         case "recieve/answer/final":
                             form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
-                            //TODO check if the read message give back useable data
                             break;
                         case "closing":
                             form.UpdateMessageLabel(SharedUtil.ReadMessage(client));

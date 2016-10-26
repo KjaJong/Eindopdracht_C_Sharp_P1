@@ -32,7 +32,7 @@ namespace ChoHan
         {
             _dataLog.Add(new LogEntry()
             {
-                TimeStamp = DateTime.Today + "/" + DateTime.Now,
+                TimeStamp = DateTime.Today + "_" + DateTime.Now,
                 PlayerName = playerName,
                 PlayerAction = playerAction
             });
@@ -42,7 +42,7 @@ namespace ChoHan
         {
             _dataLog.Add(new LogEntry()
             {
-                TimeStamp = DateTime.Today + "/" + DateTime.Now,
+                TimeStamp = DateTime.Today + "_" + DateTime.Now,
                 PlayerName = "SERVER",
                 PlayerAction = playerAction
             });
@@ -52,7 +52,9 @@ namespace ChoHan
         public void PrintLog()
         {
             //TODO something should start double logging here i think
-            string filepath = ($@"..\..\LogMap/LogFile{_logName}");
+            //TODO softcode the filepath
+            string fileName = ToSafeFileName(_logName);
+            string filepath = ($"C:/Users/Menno/Documents/FUCK THIS/{fileName}");//FILEPATH VOOR MENNO 
 
             if (!File.Exists(filepath))
             {
@@ -80,6 +82,20 @@ namespace ChoHan
                 writer.Close();
                 logFile.Close();
             }
+        }
+
+        private string ToSafeFileName(string s)
+        {
+            return s
+                .Replace("\\", " ")
+                .Replace("\\", " ")
+                .Replace("\\", " ")
+                .Replace("\\", " ")
+                .Replace("\\", " ")
+                .Replace("\\", " ")
+                .Replace("\\", " ")
+                .Replace("\\", " ")
+                .Replace("\\", " ");
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ChoHan
             //looking for ip
             IPAddress localIP = GetLocalIpAddress();
             _handlers = new List<ClientHandler>();
-            string LogName = "SessionLog/" + DateTime.Today + "/" + DateTime.Now + "/ID=" + _handlers.Count;
+            string LogName = "SessionLog_" + DateTime.Today + "_" + DateTime.Now + "_ID=" + _handlers.Count;
             _sessionLog = new Log(LogName);
             _sessionLog.AddLogEntry("Starting the server.");
 
@@ -58,7 +58,7 @@ namespace ChoHan
 
             List<Player> _activeClients = new List<Player>();
             int count = 1;
-            while (_activeClients.Count != 2)
+            while (_activeClients.Count != 1)
             {
                 //Looking for players
                 Console.WriteLine("Waiting for player");
