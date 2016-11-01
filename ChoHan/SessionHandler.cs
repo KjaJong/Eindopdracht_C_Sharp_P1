@@ -94,7 +94,8 @@ namespace ChoHan
                         });
 
                         dynamic message = SharedUtil.ReadMessage(c.Client);
-                        if ((bool)message.data.confirmation)
+                        string text = (string) message.data.confirmation;
+                        if (text.Equals("True"))
                         {
                             answercount++;
                         }
@@ -122,29 +123,35 @@ namespace ChoHan
 
                     dynamic answer = SharedUtil.ReadMessage(c.Client);
                     _sessionLog.AddLogEntry(c.Naam, "Gave the server an awnser.");
-                    if ((bool)answer.data.answer)
+                    string text = (string) answer.data.answer;
+
+                    switch (text)
                     {
-                        if (game.CheckResult(true))
-                        {
-                            c.Score++;
-                            UpdatePlayers(true);
-                        }
-                        else
-                        {
+                        case "True":
+                            if (game.CheckResult(true))
+                            {
+                                c.Score++;
+                                UpdatePlayers(true);
+                            }
+                            else
+                            {
+                                UpdatePlayers(false);
+                            }
+                            break;
+                        case "False":
+                            if (game.CheckResult(false))
+                            {
+                                c.Score++;
+                                UpdatePlayers(true);
+                            }
+                            else
+                            {
+                                UpdatePlayers(false);
+                            }
+                            break;
+                        default:
                             UpdatePlayers(false);
-                        }
-                    }
-                    else
-                    {
-                        if (game.CheckResult(false))
-                        {
-                            c.Score++;
-                            UpdatePlayers(true);
-                        }
-                        else
-                        {
-                           UpdatePlayers(false);
-                        }
+                            break;
                     }
                     Console.WriteLine("Scores send");
                     _sessionLog.AddLogEntry($"{c.Naam}'s awnser has been proccesed.");

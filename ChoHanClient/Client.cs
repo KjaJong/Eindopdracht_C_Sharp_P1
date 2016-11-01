@@ -86,7 +86,7 @@ namespace ChoHanClient
                             id = "send",
                             data = new
                             {
-                                confirmation = PlayerForm.ConfirmAnswer
+                                confirmation = PlayerForm.ConfirmAnswer.ToString()
                             }
                         });
                         break;
@@ -99,7 +99,7 @@ namespace ChoHanClient
                             id = "send",
                             data = new
                             {
-                                answer = PlayerForm.Answer
+                                answer = PlayerForm.Answer.ToString()
                             }
                         });
                         break;
