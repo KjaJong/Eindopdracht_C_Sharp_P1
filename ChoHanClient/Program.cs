@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ChoHanClient.ClientForms;
 
 namespace ChoHanClient
 {
@@ -17,8 +18,7 @@ namespace ChoHanClient
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Client client = new Client();
-            Application.Run(client.Form);
+            Application.Run(new LogInForm());
         }
     }
 }

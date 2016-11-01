@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using ChoHanClient.ClientForms;
 using SharedUtilities;
 using Timer = System.Timers.Timer;
 
@@ -12,36 +14,63 @@ namespace ChoHanClient
 {
     public class Client
     {
-        public PlayerForm Form { get; set; }
-        private readonly IPAddress _currentId;
+        public LogInForm LogInForm { get; set; }
+        public PlayerForm PlayerForm { get; set; }
+        private readonly IPAddress _localIpAddress;
         private readonly TcpClient _client;
         public string Name { get; set; }
 
-        public Client()
+        public Client(string name, LogInForm form)
         {
-            Form = new PlayerForm();
-
+            Name = name;
+            LogInForm = form;
             IPAddress localIP = GetLocalIpAddress();
 
-            bool IpOk = IPAddress.TryParse(localIP.ToString(), out _currentId);
+            bool IpOk = IPAddress.TryParse(localIP.ToString(), out _localIpAddress);
             if (!IpOk)
             {
-                Console.WriteLine("Couldn't parse the ip address. Exiting code.");
+                Console.WriteLine("Couldn't parse the IP address. Exiting code.");
                 Environment.Exit(1);
             }
             _client = new TcpClient();
+            
+            Timer t = new Timer(100);
+            t.Elapsed += (s, e) =>
+            {
+                TryConnection();
+            };
+        }
+
+        public Client(string name, LogInForm form, IPAddress IP)
+        {
+            Name = name;
+            LogInForm = form;
+            _client = new TcpClient();
+
+            Timer t = new Timer(10);
+            t.Elapsed += (s, e) =>
+            {
+                TryConnection();
+            };
         }
 
         public void TryConnection()
         {
             try
             {
-                _client.Connect(_currentId, 1337);
+                LogInForm.Close();
+                LogInForm.Dispose();
+                PlayerForm = new PlayerForm();
+                PlayerForm.Visible = true;
+                _client.Connect(_localIpAddress, 1337);
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
+                
+                
             }
             catch (Exception e)
             {
+                LogInForm.setServerText("Can't connect to this server.");
                 Console.WriteLine(e.StackTrace);
             }
         }
@@ -59,12 +88,12 @@ namespace ChoHanClient
                             id = "send",
                             data = new
                             {
-                                confirmation = Form.ConfirmAnswer
+                                confirmation = PlayerForm.ConfirmAnswer
                             }
                         });
                         break;
                     case "recieve/answer":
-                        Form.Update((bool) message.data.answer, (int) message.data.score);
+                        PlayerForm.Update((bool) message.data.answer, (int) message.data.score);
                         break;
                     case "give/answer":
                         SharedUtil.SendMessage(_client, new
@@ -72,12 +101,12 @@ namespace ChoHanClient
                             id = "send",
                             data = new
                             {
-                                answer = Form.Answer
+                                answer = PlayerForm.Answer
                             }
                         });
                         break;
                     case "update/panel":
-                        Form.UpdateMessageLabel((string)message.data.text);
+                        PlayerForm.UpdateMessageLabel((string)message.data.text);
                         break;
                     case "send/session":
                         break;
@@ -89,7 +118,6 @@ namespace ChoHanClient
                         Console.WriteLine("You're not suposse to be here.");
                         break;
                 }
-
             }
         }
 
