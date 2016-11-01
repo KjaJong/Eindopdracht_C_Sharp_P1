@@ -39,6 +39,7 @@
             this.YourChoiceLabel = new System.Windows.Forms.Label();
             this.SessionListBox = new System.Windows.Forms.ListBox();
             this.PlayerListBox = new System.Windows.Forms.ListBox();
+            this.LeaveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ConfirmButton
@@ -145,11 +146,22 @@
             this.PlayerListBox.TabIndex = 28;
             this.PlayerListBox.Visible = false;
             // 
+            // LeaveButton
+            // 
+            this.LeaveButton.Location = new System.Drawing.Point(57, 139);
+            this.LeaveButton.Name = "LeaveButton";
+            this.LeaveButton.Size = new System.Drawing.Size(75, 23);
+            this.LeaveButton.TabIndex = 29;
+            this.LeaveButton.Text = "Leave";
+            this.LeaveButton.UseVisualStyleBackColor = true;
+            this.LeaveButton.Click += new System.EventHandler(this.LeaveButton_Click);
+            // 
             // PlayerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(266, 186);
+            this.Controls.Add(this.LeaveButton);
             this.Controls.Add(this.PlayerListBox);
             this.Controls.Add(this.SessionListBox);
             this.Controls.Add(this.YourChoiceLabel);
@@ -179,5 +191,6 @@
         private System.Windows.Forms.Label YourChoiceLabel;
         private System.Windows.Forms.ListBox SessionListBox;
         private System.Windows.Forms.ListBox PlayerListBox;
+        private System.Windows.Forms.Button LeaveButton;
     }
 }

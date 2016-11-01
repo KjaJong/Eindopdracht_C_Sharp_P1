@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Timers;
 using SharedUtilities;
@@ -16,6 +17,8 @@ namespace ChoHan
         private int _timerCounter = 0;
         private bool _gameGateKeeper = false;
         private Log _sessionLog;
+        private bool _gameStart;
+        private bool _gameGoesOn = true;
 
         public SessionHandler(string name, int maxPlayers)
         {
@@ -35,18 +38,21 @@ namespace ChoHan
             };
             _sessionLog.AddLogEntry("Succesfully started a log.");
         }
-
+        
         public void AddPlayer(Player player)
         {
-            if (_players.Count <= _maxPlayers)
+            if (_players.Count <= _maxPlayers && !_gameStart)
             {
                 _players.Add(player);
-                Console.WriteLine($"Player {player.Naam} has joined the game");
+                Console.WriteLine($"Player {player.Naam} has joined the game: {_sessionName}");
+                Server.SendSessions();
+                UpdatePlayerList();
                 _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
             }
             else
             {
-                Console.WriteLine("");
+                UpdatePlayerPanel(player.Client, "To many players or the game has already started");
+                Console.WriteLine("To many players or the game has already started.");
                 _sessionLog.AddLogEntry($"Failed to add player: {player.Naam}.");
             }
         }
@@ -58,7 +64,7 @@ namespace ChoHan
 
             _sessionLog.AddLogEntry("Started a new game of ChoHan.");
 
-            while (roundCount < 5)
+            while (roundCount < 5 && _gameGoesOn)
             {
                 int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
@@ -72,6 +78,7 @@ namespace ChoHan
                     {
                         break;
                     }
+                    _gameStart = true;
 
                     answercount = 0;
                     foreach (var c in _players)
@@ -120,27 +127,11 @@ namespace ChoHan
                         if (game.CheckResult(true))
                         {
                             c.Score++;
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = true
-                                }
-                            });
+                            UpdatePlayers(true);
                         }
                         else
                         {
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = false
-                                }
-                            });
+                            UpdatePlayers(false);
                         }
                     }
                     else
@@ -148,32 +139,17 @@ namespace ChoHan
                         if (game.CheckResult(false))
                         {
                             c.Score++;
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = true
-                                }
-                            });
+                            UpdatePlayers(true);
                         }
                         else
                         {
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = false
-                                }
-                            });
+                           UpdatePlayers(false);
                         }
                     }
                     Console.WriteLine("Scores send");
                     _sessionLog.AddLogEntry($"{c.Naam}'s awnser has been proccesed.");
                 }
+                UpdatePlayerList();
                 roundCount++;
             }
 
@@ -194,40 +170,18 @@ namespace ChoHan
 
                 if (c.Score - _players.ElementAt(0).Score == 0)
                 {
-                    SharedUtil.SendMessage(c.Client, new
-                    {
-                        id = "update/panel",
-                        data = new
-                        {
-                            text = "you tied"
-                        }
-                    });
-                    playerOneWin = false;
+                    UpdatePlayerPanel(c.Client, "you tied");
                 }
 
                 else if (c.Score - _players.ElementAt(0).Score < 0)
                 {
-                    SharedUtil.SendMessage(c.Client, new
-                    {
-                        id = "update/panel",
-                        data = new
-                        {
-                            text = "you lose"
-                        }
-                    });
+                    UpdatePlayerPanel(c.Client, "you lose");
                 }
 
                 else
                 {
                     Console.WriteLine("ffs are you here?!");
-                    SharedUtil.SendMessage(c.Client, new
-                    {
-                        id = "update/panel",
-                        data = new
-                        {
-                            text = "something went wrong here"
-                        }
-                    });
+                    UpdatePlayerPanel(c.Client, "something went wrong here");
                 }
             }
             _sessionLog.AddLogEntry("Calculated the score of all players.");
@@ -235,17 +189,8 @@ namespace ChoHan
 
             //checks if the highest score doesn't tie with another one
             Console.WriteLine("Is there a winner?");
-            string text;
-            text = playerOneWin ? "you win" : "you tied";
-
-            SharedUtil.SendMessage(_players.ElementAt(0).Client, new
-            {
-                id = "update/panel",
-                data = new
-                {
-                    text = text
-                }
-            });
+            UpdatePlayerPanel(_players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
+            
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
@@ -261,18 +206,104 @@ namespace ChoHan
             }
             //TODO: Should work
             _sessionLog.PrintLog();
+            GameEnded();
+        }
+
+        public void UpdatePlayerPanel(TcpClient client, string text)
+        {
+            SharedUtil.SendMessage(client, new
+            {
+                id = "update/panel",
+                data = new
+                {
+                    text = text
+                }
+            });
+        }
+
+        public void UpdateAllPanels(string text)
+        {
+            foreach (var c in _players)
+            {
+                SharedUtil.SendMessage(c.Client, new
+                {
+                    id = "update/panel",
+                    data = new
+                    {
+                        text = text
+                    }
+                });
+            }
+        }
+
+        public void UpdatePlayers(bool answer)
+        {
+            foreach (var c in _players)
+            {
+                SharedUtil.SendMessage(c.Client, new
+                {
+                    id = "recieve/answer",
+                    data = new
+                    {
+                        score = c.Score,
+                        answer = answer
+                    }
+                });
+            }
         }
 
         public void SessionHandleThread()
         {
+            _gameGoesOn = true;
+            _gameStart = false;
             while (true)
             {
-                while (_maxPlayers != _players.Count)
+                while (2 > _players.Count)
                 {
                 }
-
                 StartGame();
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{_sessionName}: {_players.Count}/{_maxPlayers}";
+        }
+
+        public void UpdatePlayerList()
+        {
+            foreach (var c in _players)
+            {
+                SharedUtil.SendMessage(c.Client, new
+                {
+                    id = "send/players",
+                    data = new
+                    {
+                        players = _players.Select(s => s.ToString()).ToArray()
+                    }
+                });
+            }
+        }
+
+        public void DeletePlayerFromSession(Player player)
+        {
+            _players.Remove(player);
+            if (_players.Count < 2)
+            {
+                _gameGoesOn = false;
+                UpdateAllPanels("Game has stopped and starts again");
+                GameEnded();
+            }
+            
+        }
+
+        public void GameEnded()
+        {
+            foreach (var c in _players)
+            {
+                c.IsSession = false;
+            }
+            _players.Clear();
         }
     }
 }

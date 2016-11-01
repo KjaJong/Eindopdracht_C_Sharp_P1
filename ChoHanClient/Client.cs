@@ -103,6 +103,8 @@ namespace ChoHanClient
                             }
                         });
                         break;
+                    case "session/kicked":
+                        break;
                     case "update/panel":
                         PlayerForm.UpdateMessageLabel((string)message.data.text);
                         break;
@@ -113,6 +115,14 @@ namespace ChoHanClient
                             sessions.Add((string)message.data.sessions[i]);
                         }
                         PlayerForm.FillSessionBox(sessions);
+                        break;
+                    case "send/players":
+                        List<string> players = new List<string>();
+                        for (var i = 0; i < message.data.players.Count; i++)
+                        {
+                            players.Add((string)message.data.players[i]);
+                        }
+                        PlayerForm.FillSessionBox(players);
                         break;
                     case "disconnect":
                         Console.WriteLine("error");
@@ -145,6 +155,18 @@ namespace ChoHanClient
                 data = new
                 {
                     sessionname = sessionName
+                }
+            });
+        }
+
+        public void LeaveSession(string session)
+        {
+            SharedUtil.SendMessage(_client, new
+            {
+                id = "session/leave",
+                data = new
+                {
+                    sessionname = session
                 }
             });
         }

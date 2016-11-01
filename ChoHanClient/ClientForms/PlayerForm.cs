@@ -17,10 +17,13 @@ namespace ChoHanClient
         //TODO: make the game unstallable
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
+        private string _sessionName;
 
         delegate void SetTextCallback(bool text, int score);
 
         delegate void SetCommentCallBack(string text);
+
+        delegate void SetListCallBack(List<String> sessions);
 
 
         public PlayerForm()
@@ -118,19 +121,47 @@ namespace ChoHanClient
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             LogInForm.Client.JoinSession(SessionListBox.SelectedItem.ToString());
+            _sessionName = SessionListBox.SelectedItem.ToString();
+            SwitchBox();
+        }
+
+        public void FillPlayerBox(List<string> sessions)
+        {
+            if (this.SessionListBox.InvokeRequired)
+            {
+                var d = new SetListCallBack(FillPlayerBox);
+                this.Invoke(d, sessions);
+            }
+            else
+            {
+                PlayerListBox.Items.Clear();
+                PlayerListBox.Items.Add("Sessions");
+                foreach (var s in sessions)
+                {
+                    PlayerListBox.Items.Add(s);
+                }
+            }
         }
 
         public void FillSessionBox(List<string> sessions)
         {
-            SessionListBox.Items.Clear();
-            SessionListBox.Items.Add("Sessions");
-            foreach (var s in sessions)
+            if (this.SessionListBox.InvokeRequired)
             {
-                SessionListBox.Items.Add(s);
+                var d = new SetListCallBack(FillSessionBox);
+                this.Invoke(d, sessions);
+            }
+            else
+            {
+                SessionListBox.Items.Clear();
+                SessionListBox.Items.Add("Sessions");
+                foreach (var s in sessions)
+                {
+                    SessionListBox.Items.Add(s);
+                }
             }
         }
 
-        public void switchBox()
+        public void SwitchBox()
         {
             SessionListBox.Visible = !SessionListBox.Visible;
             PlayerListBox.Visible = !PlayerListBox.Visible;
@@ -143,6 +174,17 @@ namespace ChoHanClient
                 "After all players have made their choice, the die are thrown and the result is announced. " +
                 "The awnser must be given within 15 seconds.",
                 "A short explanation.");
+        }
+
+        private void LeaveButton_Click(object sender, EventArgs e)
+        {
+            if (_sessionName == null)
+            {
+                UpdateMessageLabel("You're not in a session");
+                return;
+            }
+            string[] sessionStrings = _sessionName.Split(':');
+            LogInForm.Client.LeaveSession(sessionStrings[0]);
         }
     }
 }

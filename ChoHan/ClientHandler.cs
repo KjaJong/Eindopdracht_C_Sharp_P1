@@ -24,17 +24,20 @@ namespace ChoHan
         {
             while (_client.Client.Connected)
             {
+                if (_client.IsSession) continue;
                 dynamic message = SharedUtil.ReadMessage(_client.Client);
                 switch ((string) message.id)
                 {
                     case "send/message":
                         break;
                     case "session/join":
-                        Server.FindSession((string) message.data.sessionname).AddPlayer(_client);
-
+                        string text = (string) message.data.sessionname;
+                        string[] splitText = text.Split(':');
+                        Server.FindSession(splitText[0]).AddPlayer(_client);
+                        _client.IsSession = true;
                         break;
                     case "session/leave":
-
+                        Server.FindSession((string)message.data.sessionname).DeletePlayerFromSession(_client);
                         break;
                     case "disconnect":
                         SharedUtil.SendMessage(_client.Client, new

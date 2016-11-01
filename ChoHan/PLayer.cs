@@ -12,6 +12,7 @@ namespace ChoHan
         public TcpClient Client { get; set; }
         public string Naam { get; set; }
         public int Score { get; set; }
+        public bool IsSession { get; set; }
 
         public Player(string naam, TcpClient client, int score)
         {
@@ -21,7 +22,7 @@ namespace ChoHan
         }
         public  override string ToString()
         {
-            return $"Naam: {Naam}," +
+            return $"{Naam}," +
                    $" Score: {Score}";
         }
     }
