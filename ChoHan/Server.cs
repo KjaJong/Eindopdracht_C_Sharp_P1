@@ -63,6 +63,7 @@ namespace ChoHan
                 thread.Start();
                 Handlers.Add(handler);
                 ClientThreads.Add(thread);
+                SendSessions();
                 _sessionLog.AddLogEntry("Started a new thread");
             }
         }
@@ -75,6 +76,7 @@ namespace ChoHan
             Console.WriteLine("Player connected!!");
             dynamic message = SharedUtil.ReadMessage(client);
             Player player =  new Player((string)message.data.name, client, 0);
+            
             
             _sessionLog.AddLogEntry("Added a player.");
             return player;
@@ -104,7 +106,17 @@ namespace ChoHan
 
         public static void SendSessions()
         {
-            
+            foreach (var c in Handlers)
+            {
+                SharedUtil.SendMessage(c._client.Client, new
+                {
+                    id = "send/session",
+                    data = new
+                    {
+                        sessions = Sessions.Select(s => s._sessionName).ToArray()
+                    }
+                });
+            }
         }
 
     }

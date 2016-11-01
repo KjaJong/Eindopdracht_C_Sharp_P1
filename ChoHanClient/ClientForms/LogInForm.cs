@@ -40,7 +40,7 @@ namespace ChoHanClient.ClientForms
                 try
                 {
                     Console.WriteLine("Comming now Senpai!");
-                    var client = new Client(UserNameBox.Text, this);
+                    Client = new Client(UserNameBox.Text, this);
                 }
                 catch (Exception ex)
                 {

@@ -38,16 +38,14 @@ namespace ChoHan
                     case "disconnect":
                         SharedUtil.SendMessage(Client.Client, new
                         {
-                            id = "disconnect",
-                            data = new
-                            {
-                            }
+                            id = "disconnect"
                         });
 
+                        Console.WriteLine($"player: {Client.Naam} has disconnected");
                         _sessionLog.AddLogEntry(Client.Naam, " Disconnedted.");
                         Client.Client.GetStream().Close();
                         Client.Client.Close();
-
+   
                         //sepukku
                         Server.Handlers.Remove(this);
                         break;
@@ -77,7 +75,6 @@ namespace ChoHan
                 id = "disconnect",
                 data = new
                 {
-                    
                 }
             });
         }

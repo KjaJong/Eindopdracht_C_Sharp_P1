@@ -7,13 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ChoHanClient.ClientForms;
 
 namespace ChoHanClient
 {
     public partial class PlayerForm : Form
     {
-        //answer can be null, the problem is. You cans stall the game
-        //TODO: make the game unstallable
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
 
@@ -27,6 +26,13 @@ namespace ChoHanClient
             Answer = null;
             InitializeComponent();
             Visible = true;
+            FormClosing += PlayerForm_FromClosing;
+        }
+
+        private void PlayerForm_FromClosing(object sender, FormClosingEventArgs e)
+        {
+            LogInForm.Client.Disconnect();
+            Environment.Exit(1);
         }
 
         private void EvenButton_Click(object sender, EventArgs e)
@@ -58,13 +64,7 @@ namespace ChoHanClient
             }
             ConfirmAnswer = true;
         }
-
-        private void Leavebutton_Click(object sender, EventArgs e)
-        {
-            
-            Environment.Exit(1);
-        }
-
+       
         public void Update(bool rightAnswerPlayerOne, int score )
         {
             if (this.ScorePlayerOneLabel.InvokeRequired)
@@ -115,7 +115,7 @@ namespace ChoHanClient
 
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            LogInForm.Client.JoinSession(SessionListBox.SelectedItem.ToString());
         }
 
         public void FillSessionBox(List<string> sessions)
@@ -134,7 +134,7 @@ namespace ChoHanClient
             PlayerListBox.Visible = !PlayerListBox.Visible;
         }
 
-        private void CommentLabel_Click(object sender, EventArgs e)
+        private void CommentLabel_Click_1(object sender, EventArgs e)
         {
             MessageBox.Show(
                 "In ChoHan a player chooses wheter a roll of a pair of die is odd (Cho) or even (Han). " +

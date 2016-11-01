@@ -115,6 +115,7 @@ namespace ChoHanClient
                         PlayerForm.FillSessionBox(sessions);
                         break;
                     case "disconnect":
+                        Console.WriteLine("error");
                         _client.GetStream().Close();
                         _client.Close();
                         break;
@@ -123,6 +124,29 @@ namespace ChoHanClient
                         break;
                 }
             }
+        }
+
+        public void Disconnect()
+        {
+            SharedUtil.SendMessage(_client, new
+            {
+                id = "disconnect"
+            });
+
+            _client.GetStream().Close();
+            _client.Close();
+        }
+
+        public void JoinSession(string sessionName)
+        {
+            SharedUtil.SendMessage(_client, new
+            {
+                id = "session/join",
+                data = new
+                {
+                    sessionname = sessionName
+                }
+            });
         }
 
         public static IPAddress GetLocalIpAddress()
