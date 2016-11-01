@@ -20,6 +20,9 @@ namespace ChoHan
 
         public Program()
         {
+            Server server = new Server();
+            Thread serverThread = new Thread(server.Run);
+            serverThread.Start();
             ConsoleLoop();
             foreach (var t in Server.Threads)
             {
@@ -48,15 +51,16 @@ namespace ChoHan
                 switch (command.ToLower())
                 {
                     case "help":
-                        Console.WriteLine("List of the commands:" +
+                        Console.WriteLine("List of the commands:\n" +
                                           "\t-addsession\n" +
                                           "\t-showsessions\n" +
-                                          "\tshowplayers\n" +
-                                          "\tkllplayer\n" +
-                                          "\tkillsession\n" +
-                                          "\texit");
+                                          "\t-showplayers\n" +
+                                          "\t-kllplayer\n" +
+                                          "\t-killsession\n" +
+                                          "\t-exit");
                         break;
                     case "addsession":
+                        AddSesion();
                         break;
                     case "showsessions":
                         break;
@@ -100,7 +104,14 @@ namespace ChoHan
                 }
             }
 
+            Console.WriteLine("Give maximum amount of players that may join the session, max 8.");
             int maxPlayers = Console.Read();
+            while (maxPlayers > 8)
+            {
+                Console.WriteLine(maxPlayers);
+                Console.WriteLine("please give a value lower than 8.");
+                maxPlayers = Console.Read();
+            }
             SessionHandler session = new SessionHandler(name, maxPlayers);
             Thread thread =  new Thread(session.SessionHandleThread);
             thread.Start();

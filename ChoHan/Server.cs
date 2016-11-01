@@ -25,11 +25,12 @@ namespace ChoHan
 
         private readonly Log _sessionLog;
 
+        private TcpListener _listener;
+
         public Server()
         {
             //looking for ip
             IPAddress localIP = GetLocalIpAddress();
-
             Handlers = new List<ClientHandler>();
             Threads = new List<Thread>();
             Sessions = new List<SessionHandler>();
@@ -47,14 +48,19 @@ namespace ChoHan
                 Environment.Exit(1);
             }
 
-            TcpListener listener = new TcpListener(_currentId, 1337);
-            listener.Start();
+            _listener = new TcpListener(_currentId, 1337);
+            _listener.Start();
             _sessionLog.AddLogEntry("Started.");
 
+          
+        }
+
+        public void Run()
+        {
             //making client handlers and adding them to the list
             while (true)
             {
-                ClientHandler handler = new ClientHandler(CheckForPlayers(listener), _sessionLog);
+                ClientHandler handler = new ClientHandler(CheckForPlayers(_listener), _sessionLog);
                 Thread thread = new Thread(handler.HandleClientThread);
                 thread.Start();
                 Handlers.Add(handler);
