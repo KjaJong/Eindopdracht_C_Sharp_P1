@@ -34,12 +34,8 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
             _client = new TcpClient();
-<<<<<<< HEAD
 
             Console.WriteLine("I want to connect with Senpai!");
-=======
-            
->>>>>>> 80efe902b18caf318f658c31841e4befcd690367
             TryConnection();
         }
         public Client(string name, LogInForm form, IPAddress IP)
@@ -53,12 +49,7 @@ namespace ChoHanClient
         {
             try
             {
-<<<<<<< HEAD
                 Console.WriteLine("Senpai, connect with me!");
-                PlayerForm = new PlayerForm();
-                PlayerForm.Show();
-=======
->>>>>>> 80efe902b18caf318f658c31841e4befcd690367
                 _client.Connect(_localIpAddress, 1337);
                 SharedUtil.SendMessage(_client, new
                 {
@@ -70,14 +61,10 @@ namespace ChoHanClient
                 });
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
-<<<<<<< HEAD
-                LogInForm.Close();
-                LogInForm.Dispose();
                 Console.WriteLine("YAY! Senpai and I connected!");
-=======
                 LogInForm.Visible = false;
                 PlayerForm = new PlayerForm();
->>>>>>> 80efe902b18caf318f658c31841e4befcd690367
+                PlayerForm.Show();
             }
             catch (Exception e)
             {

@@ -215,17 +215,7 @@ namespace ChoHan
             //kills every client muhahaha
             foreach (var c in _players)
             {
-                SharedUtil.SendMessage(c.Client, new
-                {
-                    id = "disconnect",
-                    data = new
-                    {
-                        
-                    }
-                });
-
-                c.Client.GetStream().Close();
-                c.Client.Close();
+                SharedUtil.SendMessage();
 
             }
             //TODO: Menno plz fix
@@ -234,7 +224,14 @@ namespace ChoHan
 
         public void SessionHandleThread()
         {
-            
+            while (true)
+            {
+                while (_maxPlayers != _players.Count)
+                {
+                }
+
+                StartGame();
+            }
         }
     }
 }
