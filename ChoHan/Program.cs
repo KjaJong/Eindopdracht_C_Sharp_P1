@@ -100,21 +100,19 @@ namespace ChoHan
 
             foreach (var s in Server.Sessions)
             {
-                if (name.Equals(s.SessionName))
+                if (!name.Equals(s.SessionName)) continue;
+                Console.WriteLine("Name already exists: continue? [y/n]");
+                var answer = Console.ReadLine();
+                switch (answer.ToLower())
                 {
-                    Console.WriteLine("Name already exists: continue? [y/n]");
-                    string answer = Console.ReadLine();
-                    switch (answer.ToLower())
-                    {
-                        case "y":
-                            AddSesion();
-                            break;
-                        case "n":
-                            return;
-                        default:
-                            Console.WriteLine("Command not recognized...");
-                            break;
-                    }
+                    case "y":
+                        AddSesion();
+                        break;
+                    case "n":
+                        return;
+                    default:
+                        Console.WriteLine("Command not recognized...");
+                        break;
                 }
             }
 
@@ -201,24 +199,24 @@ namespace ChoHan
         public void CreateSessions()
         {
             SessionHandler session1 = new SessionHandler("General 1",8);
-            SessionHandler session2 = new SessionHandler("General 2", 8);
-            SessionHandler session3 = new SessionHandler("General 3", 8);
+            //SessionHandler session2 = new SessionHandler("General 2", 8);
+            //SessionHandler session3 = new SessionHandler("General 3", 8);
 
             Thread thread1 = new Thread(session1.SessionHandleThread);
-            Thread thread2 = new Thread(session2.SessionHandleThread);
-            Thread thread3 = new Thread(session3.SessionHandleThread);
+            //Thread thread2 = new Thread(session2.SessionHandleThread);
+            //Thread thread3 = new Thread(session3.SessionHandleThread);
 
             thread1.Start();
-            thread2.Start();
-            thread3.Start();
+            //thread2.Start();
+            //thread3.Start();
 
             Server.Sessions.Add(session1);
-            Server.Sessions.Add(session2);
-            Server.Sessions.Add(session3);
+            //Server.Sessions.Add(session2);
+            //Server.Sessions.Add(session3);
 
             Server.SessionThreads.Add(thread1);
-            Server.SessionThreads.Add(thread2);
-            Server.SessionThreads.Add(thread3);
+            //Server.SessionThreads.Add(thread2);
+            //Server.SessionThreads.Add(thread3);
         }
     }
 }
