@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using SharedUtilities;
 
@@ -11,6 +12,7 @@ namespace ChoHan
         public readonly string _sessionName;
         public readonly int _maxPlayers;
         public readonly List<Player> _players;
+        private bool _gameStart;
         public SessionHandler(string name, int maxPlayers)
         {
             _sessionName = name;
@@ -20,14 +22,14 @@ namespace ChoHan
 
         public void AddPlayer(Player player)
         {
-            if (_players.Count <= _maxPlayers)
+            if (_players.Count <= _maxPlayers && !_gameStart)
             {
                 _players.Add(player);
-                Console.WriteLine($"Player {player.Naam} has joined the game");
+                Console.WriteLine($"Player {player.Naam} has joined the game: {_sessionName}");
             }
             else
             {
-                Console.WriteLine("");
+                Console.WriteLine("To many players");
             }
         }
 
@@ -51,11 +53,7 @@ namespace ChoHan
                     {
                         SharedUtil.SendMessage(c.Client, new
                         {
-                            id = "give/confirmation",
-                            data = new
-                            {
-                                
-                            }
+                            id = "give/confirmation"
                         });
 
                         dynamic message = SharedUtil.ReadMessage(c.Client);
@@ -67,7 +65,6 @@ namespace ChoHan
                 }
                 Console.WriteLine("Gimmy dat answer");
                 //TODO Displays the result of the throw and annouces win or lose.
-                //TODO Convert to fucking jason
                 //send every client a message that they can send their answer
                 game.ThrowDice();
 
@@ -75,11 +72,7 @@ namespace ChoHan
                 {
                     SharedUtil.SendMessage(c.Client, new
                     {
-                        id = "give/answer",
-                        date = new
-                        {
-                            
-                        }
+                        id = "give/answer"
                     });
 
                     dynamic answer = SharedUtil.ReadMessage(c.Client);
@@ -88,27 +81,6 @@ namespace ChoHan
                         if (game.CheckResult(true))
                         {
                             c.Score++;
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = true
-                                }
-                            });
-                        }
-                        else
-                        {
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = false
-                                }
-                            });
                         }
                     }
                     else
@@ -116,29 +88,9 @@ namespace ChoHan
                         if (game.CheckResult(false))
                         {
                             c.Score++;
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = true
-                                }
-                            });
-                        }
-                        else
-                        {
-                            SharedUtil.SendMessage(c.Client, new
-                            {
-                                id = "recieve/answer",
-                                data = new
-                                {
-                                    score = c.Score,
-                                    answer = false
-                                }
-                            });
                         }
                     }
+                    UpdatePlayers();
                     Console.WriteLine("Scores send");
 
                 }
@@ -159,59 +111,26 @@ namespace ChoHan
 
                 if (c.Score - _players.ElementAt(0).Score == 0)
                 {
-                    SharedUtil.SendMessage(c.Client, new
-                    {
-                        id = "update/panel",
-                        data = new
-                        {
-                            text = "you tied"
-                        }
-                    });
-                    playerOneWin = false;
+                    UpdatePanelPlayer(c.Client, "you tied");
                 }
 
                 else if (c.Score - _players.ElementAt(0).Score < 0)
                 {
-                    SharedUtil.SendMessage(c.Client, new
-                    {
-                        id = "update/panel",
-                        data = new
-                        {
-                            text = "you lose"
-                        }
-                    });
+                    UpdatePanelPlayer(c.Client, "you lose");
                 }
 
                 else
                 {
                     Console.WriteLine("ffs are you here?!");
-                    SharedUtil.SendMessage(c.Client, new
-                    {
-                        id = "update/panel",
-                        data = new
-                        {
-                            text = "something went wrong here"
-                        }
-                    });
+                    UpdatePanelPlayer(c.Client, "something went wrong here");
                 }
             }
             Console.WriteLine("Winner determined");
 
             //checks if the highest score doesn't tie with another one
             Console.WriteLine("Is there a winner?");
-            string text;
-            text = playerOneWin ? "you win" : "you tied";
-
-            SharedUtil.SendMessage(_players.ElementAt(0).Client, new
-            {
-                id = "update/panel",
-                data = new
-                {
-                    text = text
-                }
-            });
-
-            //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
+            UpdatePanelPlayer(_players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
+            
             //kills every client muhahaha
             foreach (var c in _players)
             {
@@ -219,9 +138,9 @@ namespace ChoHan
                 {
                     id = "session/leave"
                 });
-
             }
-            //TODO: Menno plz fix
+
+            _players.Clear();
             //_sessionLog.PrintLog();
         }
 
@@ -229,12 +148,42 @@ namespace ChoHan
         {
             while (true)
             {
+                _gameStart = false;
                 while (_maxPlayers != _players.Count)
                 {
                 }
-
+                _gameStart = true;
                 StartGame();
             }
+        }
+
+        public void UpdatePlayers()
+        {
+            foreach (var c in _players)
+            {
+                SharedUtil.SendMessage(c.Client, new
+                {
+                    id = "recieve/answer",
+                    data = new
+                    {
+                        score = c.Score,
+                        answer = true
+                    }
+                });
+            }
+
+        }
+
+        public void UpdatePanelPlayer(TcpClient client, string text)
+        {
+            SharedUtil.SendMessage(client, new
+            {
+                id = "update/panel",
+                data = new
+                {
+                    text = text
+                }
+            });
         }
     }
 }

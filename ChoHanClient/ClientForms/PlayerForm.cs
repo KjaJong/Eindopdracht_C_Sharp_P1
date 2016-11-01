@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ChoHanClient.ClientForms;
 
 namespace ChoHanClient
 {
@@ -27,6 +28,13 @@ namespace ChoHanClient
             Answer = null;
             InitializeComponent();
             Visible = true;
+            FormClosing += PlayerForm_FromClosing;
+        }
+
+        private void PlayerForm_FromClosing(object sender, FormClosingEventArgs e)
+        {
+            LogInForm.Client.Disconnect();
+            Environment.Exit(1);
         }
 
         private void EvenButton_Click(object sender, EventArgs e)
@@ -58,13 +66,7 @@ namespace ChoHanClient
             }
             ConfirmAnswer = true;
         }
-
-        private void Leavebutton_Click(object sender, EventArgs e)
-        {
-            
-            Environment.Exit(1);
-        }
-
+       
         public void Update(bool rightAnswerPlayerOne, int score )
         {
             if (this.ScorePlayerOneLabel.InvokeRequired)
@@ -115,7 +117,7 @@ namespace ChoHanClient
 
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            LogInForm.Client.JoinSession(SessionListBox.SelectedItem.ToString());
         }
 
         public void FillSessionBox(List<string> sessions)

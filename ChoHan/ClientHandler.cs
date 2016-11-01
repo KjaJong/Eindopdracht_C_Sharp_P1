@@ -39,12 +39,10 @@ namespace ChoHan
                     case "disconnect":
                         SharedUtil.SendMessage(_client.Client, new
                         {
-                            id = "disconnect",
-                            data = new
-                            {
-                            }
+                            id = "disconnect"
                         });
 
+                        Console.WriteLine($"player: {_client.Naam} has disconnected");
                         _sessionLog.AddLogEntry(_client.Naam, " Disconnedted.");
                         _client.Client.GetStream().Close();
                         _client.Client.Close();
@@ -66,7 +64,8 @@ namespace ChoHan
                 id = "send/session",
                 data = new
                 {
-                    sessions = Server.Sessions.Select(s => s._sessionName).ToList()
+                    sessions = Server.Sessions.Select(s => s
+                    ._sessionName).ToList()
                 }
             });
         }
@@ -78,7 +77,6 @@ namespace ChoHan
                 id = "disconnect",
                 data = new
                 {
-                    
                 }
             });
         }

@@ -24,6 +24,7 @@ namespace ChoHan
             Server server = new Server();
             Thread serverThread = new Thread(server.Run);
             serverThread.Start();
+            CreateSessions();
             ConsoleLoop();
 
             foreach (var t in Server.SessionThreads)
@@ -155,7 +156,7 @@ namespace ChoHan
             }
         }
 
-        private void ShowSessions()
+        private static void ShowSessions()
         {
             foreach (var s in Server.Sessions)
             {
@@ -163,7 +164,7 @@ namespace ChoHan
             }
         }
 
-        private void ShowPlayers()
+        private static void ShowPlayers()
         {
             foreach (var c in Server.Handlers)
             {
@@ -171,7 +172,7 @@ namespace ChoHan
             }
         }
 
-        private void KillSession()
+        private static void KillSession()
         {
             string target = Console.ReadLine();
             SessionHandler killSession = null;
@@ -189,7 +190,7 @@ namespace ChoHan
             Server.Sessions.Remove(killSession);
         }
 
-        private void KillPlayer()
+        private static void KillPlayer()
         {
             string target = Console.ReadLine();
             ClientHandler client = null;
@@ -205,6 +206,30 @@ namespace ChoHan
                 return;
             }
             Server.Handlers.Remove(client);
+        }
+
+
+        public void CreateSessions()
+        {
+            SessionHandler session1 = new SessionHandler("General 1",8);
+            SessionHandler session2 = new SessionHandler("General 2", 8);
+            SessionHandler session3 = new SessionHandler("General 3", 8);
+
+            Thread thread1 = new Thread(session1.SessionHandleThread);
+            Thread thread2 = new Thread(session2.SessionHandleThread);
+            Thread thread3 = new Thread(session3.SessionHandleThread);
+
+            thread1.Start();
+            thread2.Start();
+            thread3.Start();
+
+            Server.Sessions.Add(session1);
+            Server.Sessions.Add(session2);
+            Server.Sessions.Add(session3);
+
+            Server.SessionThreads.Add(thread1);
+            Server.SessionThreads.Add(thread2);
+            Server.SessionThreads.Add(thread3);
         }
     }
 }

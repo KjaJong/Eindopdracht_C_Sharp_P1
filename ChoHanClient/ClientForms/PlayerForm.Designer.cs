@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Leavebutton = new System.Windows.Forms.Button();
             this.ConfirmButton = new System.Windows.Forms.Button();
             this.OddButton = new System.Windows.Forms.Button();
             this.WrongPlayerOneLabel = new System.Windows.Forms.Label();
@@ -41,16 +40,6 @@
             this.SessionListBox = new System.Windows.Forms.ListBox();
             this.PlayerListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
-            // 
-            // Leavebutton
-            // 
-            this.Leavebutton.Location = new System.Drawing.Point(57, 139);
-            this.Leavebutton.Name = "Leavebutton";
-            this.Leavebutton.Size = new System.Drawing.Size(75, 23);
-            this.Leavebutton.TabIndex = 25;
-            this.Leavebutton.Text = "Leave";
-            this.Leavebutton.UseVisualStyleBackColor = true;
-            this.Leavebutton.Click += new System.EventHandler(this.Leavebutton_Click);
             // 
             // ConfirmButton
             // 
@@ -164,7 +153,6 @@
             this.Controls.Add(this.PlayerListBox);
             this.Controls.Add(this.SessionListBox);
             this.Controls.Add(this.YourChoiceLabel);
-            this.Controls.Add(this.Leavebutton);
             this.Controls.Add(this.ConfirmButton);
             this.Controls.Add(this.OddButton);
             this.Controls.Add(this.WrongPlayerOneLabel);
@@ -180,8 +168,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button Leavebutton;
         private System.Windows.Forms.Button ConfirmButton;
         private System.Windows.Forms.Button OddButton;
         private System.Windows.Forms.Label WrongPlayerOneLabel;
