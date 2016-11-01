@@ -18,15 +18,23 @@ namespace ChoHan
         
         private IPAddress _currentId;
         private TcpListener _listner;
-        private List<ClientHandler> _handlers;
-        private Log _sessionLog;
+        public static List<ClientHandler> Handlers { get; set; }
+        public static List<SessionHandler> Sessions { get; set; }
+
+        public static List<Thread> Threads { get; set; }
+
+        private readonly Log _sessionLog;
 
         public Server()
         {
             //looking for ip
             IPAddress localIP = GetLocalIpAddress();
-            _handlers = new List<ClientHandler>();
-            string LogName = "SessionLog/" + DateTime.Today + "/" + DateTime.Now + "/ID=" + _handlers.Count;
+
+            Handlers = new List<ClientHandler>();
+            Threads = new List<Thread>();
+            Sessions = new List<SessionHandler>();
+
+            string LogName = "SessionLog/" + DateTime.Today + "/" + DateTime.Now + "/ID=" + Handlers.Count;
             _sessionLog = new Log(LogName);
             _sessionLog.AddLogEntry("Starting the server.");
 
@@ -49,26 +57,23 @@ namespace ChoHan
                 ClientHandler handler = new ClientHandler(CheckForPlayers(listener), _sessionLog);
                 Thread thread = new Thread(handler.HandleClientThread);
                 thread.Start();
-                _handlers.Add(handler);
+                Handlers.Add(handler);
+                Threads.Add(thread);
                 _sessionLog.AddLogEntry("Started a new thread");
             }
         }
-        private List<Player> CheckForPlayers(TcpListener listner)
-        { 
 
-            List<Player> _activeClients = new List<Player>();
-            int count = 1;
-            while (_activeClients.Count != 2)
-            {
-                //Looking for players
-                Console.WriteLine("Waiting for player");
-                TcpClient client = listner.AcceptTcpClient();
-                Console.WriteLine("Player connected!!");
-                _activeClients.Add(new Player($"player{count}", client, 0));
-                count++;
-            }
+        private Player CheckForPlayers(TcpListener listner)
+        { 
+            //Looking for players
+            Console.WriteLine("Waiting for player");
+            TcpClient client = listner.AcceptTcpClient();
+            Console.WriteLine("Player connected!!");
+            dynamic message = SharedUtil.ReadMessage(client);
+            Player player =  new Player((string)message.data.name, client, 0);
+            
             _sessionLog.AddLogEntry("Added a player.");
-            return _activeClients;
+            return player;
         }
         
         public static IPAddress GetLocalIpAddress()

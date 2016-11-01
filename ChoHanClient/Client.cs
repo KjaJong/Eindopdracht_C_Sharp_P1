@@ -12,14 +12,14 @@ namespace ChoHanClient
 {
     public class Client
     {
-        public PlayerForm form { get; set; }
-        private IPAddress _currentId;
-        private TcpClient client;
+        public PlayerForm Form { get; set; }
+        private readonly IPAddress _currentId;
+        private readonly TcpClient _client;
         public string Name { get; set; }
 
         public Client()
         {
-            form = new PlayerForm();
+            Form = new PlayerForm();
 
             IPAddress localIP = GetLocalIpAddress();
 
@@ -29,21 +29,14 @@ namespace ChoHanClient
                 Console.WriteLine("Couldn't parse the ip address. Exiting code.");
                 Environment.Exit(1);
             }
-            client = new TcpClient();
-
-            Timer t = new Timer(10);
-            t.Elapsed += (s, e) =>
-            {
-                TryConnection();
-            };
-
+            _client = new TcpClient();
         }
 
         public void TryConnection()
         {
             try
             {
-                client.Connect(_currentId, 1337);
+                _client.Connect(_currentId, 1337);
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
             }
@@ -55,40 +48,54 @@ namespace ChoHanClient
 
         public void StartLoop()
         {
-            bool done = false;
-            bool beginConfirm = false;
-            while (!done)
+            while (_client.Connected)
             {
-                
-                    switch (SharedUtil.ReadMessage(client))
-                    {
-                        case "give/confirmation":
-                            SharedUtil.SendMessage(client, form.ConfirmAnswer.ToString());
-                            break;
-                        case "give/answer":
-                            SharedUtil.SendMessage(client, form.Answer.ToString());
-                            break;
-                           //TODO voeg acties en andere cases toe om te de GUI te beinvloeden
-                        case "recieve/answer":
-                            string answer =  SharedUtil.ReadMessage(client);
-                            string[] words = answer.Split(':');
-                            form.Update(words[1], words[0]);
-                            //TODO check if the read message give back useable data
-                            break;
-                        case "recieve/answer/final":
-                            form.UpdateMessageLabel(SharedUtil.ReadMessage(client));
-                            //TODO check if the read message give back useable data
-                            break;
-                        case "closing":
-                            client.GetStream().Close();
-                            client.Close();
-                            return;
-                        default:
-                            Console.WriteLine("OI, The fuck you doing here m8");
-                            break;
-                    }
-                
+                dynamic message = SharedUtil.ReadMessage(_client);
+                switch ((string)message.id)
+                {
+                    case "give/confirmation":
+                        SharedUtil.SendMessage(_client, new
+                        {
+                            id = "send",
+                            data = new
+                            {
+                                confirmation = Form.ConfirmAnswer
+                            }
+                        });
+                        break;
+                    case "recieve/answer":
+                        Form.Update((bool) message.data.answer, (int) message.data.score);
+                        break;
+                    case "give/answer":
+                        SharedUtil.SendMessage(_client, new
+                        {
+                            id = "send",
+                            data = new
+                            {
+                                answer = Form.Answer
+                            }
+                        });
+                        break;
+                    case "update/panel":
+                        Form.UpdateMessageLabel((string)message.data.text);
+                        break;
+                    case "send/session":
+                        break;
+                    case "disconnect":
+                        _client.GetStream().Close();
+                        _client.Close();
+                        break;
+                    default:
+                        Console.WriteLine("You're not suposse to be here.");
+                        break;
+                }
+
             }
+        }
+
+        public void JoinSession()
+        {
+            
         }
 
         public static IPAddress GetLocalIpAddress()

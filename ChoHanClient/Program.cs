@@ -18,7 +18,7 @@ namespace ChoHanClient
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Client client = new Client();
-            Application.Run(client.form);
+            Application.Run(client.Form);
         }
     }
 }
