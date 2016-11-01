@@ -10,22 +10,21 @@ namespace ChoHan
 {
     public class ClientHandler
     {
-        //TODO implement logging
-        public Player _client { get; set; }
+        public Player Client { get; set; }
         private readonly Log _sessionLog;
 
         public ClientHandler(Player client, Log sessionLog)
         {
-            _client = client;
+            Client = client;
             _sessionLog = sessionLog;
         }
 
         public void HandleClientThread()
         {
-            while (_client.Client.Connected)
+            while (Client.Client.Connected)
             {
-                if (_client.IsSession) continue;
-                dynamic message = SharedUtil.ReadMessage(_client.Client);
+                if (Client.IsSession) continue;
+                dynamic message = SharedUtil.ReadMessage(Client.Client);
                 switch ((string) message.id)
                 {
                     case "send/message":
@@ -33,23 +32,23 @@ namespace ChoHan
                     case "session/join":
                         string text = (string) message.data.sessionname;
                         string[] splitText = text.Split(':');
-                        Server.FindSession(splitText[0]).AddPlayer(_client);
-                        _client.IsSession = true;
+                        Server.FindSession(splitText[0]).AddPlayer(Client);
+                        Client.IsSession = true;
                         break;
                     case "session/leave":
-                        Server.FindSession((string)message.data.sessionname).DeletePlayerFromSession(_client);
+                        Server.FindSession((string)message.data.sessionname).DeletePlayerFromSession(Client);
                         break;
                     case "disconnect":
-                        SharedUtil.SendMessage(_client.Client, new
+                        SharedUtil.SendMessage(Client.Client, new
                         {
                             id = "disconnect"
                         });
 
-                        Console.WriteLine($"player: {_client.Naam} has disconnected");
-                        _sessionLog.AddLogEntry(_client.Naam, " Disconnedted.");
-                        _client.Client.GetStream().Close();
-                        _client.Client.Close();
-
+                        Console.WriteLine($"player: {Client.Naam} has disconnected");
+                        _sessionLog.AddLogEntry(Client.Naam, " Disconnedted.");
+                        Client.Client.GetStream().Close();
+                        Client.Client.Close();
+   
                         //sepukku
                         Server.Handlers.Remove(this);
                         break;
@@ -62,20 +61,19 @@ namespace ChoHan
 
         public void SendAllSessions()
         {
-            SharedUtil.SendMessage(_client.Client, new
+            SharedUtil.SendMessage(Client.Client, new
             {
                 id = "send/session",
                 data = new
                 {
-                    sessions = Server.Sessions.Select(s => s
-                    ._sessionName).ToList()
+                    sessions = Server.Sessions.Select(s => s.SessionName).ToList()
                 }
             });
         }
 
         public void Disconnect()
         {
-            SharedUtil.SendMessage(_client.Client, new
+            SharedUtil.SendMessage(Client.Client, new
             {
                 id = "disconnect",
                 data = new
@@ -86,7 +84,7 @@ namespace ChoHan
 
         public void SendAck()
         {
-            SharedUtil.SendMessage(_client.Client,new
+            SharedUtil.SendMessage(Client.Client,new
             {
                 id = "ack",
                 data = new
@@ -98,7 +96,7 @@ namespace ChoHan
 
         public void SendNotAck()
         {
-            SharedUtil.SendMessage(_client.Client, new
+            SharedUtil.SendMessage(Client.Client, new
             {
                 id = "ack",
                 data = new

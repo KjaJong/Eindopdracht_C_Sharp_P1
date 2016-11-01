@@ -17,7 +17,7 @@ namespace ChoHanClient
         public LogInForm LogInForm { get; set; }
         public PlayerForm PlayerForm { get; set; }
         private readonly IPAddress _localIpAddress;
-        public TcpClient _client { get; set; }
+        private readonly TcpClient _client;
         public string Name { get; set; }
 
         public Client(string name, LogInForm form)

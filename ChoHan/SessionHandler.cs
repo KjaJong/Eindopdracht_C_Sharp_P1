@@ -10,9 +10,9 @@ namespace ChoHan
 {
     public class SessionHandler
     {
-        public readonly string _sessionName;
-        public readonly int _maxPlayers;
-        public readonly List<Player> _players;
+        public readonly string SessionName;
+        public readonly int MaxPlayers;
+        public readonly List<Player> Players;
         private readonly Timer _awnserTimer = new Timer(1000);
         private int _timerCounter = 0;
         private bool _gameGateKeeper = false;
@@ -22,10 +22,10 @@ namespace ChoHan
 
         public SessionHandler(string name, int maxPlayers)
         {
-            _sessionName = name;
-            _sessionLog = new Log(_sessionName + "_" + DateTime.Today);
-            _maxPlayers = maxPlayers;
-            _players = new List<Player>();
+            SessionName = name;
+            _sessionLog = new Log(SessionName + "_" + DateTime.Today);
+            MaxPlayers = maxPlayers;
+            Players = new List<Player>();
             _awnserTimer.Elapsed += (sender, args) =>
             {
                 _timerCounter++;
@@ -41,10 +41,10 @@ namespace ChoHan
         
         public void AddPlayer(Player player)
         {
-            if (_players.Count <= _maxPlayers && !_gameStart)
+            if (Players.Count <= MaxPlayers && !_gameStart)
             {
-                _players.Add(player);
-                Console.WriteLine($"Player {player.Naam} has joined the game: {_sessionName}");
+                Players.Add(player);
+                Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
                 Server.SendSessions();
                 UpdatePlayerList();
                 _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
@@ -72,7 +72,7 @@ namespace ChoHan
                 Console.WriteLine(answercount);
                 Console.WriteLine(roundCount);
                 _awnserTimer.Start();
-                while (answercount < _players.Count)
+                while (answercount < Players.Count)
                 {
                     if (_gameGateKeeper)
                     {
@@ -81,7 +81,7 @@ namespace ChoHan
                     _gameStart = true;
 
                     answercount = 0;
-                    foreach (var c in _players)
+                    foreach (var c in Players)
                     {
                         _sessionLog.AddLogEntry($"Send a confirmation message to {c.Naam}.");
                         SharedUtil.SendMessage(c.Client, new
@@ -109,7 +109,7 @@ namespace ChoHan
                 //send every client a message that they can send their answer
                 game.ThrowDice();
 
-                foreach (var c in _players)
+                foreach (var c in Players)
                 {
                     _sessionLog.AddLogEntry($"Asked {c.Naam} for a awnser.");
                     SharedUtil.SendMessage(c.Client, new
@@ -162,25 +162,25 @@ namespace ChoHan
 
             //sorts the list on score
 
-            _players.Sort((x, y) => y.Score - x.Score);
+            Players.Sort((x, y) => y.Score - x.Score);
             
             bool playerOneWin = true;
             _sessionLog.AddLogEntry("Ranked players.");
 
             //starts looking for the ties and loses
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 _sessionLog.AddLogEntry($"Calculating {c.Naam}'s score.");
-                Console.WriteLine(c.Score - _players.ElementAt(0).Score);
-                if (c.Equals(_players.ElementAt(0))) continue;
+                Console.WriteLine(c.Score - Players.ElementAt(0).Score);
+                if (c.Equals(Players.ElementAt(0))) continue;
                 Console.WriteLine("error");
 
-                if (c.Score - _players.ElementAt(0).Score == 0)
+                if (c.Score - Players.ElementAt(0).Score == 0)
                 {
                     UpdatePlayerPanel(c.Client, "you tied");
                 }
 
-                else if (c.Score - _players.ElementAt(0).Score < 0)
+                else if (c.Score - Players.ElementAt(0).Score < 0)
                 {
                     UpdatePlayerPanel(c.Client, "you lose");
                 }
@@ -196,13 +196,14 @@ namespace ChoHan
 
             //checks if the highest score doesn't tie with another one
             Console.WriteLine("Is there a winner?");
-            UpdatePlayerPanel(_players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
+
+            UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
             
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
             //kills every client muhahaha
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 _sessionLog.AddLogEntry($"Murdered {c.Naam}.");
                 SharedUtil.SendMessage(c.Client, new
@@ -230,7 +231,7 @@ namespace ChoHan
 
         public void UpdateAllPanels(string text)
         {
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 SharedUtil.SendMessage(c.Client, new
                 {
@@ -245,7 +246,7 @@ namespace ChoHan
 
         public void UpdatePlayers(bool answer)
         {
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 SharedUtil.SendMessage(c.Client, new
                 {
@@ -265,8 +266,9 @@ namespace ChoHan
             _gameStart = false;
             while (true)
             {
-                while (2 > _players.Count)
+                while (2 > Players.Count)
                 {
+
                 }
                 StartGame();
             }
@@ -274,19 +276,19 @@ namespace ChoHan
 
         public override string ToString()
         {
-            return $"{_sessionName}: {_players.Count}/{_maxPlayers}";
+            return $"{SessionName}: {Players.Count}/{MaxPlayers}";
         }
 
         public void UpdatePlayerList()
         {
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 SharedUtil.SendMessage(c.Client, new
                 {
                     id = "send/players",
                     data = new
                     {
-                        players = _players.Select(s => s.ToString()).ToArray()
+                        players = Players.Select(s => s.ToString()).ToArray()
                     }
                 });
             }
@@ -294,8 +296,8 @@ namespace ChoHan
 
         public void DeletePlayerFromSession(Player player)
         {
-            _players.Remove(player);
-            if (_players.Count < 2)
+            Players.Remove(player);
+            if (Players.Count < 2)
             {
                 _gameGoesOn = false;
                 UpdateAllPanels("Game has stopped and starts again");
@@ -306,11 +308,11 @@ namespace ChoHan
 
         public void GameEnded()
         {
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 c.IsSession = false;
             }
-            _players.Clear();
+            Players.Clear();
         }
     }
 }

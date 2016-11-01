@@ -13,8 +13,6 @@ namespace ChoHanClient
 {
     public partial class PlayerForm : Form
     {
-        //answer can be null, the problem is. You cans stall the game
-        //TODO: make the game unstallable
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
         private string _sessionName;
@@ -167,7 +165,7 @@ namespace ChoHanClient
             PlayerListBox.Visible = !PlayerListBox.Visible;
         }
 
-        private void CommentLabel_Click(object sender, EventArgs e)
+        private void CommentLabel_Click_1(object sender, EventArgs e)
         {
             MessageBox.Show(
                 "In ChoHan a player chooses wheter a roll of a pair of die is odd (Cho) or even (Han). " +

@@ -42,8 +42,8 @@ namespace ChoHan
             foreach (var c in Server.Handlers)
             {
                 c.Disconnect();
-                c._client.Client.GetStream().Close();
-                c._client.Client.Close();
+                c.Client.Client.GetStream().Close();
+                c.Client.Client.Close();
             }
 
             Environment.Exit(1);
@@ -100,7 +100,7 @@ namespace ChoHan
 
             foreach (var s in Server.Sessions)
             {
-                if (name.Equals(s._sessionName))
+                if (name.Equals(s.SessionName))
                 {
                     Console.WriteLine("Name already exists: continue? [y/n]");
                     string answer = Console.ReadLine();
@@ -141,8 +141,7 @@ namespace ChoHan
             thread.Start();
             Server.Sessions.Add(session);
             Server.SessionThreads.Add(thread);
-            Console.WriteLine($"Session has been made: {session._sessionName} {session._players.Count}/{session._maxPlayers}");
-
+            Console.WriteLine($"Session has been made: {session.SessionName} {session.Players.Count}/{session.MaxPlayers}");
             Server.SendSessions();
         }
 
@@ -150,7 +149,7 @@ namespace ChoHan
         {
             foreach (var s in Server.Sessions)
             {
-                Console.WriteLine($"{s._sessionName}: {s._players.Count}/{s._maxPlayers}");
+                Console.WriteLine($"{s.SessionName}: {s.Players.Count}/{s.MaxPlayers}");
             }
         }
 
@@ -158,7 +157,7 @@ namespace ChoHan
         {
             foreach (var c in Server.Handlers)
             {
-                Console.WriteLine(c._client.Naam);
+                Console.WriteLine(c.Client.Naam);
             }
         }
 
@@ -168,7 +167,7 @@ namespace ChoHan
             SessionHandler killSession = null;
             foreach (var s in Server.Sessions)
             {
-                if (!target.Equals(s._sessionName)) continue;
+                if (!target.Equals(s.SessionName)) continue;
                 Console.WriteLine("Killing session muhahaha");
                 killSession = s;
             }
@@ -186,7 +185,7 @@ namespace ChoHan
             ClientHandler client = null;
             foreach (var s in Server.Handlers)
             {
-                if (!target.Equals(s._client.Naam)) continue;
+                if (!target.Equals(s.Client.Naam)) continue;
                 Console.WriteLine("Killing player muhahaha");
                 client = s;
             }
