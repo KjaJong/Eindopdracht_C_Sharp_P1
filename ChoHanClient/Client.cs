@@ -22,6 +22,7 @@ namespace ChoHanClient
 
         public Client(string name, LogInForm form)
         {
+            Console.WriteLine("SENPAI!");
             Name = name;
             LogInForm = form;
             IPAddress localIP = GetLocalIpAddress();
@@ -33,12 +34,9 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
             _client = new TcpClient();
-            
-            Timer t = new Timer(100);
-            t.Elapsed += (s, e) =>
-            {
-                TryConnection();
-            };
+
+            Console.WriteLine("I want to connect with Senpai!");
+            TryConnection();
         }
 
         public Client(string name, LogInForm form, IPAddress IP)
@@ -58,15 +56,15 @@ namespace ChoHanClient
         {
             try
             {
-                LogInForm.Close();
-                LogInForm.Dispose();
+                Console.WriteLine("Senpai, connect with me!");
                 PlayerForm = new PlayerForm();
-                PlayerForm.Visible = true;
+                PlayerForm.Show();
                 _client.Connect(_localIpAddress, 1337);
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
-                
-                
+                LogInForm.Close();
+                LogInForm.Dispose();
+                Console.WriteLine("YAY! Senpai and I connected!");
             }
             catch (Exception e)
             {
