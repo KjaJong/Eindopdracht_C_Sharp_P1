@@ -13,11 +13,7 @@ namespace ChoHan
 {
     class Server
     {
-        //TODO maybe start tracking points in the player and write the players of a session to json.
-        //TODO negate every error, we'll work on it
-        
         private IPAddress _currentId;
-        private TcpListener _listner;
         public static List<ClientHandler> Handlers { get; set; }
         public static List<SessionHandler> Sessions { get; set; }
 
@@ -26,23 +22,23 @@ namespace ChoHan
 
         private readonly Log _sessionLog;
 
-        private TcpListener _listener;
+        private readonly TcpListener _listener;
 
         public Server()
         {
             //looking for ip
-            IPAddress localIP = GetLocalIpAddress();
+            IPAddress localIp = GetLocalIpAddress();
             Handlers = new List<ClientHandler>();
             ClientThreads = new List<Thread>();
             SessionThreads = new List<Thread>();
             Sessions = new List<SessionHandler>();
 
-            string LogName = "SessionLog/" + DateTime.Today + "/" + DateTime.Now + "/ID=" + Handlers.Count;
-            _sessionLog = new Log(LogName);
+            string logName = "SessionLog/" + DateTime.Today + "/" + DateTime.Now + "/ID=" + Handlers.Count;
+            _sessionLog = new Log(logName);
             _sessionLog.AddLogEntry("Starting the server.");
 
-            bool IpOk = IPAddress.TryParse(localIP.ToString(), out _currentId);
-            if (!IpOk)
+            bool ipOk = IPAddress.TryParse(localIp.ToString(), out _currentId);
+            if (!ipOk)
             {
                 Console.WriteLine("Couldn't parse the ip address. Exiting code.");
                 _sessionLog.AddLogEntry("Failed to start. Shuttting down ");
@@ -98,7 +94,7 @@ namespace ChoHan
             SessionHandler session = null;
             foreach (var s in Sessions)
             {
-                if (sessionName.Equals(s._sessionName))
+                if (sessionName.Equals(s.SessionName))
                 {
                     session = s;
                 }
