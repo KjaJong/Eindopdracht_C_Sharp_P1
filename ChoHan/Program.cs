@@ -143,6 +143,7 @@ namespace ChoHan
             Server.SessionThreads.Add(thread);
             Console.WriteLine($"Session has been made: {session.SessionName} {session.Players.Count}/{session.MaxPlayers}");
 
+<<<<<<< HEAD
             foreach (var c in Server.Handlers)
             {
                 SharedUtil.SendMessage(c.Client.Client, new
@@ -154,6 +155,9 @@ namespace ChoHan
                     }
                 });
             }
+=======
+            Server.SendSessions();
+>>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
         }
 
         private static void ShowSessions()

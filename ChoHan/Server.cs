@@ -108,7 +108,12 @@ namespace ChoHan
         {
             foreach (var c in Handlers)
             {
+<<<<<<< HEAD
                 SharedUtil.SendMessage(c.Client.Client, new
+=======
+                
+                SharedUtil.SendMessage(c._client.Client, new
+>>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
                 {
                     id = "send/session",
                     data = new
