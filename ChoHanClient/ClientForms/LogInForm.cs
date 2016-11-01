@@ -26,7 +26,9 @@ namespace ChoHanClient.ClientForms
         private void WelcomeText_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "In ChoHan a player chooses wheter a roll of a pair of die is odd (Cho) or even (Han). After all players have made their choice, the die are thrown and the result is announced.",
+                "In ChoHan a player chooses wheter a roll of a pair of die is odd (Cho) or even (Han). " +
+                "After all players have made their choice, the die are thrown and the result is announced. " +
+                "The awnser must be given within 15 seconds.",
                 "A short explanation.");
         }
 
