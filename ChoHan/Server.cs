@@ -108,12 +108,12 @@ namespace ChoHan
         {
             foreach (var c in Handlers)
             {
-                SharedUtil.SendMessage(c._client.Client, new
+                SharedUtil.SendMessage(c.Client.Client, new
                 {
                     id = "send/session",
                     data = new
                     {
-                        sessions = Sessions.Select(s => s._sessionName).ToArray()
+                        sessions = Sessions.Select(s => s.ToString()).ToArray()
                     }
                 });
             }
