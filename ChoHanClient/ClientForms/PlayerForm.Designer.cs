@@ -38,6 +38,8 @@
             this.CommentLabel = new System.Windows.Forms.Label();
             this.EvenButton = new System.Windows.Forms.Button();
             this.YourChoiceLabel = new System.Windows.Forms.Label();
+            this.SessionListBox = new System.Windows.Forms.ListBox();
+            this.PlayerListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // Leavebutton
@@ -132,11 +134,35 @@
             this.YourChoiceLabel.TabIndex = 26;
             this.YourChoiceLabel.Text = "You choose:";
             // 
+            // SessionListBox
+            // 
+            this.SessionListBox.FormattingEnabled = true;
+            this.SessionListBox.Items.AddRange(new object[] {
+            "Sessions"});
+            this.SessionListBox.Location = new System.Drawing.Point(172, 9);
+            this.SessionListBox.Name = "SessionListBox";
+            this.SessionListBox.Size = new System.Drawing.Size(82, 160);
+            this.SessionListBox.TabIndex = 27;
+            this.SessionListBox.SelectedIndexChanged += new System.EventHandler(this.SessionListBox_SelectedIndexChanged);
+            // 
+            // PlayerListBox
+            // 
+            this.PlayerListBox.FormattingEnabled = true;
+            this.PlayerListBox.Items.AddRange(new object[] {
+            "Players"});
+            this.PlayerListBox.Location = new System.Drawing.Point(172, 9);
+            this.PlayerListBox.Name = "PlayerListBox";
+            this.PlayerListBox.Size = new System.Drawing.Size(82, 160);
+            this.PlayerListBox.TabIndex = 28;
+            this.PlayerListBox.Visible = false;
+            // 
             // PlayerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(180, 186);
+            this.ClientSize = new System.Drawing.Size(266, 186);
+            this.Controls.Add(this.PlayerListBox);
+            this.Controls.Add(this.SessionListBox);
             this.Controls.Add(this.YourChoiceLabel);
             this.Controls.Add(this.Leavebutton);
             this.Controls.Add(this.ConfirmButton);
@@ -165,5 +191,7 @@
         private System.Windows.Forms.Label CommentLabel;
         private System.Windows.Forms.Button EvenButton;
         private System.Windows.Forms.Label YourChoiceLabel;
+        private System.Windows.Forms.ListBox SessionListBox;
+        private System.Windows.Forms.ListBox PlayerListBox;
     }
 }

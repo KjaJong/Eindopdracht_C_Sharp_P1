@@ -34,37 +34,50 @@ namespace ChoHanClient
                 Environment.Exit(1);
             }
             _client = new TcpClient();
+<<<<<<< HEAD
 
             Console.WriteLine("I want to connect with Senpai!");
+=======
+            
+>>>>>>> 80efe902b18caf318f658c31841e4befcd690367
             TryConnection();
         }
-
         public Client(string name, LogInForm form, IPAddress IP)
         {
             Name = name;
             LogInForm = form;
             _client = new TcpClient();
-
-            Timer t = new Timer(10);
-            t.Elapsed += (s, e) =>
-            {
-                TryConnection();
-            };
         }
 
         public void TryConnection()
         {
             try
             {
+<<<<<<< HEAD
                 Console.WriteLine("Senpai, connect with me!");
                 PlayerForm = new PlayerForm();
                 PlayerForm.Show();
+=======
+>>>>>>> 80efe902b18caf318f658c31841e4befcd690367
                 _client.Connect(_localIpAddress, 1337);
+                SharedUtil.SendMessage(_client, new
+                {
+                    id = "send/name",
+                    data = new
+                    {
+                        name = Name
+                    }
+                });
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
+<<<<<<< HEAD
                 LogInForm.Close();
                 LogInForm.Dispose();
                 Console.WriteLine("YAY! Senpai and I connected!");
+=======
+                LogInForm.Visible = false;
+                PlayerForm = new PlayerForm();
+>>>>>>> 80efe902b18caf318f658c31841e4befcd690367
             }
             catch (Exception e)
             {
@@ -107,6 +120,9 @@ namespace ChoHanClient
                         PlayerForm.UpdateMessageLabel((string)message.data.text);
                         break;
                     case "send/session":
+                        List<string> sessions = new List<string>();
+                        sessions = (List<string>)message.data.sessions;
+                        PlayerForm.FillSessionBox(sessions);
                         break;
                     case "disconnect":
                         _client.GetStream().Close();

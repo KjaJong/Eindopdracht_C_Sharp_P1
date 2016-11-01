@@ -28,7 +28,6 @@ namespace ChoHan
                 switch ((string) message.id)
                 {
                     case "send/message":
-
                         break;
                     case "session/join":
 
@@ -66,7 +65,7 @@ namespace ChoHan
                 id = "send/session",
                 data = new
                 {
-                    sessions = Server.Sessions.Select(s => s._sessionName).ToArray()
+                    sessions = Server.Sessions.Select(s => s._sessionName).ToList()
                 }
             });
         }

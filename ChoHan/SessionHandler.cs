@@ -9,8 +9,8 @@ namespace ChoHan
     public class SessionHandler
     {
         public readonly string _sessionName;
-        private int _maxPlayers;
-        private List<Player> _players;
+        public readonly int _maxPlayers;
+        public readonly List<Player> _players;
         public SessionHandler(string name, int maxPlayers)
         {
             _sessionName = name;
