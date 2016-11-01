@@ -13,16 +13,27 @@ namespace ChoHanClient
 {
     public class Client
     {
+<<<<<<< HEAD
         public LogInForm LogInForm { get; set; }
         public PlayerForm PlayerForm { get; set; }
         private IPAddress _localIpAddress;
         private TcpClient client;
+=======
+        public PlayerForm Form { get; set; }
+        private readonly IPAddress _currentId;
+        private readonly TcpClient _client;
+>>>>>>> 8c749fa65492c8efb46920fae7528209756a08a7
         public string Name { get; set; }
 
         public Client(string name, LogInForm form)
         {
+<<<<<<< HEAD
             Name = name;
             LogInForm = form;
+=======
+            Form = new PlayerForm();
+
+>>>>>>> 8c749fa65492c8efb46920fae7528209756a08a7
             IPAddress localIP = GetLocalIpAddress();
 
             bool IpOk = IPAddress.TryParse(localIP.ToString(), out _localIpAddress);
@@ -31,6 +42,7 @@ namespace ChoHanClient
                 Console.WriteLine("Couldn't parse the IP address. Exiting code.");
                 Environment.Exit(1);
             }
+<<<<<<< HEAD
 
             client = new TcpClient();
             
@@ -52,17 +64,24 @@ namespace ChoHanClient
             {
                 TryConnection();
             };
+=======
+            _client = new TcpClient();
+>>>>>>> 8c749fa65492c8efb46920fae7528209756a08a7
         }
 
         public void TryConnection()
         {
             try
             {
+<<<<<<< HEAD
                 LogInForm.Close();
                 LogInForm.Dispose();
                 PlayerForm = new PlayerForm();
                 PlayerForm.Visible = true;
                 client.Connect(_localIpAddress, 1337);
+=======
+                _client.Connect(_currentId, 1337);
+>>>>>>> 8c749fa65492c8efb46920fae7528209756a08a7
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
                 
@@ -77,10 +96,9 @@ namespace ChoHanClient
 
         public void StartLoop()
         {
-            bool done = false;
-            bool beginConfirm = false;
-            while (!done)
+            while (_client.Connected)
             {
+<<<<<<< HEAD
                 //TODO good for now, need to rework this
                 switch (SharedUtil.ReadMessage(client))
                 {
@@ -107,7 +125,54 @@ namespace ChoHanClient
                         Console.WriteLine("OI, The fuck you doing here m8");
                         break;
                 }
+=======
+                dynamic message = SharedUtil.ReadMessage(_client);
+                switch ((string)message.id)
+                {
+                    case "give/confirmation":
+                        SharedUtil.SendMessage(_client, new
+                        {
+                            id = "send",
+                            data = new
+                            {
+                                confirmation = Form.ConfirmAnswer
+                            }
+                        });
+                        break;
+                    case "recieve/answer":
+                        Form.Update((bool) message.data.answer, (int) message.data.score);
+                        break;
+                    case "give/answer":
+                        SharedUtil.SendMessage(_client, new
+                        {
+                            id = "send",
+                            data = new
+                            {
+                                answer = Form.Answer
+                            }
+                        });
+                        break;
+                    case "update/panel":
+                        Form.UpdateMessageLabel((string)message.data.text);
+                        break;
+                    case "send/session":
+                        break;
+                    case "disconnect":
+                        _client.GetStream().Close();
+                        _client.Close();
+                        break;
+                    default:
+                        Console.WriteLine("You're not suposse to be here.");
+                        break;
+                }
+
+>>>>>>> 8c749fa65492c8efb46920fae7528209756a08a7
             }
+        }
+
+        public void JoinSession()
+        {
+            
         }
 
         public static IPAddress GetLocalIpAddress()

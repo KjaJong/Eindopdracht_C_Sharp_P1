@@ -11,30 +11,23 @@ namespace ChoHan
     public class ClientHandler
     {
         //TODO implement logging
-        private Log _sessionLog;
-        private List<Player> _clients;
+        public Player _client { get; set; }
+        private readonly Log _sessionLog;
 
-        public ClientHandler(List<Player> clients, Log sessionLog)
+        public ClientHandler(Player client, Log sessionLog)
         {
-            _clients = clients;
+            _client = client;
             _sessionLog = sessionLog;
         }
 
-        private void StartGame()
+        public void HandleClientThread()
         {
-            _sessionLog.AddLogEntry("Started a game");
-            int roundCount = 0;
-            ChoHan game = new ChoHan();
-
-            while (roundCount < 5)
+            while (_client.Client.Connected)
             {
-                int answercount = 0;
-                Console.WriteLine("Waiting for players to confirm");
-                //Waits for every client to choose an answer
-                Console.WriteLine(answercount);
-                Console.WriteLine(roundCount);
-                while (answercount < _clients.Count)
+                dynamic message = SharedUtil.ReadMessage(_client.Client);
+                switch ((string) message.id)
                 {
+<<<<<<< HEAD
                     answercount = 0;
                     foreach (var c in _clients)
                     {
@@ -51,102 +44,86 @@ namespace ChoHan
                 //TODO Convert to fucking jason
                 //send every client a message that they can send their answer
                 game.ThrowDice();
+=======
+                    case "send/message":
+>>>>>>> 8c749fa65492c8efb46920fae7528209756a08a7
 
-                foreach (var c in _clients)
-                {
-                    SharedUtil.SendMessage(c.Client, "give/answer");
+                        break;
+                    case "session/join":
 
-                    string answer = SharedUtil.ReadMessage(c.Client);
-                    SharedUtil.SendMessage(c.Client, "recieve/answer");
-                    if (answer.Equals("True"))
-                    {
-                        if (game.CheckResult(true))
+                        break;
+                    case "session/leave":
+
+                        break;
+                    case "disconnect":
+                        SharedUtil.SendMessage(_client.Client, new
                         {
-                            c.Score++;
-                            SharedUtil.SendMessage(c.Client, $"{c.Score}:True");
-                        }
-                        else
-                        {
-                            SharedUtil.SendMessage(c.Client, $"{c.Score}:False");
-                        }
-                    }
-                    else
-                    {
-                        if (game.CheckResult(false))
-                        {
-                            c.Score++;
-                            SharedUtil.SendMessage(c.Client, $"{c.Score}:True");
-                        }
-                        else
-                        {
-                            SharedUtil.SendMessage(c.Client, $"{c.Score}:False");
-                        }
-                    }
-                    Console.WriteLine("Scores send");
+                            id = "disconnect",
+                            data = new
+                            {
+                            }
+                        });
 
-                }
-                roundCount++;
-                _sessionLog.AddLogEntry("Processed all awnsers for round " + (roundCount));
-            }
-            //sorts the list on score
+                        _sessionLog.AddLogEntry(_client.Naam, " Disconnedted.");
+                        _client.Client.GetStream().Close();
+                        _client.Client.Close();
 
-            _clients.Sort((x, y) => y.Score - x.Score);
-
-            _sessionLog.AddLogEntry("Determaning the winner of the game");
-            bool playerOneWin = true;
-
-            //starts looking for the ties and loses
-            foreach (var c in _clients)
-            {
-                Console.WriteLine(c.Score - _clients.ElementAt(0).Score);
-                if (c.Equals(_clients.ElementAt(0))) continue;
-                Console.WriteLine("error");
-                SharedUtil.SendMessage(c.Client, "recieve/answer/final");
-
-                if (c.Score - _clients.ElementAt(0).Score == 0)
-                {
-                    SharedUtil.SendMessage(c.Client, "You tied");
-                    playerOneWin = false;
-                }
-
-                else if (c.Score - _clients.ElementAt(0).Score < 0)
-                {
-                    SharedUtil.SendMessage(c.Client, "You lose");
-                }
-
-                else
-                {
-                    Console.WriteLine("ffs are you here?!");
-                    SharedUtil.SendMessage(c.Client, "Something went wrong here");
+                        //sepukku
+                        Server.Handlers.Remove(this);
+                        break;
+                    default:
+                        Console.WriteLine("You're not suposse to be here.");
+                        break;
                 }
             }
-            Console.WriteLine("Winner determined");
-
-            //checks if the highest score doesn't tie with another one
-            SharedUtil.SendMessage(_clients.ElementAt(0).Client, "recieve/answer/final");
-            Console.WriteLine("Is there a winner?");
-            SharedUtil.SendMessage(_clients.ElementAt(0).Client, playerOneWin ? "You win" : "You tied");
-
-            //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
-            //kills every client muhahaha
-            foreach (var c in _clients)
-            {
-                _sessionLog.AddLogEntry("Game is over, closing the game");
-                SharedUtil.SendMessage(c.Client, "closing");
-
-                c.Client.GetStream().Close();
-                c.Client.Close();
-
-            }
-            //TODO: Menno plz fix
-            //_sessionLog.PrintLog();
         }
 
-        public void HandleClientThread()
+        public void SendAllSessions()
         {
-            //starts the game
-            StartGame();
-            Console.WriteLine("Connection closed");
+            SharedUtil.SendMessage(_client.Client, new
+            {
+                id = "send/session",
+                data = new
+                {
+                    sessions = Server.Sessions.Select(s => s._sessionName).ToArray()
+                }
+            });
+        }
+
+        public void Disconnect()
+        {
+            SharedUtil.SendMessage(_client.Client, new
+            {
+                id = "disconnect",
+                data = new
+                {
+                    
+                }
+            });
+        }
+
+        public void SendAck()
+        {
+            SharedUtil.SendMessage(_client.Client,new
+            {
+                id = "ack",
+                data = new
+                {
+                    ack = true
+                }
+            });
+        }
+
+        public void SendNotAck()
+        {
+            SharedUtil.SendMessage(_client.Client, new
+            {
+                id = "ack",
+                data = new
+                {
+                    ack = false
+                }
+            });
         }
     }
 }

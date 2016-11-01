@@ -17,7 +17,7 @@ namespace ChoHanClient
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
 
-        delegate void SetTextCallback(string text, string score);
+        delegate void SetTextCallback(bool text, int score);
 
         delegate void SetCommentCallBack(string text);
 
@@ -60,42 +60,37 @@ namespace ChoHanClient
 
         private void Leavebutton_Click(object sender, EventArgs e)
         {
+            
             Environment.Exit(1);
         }
 
-        public void Update(string rightAnswerPlayerOne, string score )
+        public void Update(bool rightAnswerPlayerOne, int score )
         {
             if (this.ScorePlayerOneLabel.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(Update);
+                var d = new SetTextCallback(Update);
                 this.Invoke(d, rightAnswerPlayerOne, score);
             }
             else
             {
 
-                ScorePlayerOneLabel.Text = score;
-
-                //TODO This doesn't seem to function
+                ScorePlayerOneLabel.Text = score.ToString();
+                
                 Answer = null;
                 ConfirmAnswer = false;
 
-                switch (rightAnswerPlayerOne)
+                if (rightAnswerPlayerOne)
                 {
-                    case "True":
-                        RightPlayerOneLabel.Visible = true;
-                        WrongPlayerOneLabel.Visible = false;
-                        break;
-                        
-                    case "False":
-                        WrongPlayerOneLabel.Visible = true;
-                        RightPlayerOneLabel.Visible = false;
-                        break;
+                    RightPlayerOneLabel.Visible = true;
+                    WrongPlayerOneLabel.Visible = false;
                 }
-
+                else
+                {
+                    WrongPlayerOneLabel.Visible = true;
+                    RightPlayerOneLabel.Visible = false;
+                }
                 ResetChoiceLabel();
-
             }
-
         }
 
 
