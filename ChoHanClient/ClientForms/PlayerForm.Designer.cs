@@ -174,12 +174,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-<<<<<<< HEAD
-            this.ClientSize = new System.Drawing.Size(355, 229);
-=======
             this.ClientSize = new System.Drawing.Size(266, 186);
             this.Controls.Add(this.LeaveButton);
->>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
             this.Controls.Add(this.PlayerListBox);
             this.Controls.Add(this.SessionListBox);
             this.Controls.Add(this.YourChoiceLabel);

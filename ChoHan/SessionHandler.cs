@@ -14,17 +14,11 @@ namespace ChoHan
         public readonly int MaxPlayers;
         public readonly List<Player> Players;
         private readonly Timer _awnserTimer = new Timer(1000);
-<<<<<<< HEAD
-        private int _timerCounter;
-        private bool _gameGateKeeper;
-        private readonly Log _sessionLog;
-=======
         private int _timerCounter = 0;
         private bool _gameGateKeeper = false;
         private Log _sessionLog;
         private bool _gameStart;
         private bool _gameGoesOn = true;
->>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
 
         public SessionHandler(string name, int maxPlayers)
         {
@@ -47,19 +41,12 @@ namespace ChoHan
         
         public void AddPlayer(Player player)
         {
-<<<<<<< HEAD
-            if (Players.Count <= MaxPlayers)
+            if (Players.Count <= MaxPlayers && !_gameStart)
             {
                 Players.Add(player);
-                Console.WriteLine($"Player {player.Naam} has joined the game");
-=======
-            if (_players.Count <= _maxPlayers && !_gameStart)
-            {
-                _players.Add(player);
-                Console.WriteLine($"Player {player.Naam} has joined the game: {_sessionName}");
+                Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
                 Server.SendSessions();
                 UpdatePlayerList();
->>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
                 _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
             }
             else
@@ -202,18 +189,14 @@ namespace ChoHan
 
             //checks if the highest score doesn't tie with another one
             Console.WriteLine("Is there a winner?");
-<<<<<<< HEAD
-            string text = playerOneWin ? "you win" : "you tied";
 
-            SharedUtil.SendMessage(Players.ElementAt(0).Client, new
-=======
-            UpdatePlayerPanel(_players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
+            UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
             
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
 
             //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
             //kills every client muhahaha
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 _sessionLog.AddLogEntry($"Murdered {c.Naam}.");
                 SharedUtil.SendMessage(c.Client, new
@@ -230,7 +213,6 @@ namespace ChoHan
         public void UpdatePlayerPanel(TcpClient client, string text)
         {
             SharedUtil.SendMessage(client, new
->>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
             {
                 id = "update/panel",
                 data = new
@@ -240,14 +222,9 @@ namespace ChoHan
             });
         }
 
-<<<<<<< HEAD
-            //kills every client muhahaha
-            foreach (var c in Players)
-=======
         public void UpdateAllPanels(string text)
         {
-            foreach (var c in _players)
->>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
+            foreach (var c in Players)
             {
                 SharedUtil.SendMessage(c.Client, new
                 {
@@ -262,7 +239,7 @@ namespace ChoHan
 
         public void UpdatePlayers(bool answer)
         {
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 SharedUtil.SendMessage(c.Client, new
                 {
@@ -274,10 +251,6 @@ namespace ChoHan
                     }
                 });
             }
-<<<<<<< HEAD
-            _sessionLog.PrintLog();
-=======
->>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
         }
 
         public void SessionHandleThread()
@@ -286,12 +259,9 @@ namespace ChoHan
             _gameStart = false;
             while (true)
             {
-<<<<<<< HEAD
-                while (MaxPlayers != Players.Count)
-=======
-                while (2 > _players.Count)
->>>>>>> fbdf2f186ddb07770091ecf3f5eccaccb0ff36c7
+                while (2 > Players.Count)
                 {
+
                 }
                 StartGame();
             }
@@ -299,19 +269,19 @@ namespace ChoHan
 
         public override string ToString()
         {
-            return $"{_sessionName}: {_players.Count}/{_maxPlayers}";
+            return $"{SessionName}: {Players.Count}/{MaxPlayers}";
         }
 
         public void UpdatePlayerList()
         {
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 SharedUtil.SendMessage(c.Client, new
                 {
                     id = "send/players",
                     data = new
                     {
-                        players = _players.Select(s => s.ToString()).ToArray()
+                        players = Players.Select(s => s.ToString()).ToArray()
                     }
                 });
             }
@@ -319,8 +289,8 @@ namespace ChoHan
 
         public void DeletePlayerFromSession(Player player)
         {
-            _players.Remove(player);
-            if (_players.Count < 2)
+            Players.Remove(player);
+            if (Players.Count < 2)
             {
                 _gameGoesOn = false;
                 UpdateAllPanels("Game has stopped and starts again");
@@ -331,11 +301,11 @@ namespace ChoHan
 
         public void GameEnded()
         {
-            foreach (var c in _players)
+            foreach (var c in Players)
             {
                 c.IsSession = false;
             }
-            _players.Clear();
+            Players.Clear();
         }
     }
 }
