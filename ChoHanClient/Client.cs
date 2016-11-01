@@ -102,6 +102,9 @@ namespace ChoHanClient
                         PlayerForm.UpdateMessageLabel((string)message.data.text);
                         break;
                     case "send/session":
+                        List<string> sessions = new List<string>();
+                        sessions = (List<string>)message.data.sessions;
+                        PlayerForm.FillSessionBox(sessions);
                         break;
                     case "disconnect":
                         _client.GetStream().Close();

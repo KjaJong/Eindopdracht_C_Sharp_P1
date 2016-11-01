@@ -112,5 +112,20 @@ namespace ChoHanClient
         {
             YourChoiceLabel.Text = "You choose: ";
         }
+
+        private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        public void FillSessionBox(List<string> sessions)
+        {
+            SessionListBox.Items.Clear();
+            SessionListBox.Items.Add("Sessions");
+            foreach (var s in sessions)
+            {
+                SessionListBox.Items.Add(s);
+            }
+        }
     }
 }

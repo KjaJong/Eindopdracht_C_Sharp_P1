@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ChoHanClient;
+using SharedUtilities;
 
 namespace ChoHan
 {
@@ -140,6 +141,18 @@ namespace ChoHan
             Server.Sessions.Add(session);
             Server.SessionThreads.Add(thread);
             Console.WriteLine($"Session has been made: {session._sessionName} {session._players.Count}/{session._maxPlayers}");
+
+            foreach (var c in Server.Handlers)
+            {
+                SharedUtil.SendMessage(c._client.Client, new
+                {
+                    id = "send/session",
+                    data = new
+                    {
+                        sessions = Server.Sessions.Select(s => s._sessionName).ToArray()
+                    }
+                });
+            }
         }
 
         private void ShowSessions()

@@ -65,7 +65,7 @@ namespace ChoHan
                 id = "send/session",
                 data = new
                 {
-                    sessions = Server.Sessions.Select(s => s._sessionName).ToArray()
+                    sessions = Server.Sessions.Select(s => s._sessionName).ToList()
                 }
             });
         }
