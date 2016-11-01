@@ -127,5 +127,11 @@ namespace ChoHanClient
                 SessionListBox.Items.Add(s);
             }
         }
+
+        public void switchBox()
+        {
+            SessionListBox.Visible = !SessionListBox.Visible;
+            PlayerListBox.Visible = !PlayerListBox.Visible;
+        }
     }
 }
