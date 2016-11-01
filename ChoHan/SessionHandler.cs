@@ -217,15 +217,8 @@ namespace ChoHan
             {
                 SharedUtil.SendMessage(c.Client, new
                 {
-                    id = "disconnect",
-                    data = new
-                    {
-                        
-                    }
+                    id = "session/leave"
                 });
-
-                c.Client.GetStream().Close();
-                c.Client.Close();
 
             }
             //TODO: Menno plz fix
@@ -234,7 +227,14 @@ namespace ChoHan
 
         public void SessionHandleThread()
         {
-            
+            while (true)
+            {
+                while (_maxPlayers != _players.Count)
+                {
+                }
+
+                StartGame();
+            }
         }
     }
 }

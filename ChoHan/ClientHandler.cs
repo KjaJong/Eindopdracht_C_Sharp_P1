@@ -30,6 +30,7 @@ namespace ChoHan
                     case "send/message":
                         break;
                     case "session/join":
+                        Server.FindSession((string) message.data.sessionname).AddPlayer(_client);
 
                         break;
                     case "session/leave":

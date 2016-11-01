@@ -17,7 +17,7 @@ namespace ChoHanClient
         public LogInForm LogInForm { get; set; }
         public PlayerForm PlayerForm { get; set; }
         private readonly IPAddress _localIpAddress;
-        private readonly TcpClient _client;
+        private TcpClient _client;
         public string Name { get; set; }
 
         public Client(string name, LogInForm form)
@@ -36,7 +36,10 @@ namespace ChoHanClient
             _client = new TcpClient();
 
             Console.WriteLine("I want to connect with Senpai!");
+<<<<<<< HEAD
             
+=======
+>>>>>>> ebba8d8f8792945b45d9e4a6c5eb785cadfe6562
             TryConnection();
         }
         public Client(string name, LogInForm form, IPAddress IP)
@@ -62,11 +65,18 @@ namespace ChoHanClient
                 });
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
+<<<<<<< HEAD
                 LogInForm.Close();
                 LogInForm.Dispose();
                 Console.WriteLine("YAY! Senpai and I connected!");
                 LogInForm.Visible = false;
                 PlayerForm = new PlayerForm();
+=======
+                Console.WriteLine("YAY! Senpai and I connected!");
+                LogInForm.Visible = false;
+                PlayerForm = new PlayerForm();
+                PlayerForm.Show();
+>>>>>>> ebba8d8f8792945b45d9e4a6c5eb785cadfe6562
             }
             catch (Exception e)
             {
@@ -110,7 +120,10 @@ namespace ChoHanClient
                         break;
                     case "send/session":
                         List<string> sessions = new List<string>();
-                        sessions = (List<string>)message.data.sessions;
+                        for (var i = 0; i < message.data.sessions.Count; i++)
+                        {
+                            sessions.Add((string)message.data.sessions[i]);
+                        }
                         PlayerForm.FillSessionBox(sessions);
                         break;
                     case "disconnect":
@@ -122,11 +135,6 @@ namespace ChoHanClient
                         break;
                 }
             }
-        }
-
-        public void JoinSession()
-        {
-            
         }
 
         public static IPAddress GetLocalIpAddress()
