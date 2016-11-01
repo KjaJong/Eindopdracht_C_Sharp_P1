@@ -54,15 +54,24 @@
       <Link>SharedUtil.cs</Link>
     </Compile>
     <Compile Include="Client.cs" />
-    <Compile Include="PlayerForm.cs">
+    <Compile Include="ClientForms\LogInForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlayerForm.Designer.cs">
+    <Compile Include="ClientForms\LogInForm.Designer.cs">
+      <DependentUpon>LogInForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ClientForms\PlayerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClientForms\PlayerForm.Designer.cs">
       <DependentUpon>PlayerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="PlayerForm.resx">
+    <EmbeddedResource Include="ClientForms\LogInForm.resx">
+      <DependentUpon>LogInForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClientForms\PlayerForm.resx">
       <DependentUpon>PlayerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

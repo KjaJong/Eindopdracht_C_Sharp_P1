@@ -57,3 +57,4 @@ D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHa
 D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
 D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
 D:\Gijs\Documenten\Avans\CSharp\CSharp eindproject\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache
+C:\Users\Menno\Documents\Eindopdracht_C_Sharp_P1\ChoHanClient\obj\Debug\ChoHanClient.ClientForms.LogInForm.resources

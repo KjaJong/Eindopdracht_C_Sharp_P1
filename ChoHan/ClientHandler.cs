@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.Remoting.Messaging;
+using System.Threading;
 using SharedUtilities;
 
 namespace ChoHan
@@ -34,7 +35,6 @@ namespace ChoHan
                 Console.WriteLine(roundCount);
                 while (answercount < _clients.Count)
                 {
-                    //TODO check if the code isn't the same as down below (from rule 51)
                     answercount = 0;
                     foreach (var c in _clients)
                     {

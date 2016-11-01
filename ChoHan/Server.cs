@@ -53,20 +53,22 @@ namespace ChoHan
                 _sessionLog.AddLogEntry("Started a new thread");
             }
         }
+
         private List<Player> CheckForPlayers(TcpListener listner)
         { 
 
             List<Player> _activeClients = new List<Player>();
             int count = 1;
-            while (_activeClients.Count != 1)
+            while (_activeClients.Count != 2)
             {
-                //Looking for players
+                //Looking for players. Provides the bare minimum of players needed
                 Console.WriteLine("Waiting for player");
                 TcpClient client = listner.AcceptTcpClient();
                 Console.WriteLine("Player connected!!");
                 _activeClients.Add(new Player($"player{count}", client, 0));
                 count++;
             }
+            
             _sessionLog.AddLogEntry("Added a player.");
             return _activeClients;
         }

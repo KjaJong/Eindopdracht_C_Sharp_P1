@@ -86,16 +86,12 @@ namespace ChoHan
 
         private string ToSafeFileName(string s)
         {
-            return s
-                .Replace("\\", " ")
-                .Replace("\\", " ")
-                .Replace("\\", " ")
-                .Replace("\\", " ")
-                .Replace("\\", " ")
-                .Replace("\\", " ")
-                .Replace("\\", " ")
-                .Replace("\\", " ")
-                .Replace("\\", " ");
+            String temp = s;
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                temp = temp.Replace(c, '_');
+            }
+            return temp;
         }
     }
 }
