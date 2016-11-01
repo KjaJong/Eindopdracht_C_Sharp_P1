@@ -52,9 +52,9 @@ namespace ChoHan
         public void PrintLog()
         {
             //TODO something should start double logging here i think
-            //TODO softcode the filepath
+            //TODO softcode the filepath (solved?)
             string fileName = ToSafeFileName(_logName);
-            string filepath = ($"C:/Users/Menno/Documents/FUCK THIS/{fileName}");//FILEPATH VOOR MENNO 
+            string filepath = Path.Combine(Environment.CurrentDirectory, @"LogFolder", fileName);
 
             if (!File.Exists(filepath))
             {

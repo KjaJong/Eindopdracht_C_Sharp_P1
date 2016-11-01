@@ -25,8 +25,7 @@ namespace ChoHanClient.ClientForms
         private void WelcomeText_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "In ChoHan a player chooses wheter a roll of a pair of die is odd (Cho) or even (Han)." + "\n"
-                + "After all player have chosen, the die are thrown and the result is announced.",
+                "In ChoHan a player chooses wheter a roll of a pair of die is odd (Cho) or even (Han). After all players have made their choice, the die are thrown and the result is announced.",
                 "A short explanation.");
         }
 
@@ -34,8 +33,10 @@ namespace ChoHanClient.ClientForms
         {
             if (ServerBox.TextLength == 0)
             {
+                Console.WriteLine("Senpai!");
                 try
                 {
+                    Console.WriteLine("Comming now Senpai!");
                     var client = new Client(UserNameBox.Text, this);
                 }
                 catch (Exception ex)
@@ -46,8 +47,9 @@ namespace ChoHanClient.ClientForms
             }
             else
             {
+                Console.WriteLine("BAKA!");
                 bool gateKeeper = true;
-                IPAddress serverip = null;
+                IPAddress serverip;
                 bool IpOk = IPAddress.TryParse(ServerBox.Text, out serverip);
                 if (!IpOk)
                 {
@@ -68,7 +70,6 @@ namespace ChoHanClient.ClientForms
                     }
                 }
             }
-
         }
 
         public void setWelcomeText(string t)
