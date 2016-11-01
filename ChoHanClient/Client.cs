@@ -103,7 +103,10 @@ namespace ChoHanClient
                         break;
                     case "send/session":
                         List<string> sessions = new List<string>();
-                        sessions = (List<string>)message.data.sessions;
+                        for (var i = 0; i < message.data.sessions.Count; i++)
+                        {
+                            sessions.Add((string)message.data.sessions[i]);
+                        }
                         PlayerForm.FillSessionBox(sessions);
                         break;
                     case "disconnect":
