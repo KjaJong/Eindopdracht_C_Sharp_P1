@@ -215,7 +215,10 @@ namespace ChoHan
             //kills every client muhahaha
             foreach (var c in _players)
             {
-                SharedUtil.SendMessage();
+                SharedUtil.SendMessage(c.Client, new
+                {
+                    id = "session/leave"
+                });
 
             }
             //TODO: Menno plz fix

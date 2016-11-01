@@ -16,6 +16,7 @@ namespace ChoHanClient.ClientForms
 {
     public partial class LogInForm : Form
     {
+        public static Client Client;
         public LogInForm()
         {
             InitializeComponent();
@@ -61,7 +62,7 @@ namespace ChoHanClient.ClientForms
                 {
                     try
                     {
-                        var client = new Client(UserNameBox.Text, this, serverip);
+                        Client = new Client(UserNameBox.Text, this, serverip);
                     }
                     catch (Exception ex)
                     {

@@ -93,7 +93,7 @@ namespace ChoHan
             throw new Exception("Local IP Address Not Found!");
         }
 
-        public static SessionHandler FiendSession(string sessionName)
+        public static SessionHandler FindSession(string sessionName)
         {
             SessionHandler session = null;
             foreach (var s in Sessions)
@@ -104,6 +104,11 @@ namespace ChoHan
                 }
             }
             return session;
+        }
+
+        public static void SendSessions()
+        {
+            
         }
 
     }

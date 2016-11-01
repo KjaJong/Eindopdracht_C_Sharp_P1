@@ -17,7 +17,7 @@ namespace ChoHanClient
         public LogInForm LogInForm { get; set; }
         public PlayerForm PlayerForm { get; set; }
         private readonly IPAddress _localIpAddress;
-        private readonly TcpClient _client;
+        private TcpClient _client;
         public string Name { get; set; }
 
         public Client(string name, LogInForm form)
@@ -123,11 +123,6 @@ namespace ChoHanClient
                         break;
                 }
             }
-        }
-
-        public void JoinSession()
-        {
-            
         }
 
         public static IPAddress GetLocalIpAddress()
