@@ -28,7 +28,6 @@ namespace ChoHan
                 switch ((string) message.id)
                 {
                     case "send/message":
-
                         break;
                     case "session/join":
 

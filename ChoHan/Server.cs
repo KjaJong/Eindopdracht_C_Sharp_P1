@@ -21,7 +21,8 @@ namespace ChoHan
         public static List<ClientHandler> Handlers { get; set; }
         public static List<SessionHandler> Sessions { get; set; }
 
-        public static List<Thread> Threads { get; set; }
+        public static List<Thread> ClientThreads { get; set; }
+        public static List<Thread> SessionThreads { get; set; }
 
         private readonly Log _sessionLog;
 
@@ -32,7 +33,8 @@ namespace ChoHan
             //looking for ip
             IPAddress localIP = GetLocalIpAddress();
             Handlers = new List<ClientHandler>();
-            Threads = new List<Thread>();
+            ClientThreads = new List<Thread>();
+            SessionThreads = new List<Thread>();
             Sessions = new List<SessionHandler>();
 
             string LogName = "SessionLog/" + DateTime.Today + "/" + DateTime.Now + "/ID=" + Handlers.Count;
@@ -64,7 +66,7 @@ namespace ChoHan
                 Thread thread = new Thread(handler.HandleClientThread);
                 thread.Start();
                 Handlers.Add(handler);
-                Threads.Add(thread);
+                ClientThreads.Add(thread);
                 _sessionLog.AddLogEntry("Started a new thread");
             }
         }

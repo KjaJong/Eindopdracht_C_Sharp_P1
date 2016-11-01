@@ -36,7 +36,7 @@ namespace ChoHanClient.ClientForms
             {
                 try
                 {
-                    new Client(UserNameBox.Text, this);
+                    var client = new Client(UserNameBox.Text, this);
                 }
                 catch (Exception ex)
                 {
@@ -59,7 +59,7 @@ namespace ChoHanClient.ClientForms
                 {
                     try
                     {
-                        new Client(UserNameBox.Text, this, serverip);
+                        var client = new Client(UserNameBox.Text, this, serverip);
                     }
                     catch (Exception ex)
                     {

@@ -26,6 +26,7 @@ namespace ChoHanClient
         {
             Answer = null;
             InitializeComponent();
+            Visible = true;
         }
 
         private void EvenButton_Click(object sender, EventArgs e)

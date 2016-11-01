@@ -34,39 +34,32 @@ namespace ChoHanClient
             }
             _client = new TcpClient();
             
-            Timer t = new Timer(100);
-            t.Elapsed += (s, e) =>
-            {
-                TryConnection();
-            };
+            TryConnection();
         }
-
         public Client(string name, LogInForm form, IPAddress IP)
         {
             Name = name;
             LogInForm = form;
             _client = new TcpClient();
-
-            Timer t = new Timer(10);
-            t.Elapsed += (s, e) =>
-            {
-                TryConnection();
-            };
         }
 
         public void TryConnection()
         {
             try
             {
-                LogInForm.Close();
-                LogInForm.Dispose();
-                PlayerForm = new PlayerForm();
-                PlayerForm.Visible = true;
                 _client.Connect(_localIpAddress, 1337);
+                SharedUtil.SendMessage(_client, new
+                {
+                    id = "send/name",
+                    data = new
+                    {
+                        name = Name
+                    }
+                });
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
-                
-                
+                LogInForm.Visible = false;
+                PlayerForm = new PlayerForm();
             }
             catch (Exception e)
             {

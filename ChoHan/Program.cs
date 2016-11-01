@@ -24,7 +24,14 @@ namespace ChoHan
             Thread serverThread = new Thread(server.Run);
             serverThread.Start();
             ConsoleLoop();
-            foreach (var t in Server.Threads)
+
+            foreach (var t in Server.SessionThreads)
+            {
+                t.Interrupt();
+                t.Abort();
+            }
+
+            foreach (var t in Server.ClientThreads)
             {
                 t.Interrupt();
                 t.Abort();
@@ -63,12 +70,16 @@ namespace ChoHan
                         AddSesion();
                         break;
                     case "showsessions":
+                        ShowSessions();
                         break;
                     case "showplayers":
+                        ShowPlayers();
                         break;
                     case "killsession":
+                        KillSession();
                         break;
                     case "killplayer":
+                        KillPlayer();
                         break;
                     case "exit":
                         return;
@@ -79,8 +90,9 @@ namespace ChoHan
             }
         }
 
-        public void AddSesion()
+        private void AddSesion()
         {
+            Console.WriteLine("Please give name for your session");
             string name = Console.ReadLine();
             if (name == null) return;
 
@@ -105,18 +117,81 @@ namespace ChoHan
             }
 
             Console.WriteLine("Give maximum amount of players that may join the session, max 8.");
-            int maxPlayers = Console.Read();
+            int maxPlayers = 10;
+           
             while (maxPlayers > 8)
             {
-                Console.WriteLine(maxPlayers);
-                Console.WriteLine("please give a value lower than 8.");
-                maxPlayers = Console.Read();
+                try
+                {
+                    maxPlayers = Convert.ToInt32(Console.ReadLine());
+                    if (maxPlayers > 8)
+                    {
+                        Console.WriteLine("please give a value lower than 8.");
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Give a fucking number");
+                }
             }
             SessionHandler session = new SessionHandler(name, maxPlayers);
             Thread thread =  new Thread(session.SessionHandleThread);
             thread.Start();
             Server.Sessions.Add(session);
-            Server.Threads.Add(thread);
+            Server.SessionThreads.Add(thread);
+            Console.WriteLine($"Session has been made: {session._sessionName} {session._players.Count}/{session._maxPlayers}");
+        }
+
+        private void ShowSessions()
+        {
+            foreach (var s in Server.Sessions)
+            {
+                Console.WriteLine($"{s._sessionName}: {s._players.Count}/{s._maxPlayers}");
+            }
+        }
+
+        private void ShowPlayers()
+        {
+            foreach (var c in Server.Handlers)
+            {
+                Console.WriteLine(c._client.Naam);
+            }
+        }
+
+        private void KillSession()
+        {
+            string target = Console.ReadLine();
+            SessionHandler killSession = null;
+            foreach (var s in Server.Sessions)
+            {
+                if (!target.Equals(s._sessionName)) continue;
+                Console.WriteLine("Killing session muhahaha");
+                killSession = s;
+            }
+            if (killSession == null)
+            {
+                Console.WriteLine("Target not found");
+                return;
+            }
+            Server.Sessions.Remove(killSession);
+        }
+
+        private void KillPlayer()
+        {
+            string target = Console.ReadLine();
+            ClientHandler client = null;
+            foreach (var s in Server.Handlers)
+            {
+                if (!target.Equals(s._client.Naam)) continue;
+                Console.WriteLine("Killing player muhahaha");
+                client = s;
+            }
+            if (client== null)
+            {
+                Console.WriteLine("Target not found");
+                return;
+            }
+            Server.Handlers.Remove(client);
         }
     }
 }
