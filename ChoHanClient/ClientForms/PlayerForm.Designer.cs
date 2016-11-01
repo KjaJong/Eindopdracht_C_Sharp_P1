@@ -44,10 +44,10 @@
             // 
             // ConfirmButton
             // 
-            this.ConfirmButton.Location = new System.Drawing.Point(76, 135);
-            this.ConfirmButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ConfirmButton.Location = new System.Drawing.Point(124, 136);
+            this.ConfirmButton.Margin = new System.Windows.Forms.Padding(4);
             this.ConfirmButton.Name = "ConfirmButton";
-            this.ConfirmButton.Size = new System.Drawing.Size(100, 28);
+            this.ConfirmButton.Size = new System.Drawing.Size(99, 24);
             this.ConfirmButton.TabIndex = 24;
             this.ConfirmButton.Text = "Confirm";
             this.ConfirmButton.UseVisualStyleBackColor = true;
@@ -56,7 +56,7 @@
             // OddButton
             // 
             this.OddButton.Location = new System.Drawing.Point(124, 100);
-            this.OddButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OddButton.Margin = new System.Windows.Forms.Padding(4);
             this.OddButton.Name = "OddButton";
             this.OddButton.Size = new System.Drawing.Size(100, 28);
             this.OddButton.TabIndex = 23;
@@ -117,7 +117,7 @@
             // EvenButton
             // 
             this.EvenButton.Location = new System.Drawing.Point(16, 100);
-            this.EvenButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.EvenButton.Margin = new System.Windows.Forms.Padding(4);
             this.EvenButton.Name = "EvenButton";
             this.EvenButton.Size = new System.Drawing.Size(100, 28);
             this.EvenButton.TabIndex = 13;
@@ -141,9 +141,9 @@
             this.SessionListBox.Items.AddRange(new object[] {
             "Sessions"});
             this.SessionListBox.Location = new System.Drawing.Point(229, 11);
-            this.SessionListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.SessionListBox.Margin = new System.Windows.Forms.Padding(4);
             this.SessionListBox.Name = "SessionListBox";
-            this.SessionListBox.Size = new System.Drawing.Size(108, 196);
+            this.SessionListBox.Size = new System.Drawing.Size(108, 148);
             this.SessionListBox.TabIndex = 27;
             this.SessionListBox.SelectedIndexChanged += new System.EventHandler(this.SessionListBox_SelectedIndexChanged);
             // 
@@ -154,17 +154,17 @@
             this.PlayerListBox.Items.AddRange(new object[] {
             "Players"});
             this.PlayerListBox.Location = new System.Drawing.Point(229, 11);
-            this.PlayerListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.PlayerListBox.Margin = new System.Windows.Forms.Padding(4);
             this.PlayerListBox.Name = "PlayerListBox";
-            this.PlayerListBox.Size = new System.Drawing.Size(108, 196);
+            this.PlayerListBox.Size = new System.Drawing.Size(108, 148);
             this.PlayerListBox.TabIndex = 28;
             this.PlayerListBox.Visible = false;
             // 
             // LeaveButton
             // 
-            this.LeaveButton.Location = new System.Drawing.Point(57, 139);
+            this.LeaveButton.Location = new System.Drawing.Point(16, 135);
             this.LeaveButton.Name = "LeaveButton";
-            this.LeaveButton.Size = new System.Drawing.Size(75, 23);
+            this.LeaveButton.Size = new System.Drawing.Size(100, 25);
             this.LeaveButton.TabIndex = 29;
             this.LeaveButton.Text = "Leave";
             this.LeaveButton.UseVisualStyleBackColor = true;
@@ -174,7 +174,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(266, 186);
+            this.ClientSize = new System.Drawing.Size(353, 176);
             this.Controls.Add(this.LeaveButton);
             this.Controls.Add(this.PlayerListBox);
             this.Controls.Add(this.SessionListBox);
@@ -187,7 +187,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.CommentLabel);
             this.Controls.Add(this.EvenButton);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PlayerForm";
             this.Text = "PlayerForm";
             this.ResumeLayout(false);
