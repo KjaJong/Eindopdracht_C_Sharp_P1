@@ -17,7 +17,7 @@ namespace ChoHan
         private readonly Timer _awnserTimer = new Timer(1000);
         private int _timerCounter = 0;
         private bool _gameGateKeeper = false;
-        private Log _sessionLog;
+        private readonly Log _sessionLog;
         private bool _gameStart;
         private bool _gameGoesOn = true;
 

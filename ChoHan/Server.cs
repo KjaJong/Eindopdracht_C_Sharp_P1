@@ -59,7 +59,7 @@ namespace ChoHan
             while (true)
             {
                 ClientHandler handler = new ClientHandler(CheckForPlayers(_listener), _sessionLog);
-                Thread thread = new Thread(handler.HandleClientThread);
+                var thread = new Thread(handler.HandleClientThread);
                 thread.Start();
                 Handlers.Add(handler);
                 ClientThreads.Add(thread);
@@ -72,10 +72,10 @@ namespace ChoHan
         { 
             //Looking for players
             Console.WriteLine("Waiting for player");
-            TcpClient client = listner.AcceptTcpClient();
+            var client = listner.AcceptTcpClient();
             Console.WriteLine("Player connected!!");
             dynamic message = SharedUtil.ReadMessage(client);
-            Player player =  new Player((string)message.data.name, client, 0);
+            var player =  new Player((string)message.data.name, client, 0);
             
             
             _sessionLog.AddLogEntry("Added a player.");
