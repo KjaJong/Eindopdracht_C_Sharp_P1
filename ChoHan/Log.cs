@@ -34,7 +34,7 @@ namespace ChoHan
             {
                 TimeStamp = DateTime.Today + "_" + DateTime.Now,
                 PlayerName = playerName,
-                PlayerAction = playerAction
+                PlayerAction = playerAction + "\n"
             });
         }
 
@@ -44,7 +44,7 @@ namespace ChoHan
             {
                 TimeStamp = DateTime.Today + "_" + DateTime.Now,
                 PlayerName = "SERVER",
-                PlayerAction = playerAction
+                PlayerAction = playerAction + "\n"
             });
         }
 
@@ -53,12 +53,15 @@ namespace ChoHan
         {
             //TODO something should start double logging here i think
             //TODO softcode the filepath (solved?)
-            string fileName = ToSafeFileName(_logName);
-            string filepath = Path.Combine(Environment.CurrentDirectory, @"LogFolder", fileName);
+            string filepath1 = Path.Combine(Environment.CurrentDirectory, @"LogFolder");
+            string fileName = Path.Combine(_logName, getMagicNumber(filepath1).ToString(), ".txt");
+            fileName = ToSafeFileName(fileName);
+            string filepath2 = Path.Combine(filepath1, fileName);
+            
 
-            if (!File.Exists(filepath))
+            if (!File.Exists(filepath2))
             {
-                FileStream logFile = new FileStream(filepath, FileMode.Create, FileAccess.Write);
+                FileStream logFile = new FileStream(filepath2, FileMode.Create, FileAccess.Write);
                 StreamWriter writer = new StreamWriter(logFile);
 
                 foreach (var logEntry in _dataLog)
@@ -71,7 +74,7 @@ namespace ChoHan
             }
             else
             {
-                FileStream logFile = new FileStream(filepath, FileMode.Append, FileAccess.Write);
+                FileStream logFile = new FileStream(filepath2, FileMode.Append, FileAccess.Write);
                 StreamWriter writer = new StreamWriter(logFile);
 
                 foreach (var logEntry in _dataLog)
@@ -92,6 +95,11 @@ namespace ChoHan
                 temp = temp.Replace(c, '_');
             }
             return temp;
+        }
+
+        private int getMagicNumber(string filepath)
+        {
+            return Directory.GetFiles(filepath, "*", SearchOption.TopDirectoryOnly).Length;
         }
     }
 }

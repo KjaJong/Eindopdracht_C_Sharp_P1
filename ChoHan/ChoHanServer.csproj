@@ -70,9 +70,7 @@
       <Name>ChoHanClient</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LogFolder\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\SharedUtilities\SharedUtilities.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
