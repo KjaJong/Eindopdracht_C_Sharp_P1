@@ -68,6 +68,7 @@ namespace ChoHan
 
             while (roundCount < 5 && _gameGoesOn)
             {
+                _gameStart = true;
                 int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
@@ -98,7 +99,6 @@ namespace ChoHan
                         _sessionLog.AddLogEntry(c.Naam, "Confirmed activity with the server.");
                     }
                 }
-                _gameStart = true;
                 _awnserTimer.Stop();
                 _timerCounter = 0;
 
