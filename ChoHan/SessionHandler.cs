@@ -14,9 +14,10 @@ namespace ChoHan
         public readonly string SessionName;
         public readonly int MaxPlayers;
         public readonly List<Player> Players;
-        private readonly Timer _awnserTimer = new Timer(1000);
-        private int _timerCounter = 0;
-        private bool _gameGateKeeper = false;
+        private readonly Timer _awnserTimer = new Timer(15000);
+        private readonly Timer _startTimer = new Timer(15000);
+        private bool _gameGateKeeper;
+        private bool _startGame;
         private readonly Log _sessionLog;
         private bool _gameStart;
         private bool _gameGoesOn = true;
@@ -27,16 +28,19 @@ namespace ChoHan
             _sessionLog = new Log(SessionName + "_" + DateTime.Today);
             MaxPlayers = maxPlayers;
             Players = new List<Player>();
+
             _awnserTimer.Elapsed += (sender, args) =>
             {
-                _timerCounter++;
-                if (_timerCounter >= 15)
-                {
-                    _timerCounter = 0;
-                    _gameGateKeeper = true;
-                    _awnserTimer.Stop();
-                }
+                _gameGateKeeper = true;
+                _awnserTimer.Stop();
             };
+
+            _startTimer.Elapsed += (sender, args) =>
+            {
+                _startGame = true;
+                _startTimer.Stop();
+            };
+
             _sessionLog.AddLogEntry("Succesfully started a log.");
         }
         
@@ -60,6 +64,9 @@ namespace ChoHan
 
         private void StartGame()
         {
+            _startTimer.Start();
+            while (!_startGame) { }
+            _startGame = false;
             int roundCount = 0;
             ChoHan game = new ChoHan();
 
@@ -99,7 +106,6 @@ namespace ChoHan
                     _gameStart = true;
                 }
                 _awnserTimer.Stop();
-                _timerCounter = 0;
                 _gameGateKeeper = false;
 
                 Console.WriteLine("Gimmy dat answer");
@@ -201,7 +207,7 @@ namespace ChoHan
 
             }
             //TODO: Should work
-            //_sessionLog.PrintLog();
+            _sessionLog.PrintLog();
             GameEnded();
         }
 
