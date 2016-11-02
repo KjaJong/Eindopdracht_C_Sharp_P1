@@ -45,9 +45,10 @@ namespace ChoHan
             if (Players.Count <= MaxPlayers && !_gameStart)
             {
                 Players.Add(player);
+                UpdatePlayerPanel(player.Client, "Welcome to Sho Han");
                 Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
                 Server.SendSessions();
-                UpdatePlayerList();
+                //UpdatePlayerList();
                 _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
             }
             else
@@ -187,9 +188,7 @@ namespace ChoHan
             UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
             
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
-
-            //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
-            //kills every client muhahaha
+            
             foreach (var c in Players)
             {
                 _sessionLog.AddLogEntry($"Murdered {c.Naam}.");
@@ -249,10 +248,10 @@ namespace ChoHan
 
         public void SessionHandleThread()
         {
-            _gameGoesOn = true;
-            _gameStart = false;
             while (true)
             {
+                _gameGoesOn = true;
+                _gameStart = false;
                 if(Players.Count < 2) continue;
                 StartGame();
             }
@@ -275,7 +274,6 @@ namespace ChoHan
                         players = Players.Select(s => s.ToString()).ToArray()
                     }
                 });
-                SharedUtil.ReadMessage(c.Client);
             }
         }
 
@@ -296,8 +294,10 @@ namespace ChoHan
             foreach (var c in Players)
             {
                 c.IsSession = false;
+                c.Score = 0;
             }
             Players.Clear();
+            Server.SendSessions();
         }
     }
 }

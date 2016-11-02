@@ -15,7 +15,7 @@ namespace ChoHanClient
     {
         public bool ?Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
-        private string _sessionName;
+        public string SessionName { get; set; }
 
         delegate void SetTextCallback(bool text, int score);
 
@@ -35,7 +35,7 @@ namespace ChoHanClient
         private void PlayerForm_FromClosing(object sender, FormClosingEventArgs e)
         {
             LogInForm.Client.Disconnect();
-            Environment.Exit(1);
+            Environment.Exit(0);
         }
 
         private void EvenButton_Click(object sender, EventArgs e)
@@ -118,9 +118,9 @@ namespace ChoHanClient
 
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _sessionName = SessionListBox.SelectedItem.ToString();
-            if (_sessionName.Equals("Sessions")) return;
-            LogInForm.Client.JoinSession(_sessionName);
+            SessionName = SessionListBox.SelectedItem.ToString();
+            if (SessionName.Equals("Sessions")) return;
+            LogInForm.Client.JoinSession(SessionName);
             SwitchBox();
         }
 
@@ -177,12 +177,12 @@ namespace ChoHanClient
 
         private void LeaveButton_Click(object sender, EventArgs e)
         {
-            if (_sessionName == null)
+            if (SessionName == null)
             {
                 UpdateMessageLabel("You're not in a session");
                 return;
             }
-            string[] sessionStrings = _sessionName.Split(':');
+            string[] sessionStrings = SessionName.Split(':');
             LogInForm.Client.LeaveSession(sessionStrings[0]);
         }
     }

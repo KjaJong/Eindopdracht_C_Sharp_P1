@@ -27,8 +27,6 @@ namespace ChoHan
                 dynamic message = SharedUtil.ReadMessage(Client.Client);
                 switch ((string) message.id)
                 {
-                    case "send/message":
-                        break;
                     case "session/join":
                         string text = (string) message.data.sessionname;
                         string[] splitText = text.Split(':');
@@ -45,7 +43,7 @@ namespace ChoHan
                         });
 
                         Console.WriteLine($"player: {Client.Naam} has disconnected");
-                        _sessionLog.AddLogEntry(Client.Naam, " Disconnedted.");
+                        _sessionLog.AddLogEntry(Client.Naam, " Disconnected.");
                         Client.Client.GetStream().Close();
                         Client.Client.Close();
    
@@ -53,22 +51,10 @@ namespace ChoHan
                         Server.Handlers.Remove(this);
                         break;
                     default:
-                        Console.WriteLine("You're not suposse to be here.");
+                        Console.WriteLine(message.id);
                         break;
                 }
             }
-        }
-
-        public void SendAllSessions()
-        {
-            SharedUtil.SendMessage(Client.Client, new
-            {
-                id = "send/session",
-                data = new
-                {
-                    sessions = Server.Sessions.Select(s => s.SessionName).ToList()
-                }
-            });
         }
 
         public void Disconnect()

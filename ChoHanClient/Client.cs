@@ -107,6 +107,10 @@ namespace ChoHanClient
                         break;
                     case "session/kicked":
                         break;
+                    case "session/leave":
+                        PlayerForm.SwitchBox();
+                        PlayerForm.SessionName = "Session";
+                        break;
                     case "update/panel":
                         PlayerForm.UpdateMessageLabel((string)message.data.text);
                         SendAck();
@@ -125,8 +129,7 @@ namespace ChoHanClient
                         {
                             players.Add((string)message.data.players[i]);
                         }
-                        PlayerForm.FillSessionBox(players);
-                        SendAck();
+                        PlayerForm.FillPlayerBox(players);
                         break;
                     case "disconnect":
                         Console.WriteLine("error");
@@ -173,6 +176,7 @@ namespace ChoHanClient
 
             _client.GetStream().Close();
             _client.Close();
+            Environment.Exit(0);
         }
 
         public void JoinSession(string sessionName)
