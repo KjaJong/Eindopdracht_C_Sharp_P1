@@ -34,8 +34,8 @@ namespace ChoHanClient
 
         private void PlayerForm_FromClosing(object sender, FormClosingEventArgs e)
         {
-            LogInForm.Client.Disconnect();
-            Environment.Exit(0);
+                LogInForm.Client.Disconnect();
+                Environment.Exit(1);
         }
 
         private void EvenButton_Click(object sender, EventArgs e)
@@ -118,10 +118,13 @@ namespace ChoHanClient
 
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SessionName = SessionListBox.SelectedItem.ToString();
-            if (SessionName.Equals("Sessions")) return;
-            LogInForm.Client.JoinSession(SessionName);
-            SwitchBox();
+            if (SessionListBox.SelectedIndex != -1)
+            {
+                SessionName = SessionListBox.SelectedItem.ToString();
+                if (SessionName.Equals("Sessions")) return;
+                LogInForm.Client.JoinSession(SessionName);
+                SwitchBox();
+            }
         }
 
         public void FillPlayerBox(List<string> sessions)
@@ -173,17 +176,6 @@ namespace ChoHanClient
                 "After all players have made their choice, the die are thrown and the result is announced. " +
                 "The awnser must be given within 15 seconds.",
                 "A short explanation.");
-        }
-
-        private void LeaveButton_Click(object sender, EventArgs e)
-        {
-            if (SessionName == null)
-            {
-                UpdateMessageLabel("You're not in a session");
-                return;
-            }
-            string[] sessionStrings = SessionName.Split(':');
-            LogInForm.Client.LeaveSession(sessionStrings[0]);
         }
     }
 }

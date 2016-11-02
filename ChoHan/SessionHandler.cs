@@ -52,7 +52,6 @@ namespace ChoHan
                 UpdatePlayerPanel(player.Client, "Welcome to Sho Han");
                 Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
                 Server.SendSessions();
-                //UpdatePlayerList();
                 _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
             }
             else
