@@ -118,13 +118,11 @@ namespace ChoHanClient
 
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (SessionListBox.SelectedIndex != -1)
-            {
-                SessionName = SessionListBox.SelectedItem.ToString();
-                if (SessionName.Equals("Sessions")) return;
-                LogInForm.Client.JoinSession(SessionName);
-                SwitchBox();
-            }
+            if (SessionListBox.SelectedIndex == -1) return;
+            SessionName = SessionListBox.SelectedItem.ToString();
+            if (SessionName.Equals("Sessions")) return;
+            LogInForm.Client.JoinSession(SessionName);
+            SwitchBox();
         }
 
         public void FillPlayerBox(List<string> sessions)
