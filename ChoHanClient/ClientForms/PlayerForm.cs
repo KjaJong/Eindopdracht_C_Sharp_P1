@@ -35,7 +35,7 @@ namespace ChoHanClient
         private void PlayerForm_FromClosing(object sender, FormClosingEventArgs e)
         {
                 LogInForm.Client.Disconnect();
-                Environment.Exit(0);
+                Environment.Exit(1);
         }
 
         private void EvenButton_Click(object sender, EventArgs e)
@@ -118,10 +118,13 @@ namespace ChoHanClient
 
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SessionName = SessionListBox.SelectedItem.ToString();
-            if (SessionName.Equals("Sessions")) return;
-            LogInForm.Client.JoinSession(SessionName);
-            SwitchBox();
+            if (SessionListBox.SelectedIndex != -1)
+            {
+                SessionName = SessionListBox.SelectedItem.ToString();
+                if (SessionName.Equals("Sessions")) return;
+                LogInForm.Client.JoinSession(SessionName);
+                SwitchBox();
+            }
         }
 
         public void FillPlayerBox(List<string> sessions)
