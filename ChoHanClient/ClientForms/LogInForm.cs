@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Timer = System.Timers.Timer;
 
 namespace ChoHanClient.ClientForms
 {
@@ -36,10 +26,10 @@ namespace ChoHanClient.ClientForms
         {
             if (ServerBox.TextLength == 0)
             {
-                Console.WriteLine("Senpai!");
+                //Console.WriteLine("Senpai!");
                 try
                 {
-                    Console.WriteLine("Comming now Senpai!");
+                    //Console.WriteLine("Comming now Senpai!");
                     Client = new Client(UserNameBox.Text, this);
                 }
                 catch (Exception ex)
@@ -50,11 +40,11 @@ namespace ChoHanClient.ClientForms
             }
             else
             {
-                Console.WriteLine("BAKA!");
+                //Console.WriteLine("BAKA!");
                 bool gateKeeper = true;
                 IPAddress serverip;
-                bool IpOk = IPAddress.TryParse(ServerBox.Text, out serverip);
-                if (!IpOk)
+                bool ipOk = IPAddress.TryParse(ServerBox.Text, out serverip);
+                if (!ipOk)
                 {
                     MessageBox.Show("The server couldn't be found. Please try again.", "Unable to find server.");
                     gateKeeper = false;
@@ -75,12 +65,12 @@ namespace ChoHanClient.ClientForms
             }
         }
 
-        public void setWelcomeText(string t)
+        public void SetWelcomeText(string t)
         {
             WelcomeText.Text = t;
         }
 
-        public void setServerText(string t)
+        public void SetServerText(string t)
         {
             ServerLabel.Text = t;
         }

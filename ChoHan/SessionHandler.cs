@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using SharedUtilities;
 using Timer = System.Timers.Timer;
 
@@ -14,16 +12,10 @@ namespace ChoHan
         public readonly string SessionName;
         public readonly int MaxPlayers;
         public readonly List<Player> Players;
-<<<<<<< HEAD
         private readonly Timer _awnserTimer = new Timer(15000);
         private readonly Timer _startTimer = new Timer(15000);
         private bool _gameGateKeeper;
         private bool _startGame;
-=======
-        private readonly Timer _awnserTimer = new Timer(1000);
-        private int _timerCounter = 0;
-        private bool _gameGateKeeper = false;
->>>>>>> dfc1bf79ce5bea24004c9fce72f183d9477e865c
         private readonly Log _sessionLog;
         private bool _gameStart;
         private bool _gameGoesOn = true;

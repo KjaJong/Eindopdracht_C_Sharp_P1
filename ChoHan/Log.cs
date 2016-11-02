@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 
@@ -17,6 +14,7 @@ namespace ChoHan
             public string TimeStamp;
             public string PlayerName;
             public string PlayerAction;
+            public string Separator;
         }
 
         private readonly List<LogEntry> _dataLog = new List<LogEntry>();
@@ -34,7 +32,8 @@ namespace ChoHan
             {
                 TimeStamp = DateTime.Today + "_" + DateTime.Now,
                 PlayerName = playerName,
-                PlayerAction = playerAction + "\n"
+                PlayerAction = playerAction + "\n",
+                Separator = "/-----/"
             });
         }
 
@@ -44,15 +43,14 @@ namespace ChoHan
             {
                 TimeStamp = DateTime.Today + "_" + DateTime.Now,
                 PlayerName = "SERVER",
-                PlayerAction = playerAction + "\n"
+                PlayerAction = playerAction + "\n",
+                Separator = "/-----/"
             });
         }
 
         //Prints the log to a file. Uses a filename dependent on the given name of the log. The if-else automaticly decides to append or create a newe file.
         public void PrintLog()
         {
-            //TODO something should start double logging here i think
-            //TODO softcode the filepath (solved?)
             string filepath1 = Path.Combine(Environment.CurrentDirectory, @"LogFolder");
             string fileName = Path.Combine(_logName, getMagicNumber(filepath1).ToString(), ".txt");
             fileName = ToSafeFileName(fileName);

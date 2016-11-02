@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
-using System.Threading;
 using SharedUtilities;
 
 namespace ChoHan
@@ -47,7 +42,6 @@ namespace ChoHan
                         Client.Client.GetStream().Close();
                         Client.Client.Close();
    
-                        //sepukku
                         Server.Handlers.Remove(this);
                         break;
                     default:

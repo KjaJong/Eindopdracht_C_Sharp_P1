@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using ChoHanClient.ClientForms;
 using SharedUtilities;
-using Timer = System.Timers.Timer;
 
 namespace ChoHanClient
 {
@@ -22,20 +18,20 @@ namespace ChoHanClient
 
         public Client(string name, LogInForm form)
         {
-            Console.WriteLine("SENPAI!");
+            //Console.WriteLine("SENPAI!");
             Name = name;
             LogInForm = form;
-            IPAddress localIP = GetLocalIpAddress();
+            IPAddress localIp = GetLocalIpAddress();
 
-            bool IpOk = IPAddress.TryParse(localIP.ToString(), out _localIpAddress);
-            if (!IpOk)
+            bool ipOk = IPAddress.TryParse(localIp.ToString(), out _localIpAddress);
+            if (!ipOk)
             {
                 Console.WriteLine("Couldn't parse the IP address. Exiting code.");
                 Environment.Exit(1);
             }
             _client = new TcpClient();
 
-            Console.WriteLine("I want to connect with Senpai!");
+            //Console.WriteLine("I want to connect with Senpai!");
             TryConnection();
         }
 
@@ -50,7 +46,7 @@ namespace ChoHanClient
         {
             try
             {
-                Console.WriteLine("Senpai, connect with me!");
+                //Console.WriteLine("Senpai, connect with me!");
                 _client.Connect(_localIpAddress, 1337);
                 SharedUtil.SendMessage(_client, new
                 {
@@ -62,14 +58,14 @@ namespace ChoHanClient
                 });
                 Thread thread = new Thread(StartLoop);
                 thread.Start();
-                Console.WriteLine("YAY! Senpai and I connected!");
+                //Console.WriteLine("YAY! Senpai and I connected!");
                 LogInForm.Visible = false;
                 PlayerForm = new PlayerForm();
                 PlayerForm.Show();
             }
             catch (Exception e)
             {
-                LogInForm.setServerText("Can't connect to this server.");
+                LogInForm.SetServerText("Can't connect to this server.");
                 Console.WriteLine(e.StackTrace);
             }
         }
