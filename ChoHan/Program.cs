@@ -135,7 +135,7 @@ namespace ChoHan
                 }
             }
             SessionHandler session = new SessionHandler(name, maxPlayers);
-            Thread thread =  new Thread(session.SessionHandleThread);
+            var thread =  new Thread(session.SessionHandleThread);
             thread.Start();
             Server.Sessions.Add(session);
             Server.SessionThreads.Add(thread);
@@ -184,7 +184,7 @@ namespace ChoHan
             ClientHandler client = null;
             foreach (var s in Server.Handlers)
             {
-                if (!target.Equals(s.Client.Naam)) continue;
+                if (target != null && !target.Equals(s.Client.Naam)) continue;
                 Console.WriteLine("Killing player muhahaha");
                 client = s;
             }

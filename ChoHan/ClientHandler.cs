@@ -61,10 +61,7 @@ namespace ChoHan
         {
             SharedUtil.SendMessage(Client.Client, new
             {
-                id = "disconnect",
-                data = new
-                {
-                }
+                id = "disconnect"
             });
         }
 
