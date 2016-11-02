@@ -14,7 +14,7 @@ namespace ChoHan
         public readonly string SessionName;
         public readonly int MaxPlayers;
         public readonly List<Player> Players;
-        private readonly Timer _awnserTimer = new Timer(1000);
+        private readonly Timer _awnserTimer = new Timer(15000);
         private readonly Timer _startTimer = new Timer(15000);
         private bool _gameGateKeeper;
         private bool _startGame;
