@@ -49,9 +49,10 @@ namespace ChoHan
             if (Players.Count <= MaxPlayers && !_gameStart)
             {
                 Players.Add(player);
+                UpdatePlayerPanel(player.Client, "Welcome to Sho Han");
                 Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
                 Server.SendSessions();
-                UpdatePlayerList();
+                //UpdatePlayerList();
                 _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
             }
             else
@@ -74,6 +75,7 @@ namespace ChoHan
 
             while (roundCount < 5 && _gameGoesOn)
             {
+                _gameStart = true;
                 int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
@@ -103,7 +105,6 @@ namespace ChoHan
                         Console.WriteLine(answercount);
                         _sessionLog.AddLogEntry(c.Naam, "Confirmed activity with the server.");
                     }
-                    _gameStart = true;
                 }
                 _awnserTimer.Stop();
                 _gameGateKeeper = false;
@@ -194,9 +195,7 @@ namespace ChoHan
             UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
             
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
-
-            //TODO also needs reworking. The room doesn't play with one player and only closes when the server shuts off.
-            //kills every client muhahaha
+            
             foreach (var c in Players)
             {
                 _sessionLog.AddLogEntry($"Murdered {c.Naam}.");
@@ -256,10 +255,10 @@ namespace ChoHan
 
         public void SessionHandleThread()
         {
-            _gameGoesOn = true;
-            _gameStart = false;
             while (true)
             {
+                _gameGoesOn = true;
+                _gameStart = false;
                 if(Players.Count < 2) continue;
                 StartGame();
             }
@@ -282,7 +281,6 @@ namespace ChoHan
                         players = Players.Select(s => s.ToString()).ToArray()
                     }
                 });
-                SharedUtil.ReadMessage(c.Client);
             }
         }
 
@@ -303,8 +301,10 @@ namespace ChoHan
             foreach (var c in Players)
             {
                 c.IsSession = false;
+                c.Score = 0;
             }
             Players.Clear();
+            Server.SendSessions();
         }
     }
 }
