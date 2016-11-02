@@ -118,8 +118,9 @@ namespace ChoHanClient
 
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LogInForm.Client.JoinSession(SessionListBox.SelectedItem.ToString());
             _sessionName = SessionListBox.SelectedItem.ToString();
+            if (_sessionName.Equals("Sessions")) return;
+            LogInForm.Client.JoinSession(_sessionName);
             SwitchBox();
         }
 
@@ -133,7 +134,7 @@ namespace ChoHanClient
             else
             {
                 PlayerListBox.Items.Clear();
-                PlayerListBox.Items.Add("Sessions");
+                PlayerListBox.Items.Add("Player");
                 foreach (var s in sessions)
                 {
                     PlayerListBox.Items.Add(s);

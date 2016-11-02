@@ -86,20 +86,22 @@ namespace ChoHanClient
                             id = "send",
                             data = new
                             {
-                                confirmation = PlayerForm.ConfirmAnswer.ToString()
+                                confirmation = PlayerForm.ConfirmAnswer
                             }
                         });
                         break;
                     case "recieve/answer":
                         PlayerForm.Update((bool) message.data.answer, (int) message.data.score);
+                        SendAck();
                         break;
                     case "give/answer":
+                        bool answer = PlayerForm.Answer != null && (bool)PlayerForm.Answer;
                         SharedUtil.SendMessage(_client, new
                         {
                             id = "send",
                             data = new
                             {
-                                answer = PlayerForm.Answer.ToString()
+                                answer = answer
                             }
                         });
                         break;
@@ -107,6 +109,7 @@ namespace ChoHanClient
                         break;
                     case "update/panel":
                         PlayerForm.UpdateMessageLabel((string)message.data.text);
+                        SendAck();
                         break;
                     case "send/session":
                         List<string> sessions = new List<string>();
@@ -123,6 +126,7 @@ namespace ChoHanClient
                             players.Add((string)message.data.players[i]);
                         }
                         PlayerForm.FillSessionBox(players);
+                        SendAck();
                         break;
                     case "disconnect":
                         Console.WriteLine("error");
@@ -134,6 +138,30 @@ namespace ChoHanClient
                         break;
                 }
             }
+        }
+
+        public void SendAck()
+        {
+            SharedUtil.SendMessage(_client, new
+            {
+                id = "ack",
+                data= new
+                {
+                    ack = true
+                }
+            });
+        }
+
+        public void NotSendAck()
+        {
+            SharedUtil.SendMessage(_client, new
+            {
+                id = "ack",
+                data = new
+                {
+                    ack = false
+                }
+            });
         }
 
         public void Disconnect()

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
-using System.Timers;
+using System.Threading;
 using SharedUtilities;
+using Timer = System.Timers.Timer;
 
 namespace ChoHan
 {
@@ -31,9 +32,9 @@ namespace ChoHan
                 _timerCounter++;
                 if (_timerCounter >= 15)
                 {
-                    _awnserTimer.Stop();
                     _timerCounter = 0;
                     _gameGateKeeper = true;
+                    _awnserTimer.Stop();
                 }
             };
             _sessionLog.AddLogEntry("Succesfully started a log.");
@@ -63,45 +64,39 @@ namespace ChoHan
             ChoHan game = new ChoHan();
 
             _sessionLog.AddLogEntry("Started a new game of ChoHan.");
-            int answercount = 0;
 
             while (roundCount < 5 && _gameGoesOn)
             {
+                int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
                 Console.WriteLine(roundCount);
                 _awnserTimer.Start();
-
                 while (answercount < Players.Count)
                 {
-                    Console.WriteLine(answercount);
                     if (_gameGateKeeper)
                     {
+                        _gameGateKeeper = false;
                         break;
                     }
-                    _gameStart = true;
-
                     answercount = 0;
                     foreach (var c in Players)
                     {
                         _sessionLog.AddLogEntry($"Send a confirmation message to {c.Naam}.");
                         SharedUtil.SendMessage(c.Client, new
                         {
-                            id = "give/confirmation",
-                            data = new
-                            {
-                                
-                            }
+                            id = "give/confirmation"
                         });
-
                         dynamic message = SharedUtil.ReadMessage(c.Client);
-                        string text = (string) message.data.confirmation;
-                        if (text.Equals("True"))
+                        bool answer = (bool) message.data.confirmation;
+                        if (answer)
                         {
                             answercount++;
                         }
+                        Console.WriteLine(answercount);
                         _sessionLog.AddLogEntry(c.Naam, "Confirmed activity with the server.");
                     }
+                    _gameStart = true;
                 }
                 _awnserTimer.Stop();
                 _timerCounter = 0;
@@ -115,44 +110,34 @@ namespace ChoHan
                     _sessionLog.AddLogEntry($"Asked {c.Naam} for a awnser.");
                     SharedUtil.SendMessage(c.Client, new
                     {
-                        id = "give/answer",
-                        date = new
-                        {
-                            
-                        }
+                        id = "give/answer"
                     });
 
                     dynamic answer = SharedUtil.ReadMessage(c.Client);
                     _sessionLog.AddLogEntry(c.Naam, "Gave the server an awnser.");
-                    string text = (string) answer.data.answer;
-
-                    switch (text)
+                    if ((bool) answer.data.answer)
                     {
-                        case "True":
-                            if (game.CheckResult(true))
-                            {
-                                c.Score++;
-                                UpdatePlayers(true);
-                            }
-                            else
-                            {
-                                UpdatePlayers(false);
-                            }
-                            break;
-                        case "False":
-                            if (game.CheckResult(false))
-                            {
-                                c.Score++;
-                                UpdatePlayers(true);
-                            }
-                            else
-                            {
-                                UpdatePlayers(false);
-                            }
-                            break;
-                        default:
-                            UpdatePlayers(false);
-                            break;
+                        if (game.CheckResult(true))
+                        {
+                            c.Score++;
+                            UpdatePlayers(c, true);
+                        }
+                        else
+                        {
+                            UpdatePlayers(c, false);
+                        }
+                    }
+                    else
+                    {
+                        if (game.CheckResult(false))
+                        {
+                            c.Score++;
+                            UpdatePlayers(c, true);
+                        }
+                        else
+                        {
+                            UpdatePlayers(c, false);
+                        }
                     }
                     Console.WriteLine("Scores send");
                     _sessionLog.AddLogEntry($"{c.Naam}'s awnser has been proccesed.");
@@ -179,6 +164,7 @@ namespace ChoHan
                 if (c.Score - Players.ElementAt(0).Score == 0)
                 {
                     UpdatePlayerPanel(c.Client, "you tied");
+                    playerOneWin = false;
                 }
 
                 else if (c.Score - Players.ElementAt(0).Score < 0)
@@ -214,7 +200,7 @@ namespace ChoHan
 
             }
             //TODO: Should work
-            _sessionLog.PrintLog();
+            //_sessionLog.PrintLog();
             GameEnded();
         }
 
@@ -228,6 +214,7 @@ namespace ChoHan
                     text = text
                 }
             });
+            SharedUtil.ReadMessage(client);
         }
 
         public void UpdateAllPanels(string text)
@@ -242,23 +229,22 @@ namespace ChoHan
                         text = text
                     }
                 });
+                SharedUtil.ReadMessage(c.Client);
             }
         }
 
-        public void UpdatePlayers(bool answer)
+        public void UpdatePlayers(Player player, bool answer)
         {
-            foreach (var c in Players)
-            {
-                SharedUtil.SendMessage(c.Client, new
+                SharedUtil.SendMessage(player.Client, new
                 {
                     id = "recieve/answer",
                     data = new
                     {
-                        score = c.Score,
+                        score = player.Score,
                         answer = answer
                     }
                 });
-            }
+                SharedUtil.ReadMessage(player.Client);
         }
 
         public void SessionHandleThread()
@@ -289,6 +275,7 @@ namespace ChoHan
                         players = Players.Select(s => s.ToString()).ToArray()
                     }
                 });
+                SharedUtil.ReadMessage(c.Client);
             }
         }
 
