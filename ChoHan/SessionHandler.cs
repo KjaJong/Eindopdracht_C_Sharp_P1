@@ -97,8 +97,8 @@ namespace ChoHan
                         Console.WriteLine(answercount);
                         _sessionLog.AddLogEntry(c.Naam, "Confirmed activity with the server.");
                     }
-                    _gameStart = true;
                 }
+                _gameStart = true;
                 _awnserTimer.Stop();
                 _timerCounter = 0;
 
