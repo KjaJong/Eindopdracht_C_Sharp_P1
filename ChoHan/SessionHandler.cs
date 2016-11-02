@@ -16,7 +16,7 @@ namespace ChoHan
         private readonly Timer _awnserTimer = new Timer(1000);
         private int _timerCounter = 0;
         private bool _gameGateKeeper = false;
-        private Log _sessionLog;
+        private readonly Log _sessionLog;
         private bool _gameStart;
         private bool _gameGoesOn = true;
 
@@ -105,6 +105,7 @@ namespace ChoHan
                 }
                 _awnserTimer.Stop();
                 _timerCounter = 0;
+                _gameGateKeeper = false;
 
                 Console.WriteLine("Gimmy dat answer");
                 //send every client a message that they can send their answer

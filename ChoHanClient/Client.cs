@@ -38,6 +38,7 @@ namespace ChoHanClient
             Console.WriteLine("I want to connect with Senpai!");
             TryConnection();
         }
+
         public Client(string name, LogInForm form, IPAddress IP)
         {
             Name = name;
