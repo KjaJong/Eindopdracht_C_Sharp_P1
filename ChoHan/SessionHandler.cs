@@ -29,7 +29,7 @@ namespace ChoHan
             _awnserTimer.Elapsed += (sender, args) =>
             {
                 _timerCounter++;
-                if (_timerCounter <= 15)
+                if (_timerCounter >= 15)
                 {
                     _awnserTimer.Stop();
                     _timerCounter = 0;
@@ -63,17 +63,18 @@ namespace ChoHan
             ChoHan game = new ChoHan();
 
             _sessionLog.AddLogEntry("Started a new game of ChoHan.");
+            int answercount = 0;
 
             while (roundCount < 5 && _gameGoesOn)
             {
-                int answercount = 0;
                 Console.WriteLine("Waiting for players to confirm");
                 //Waits for every client to choose an answer
-                Console.WriteLine(answercount);
                 Console.WriteLine(roundCount);
                 _awnserTimer.Start();
+
                 while (answercount < Players.Count)
                 {
+                    Console.WriteLine(answercount);
                     if (_gameGateKeeper)
                     {
                         break;
@@ -266,10 +267,7 @@ namespace ChoHan
             _gameStart = false;
             while (true)
             {
-                while (2 > Players.Count)
-                {
-
-                }
+                if(Players.Count < 2) continue;
                 StartGame();
             }
         }
