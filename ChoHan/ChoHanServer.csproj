@@ -59,6 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="SessionHandler.cs" />
+    <Compile Include="WittyCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
