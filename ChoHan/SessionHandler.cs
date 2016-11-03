@@ -194,11 +194,10 @@ namespace ChoHan
                     //Sorts list on score and send it to the clients
                 UpdatePlayerList();
                 roundCount++;
-                
-                Result();
-                _sessionLog.PrintLog();
-                GameEnded();
             }
+            Result();
+            _sessionLog.PrintLog();
+            GameEnded();
         }
 
 
