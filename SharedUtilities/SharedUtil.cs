@@ -8,7 +8,6 @@ namespace SharedUtilities
     {
         public static dynamic ReadMessage(TcpClient client)
         {
-
             byte[] buffer = new byte[1028];
             int totalRead = 0;
 
@@ -28,8 +27,11 @@ namespace SharedUtilities
             //make sure the other end decodes with the same format!
             message = JsonConvert.SerializeObject(message);
             byte[] bytes = Encoding.Unicode.GetBytes(message);
-            client.GetStream().Write(bytes, 0, bytes.Length);
-            client.GetStream().Flush();
+            if (client.Connected)
+            {
+                client.GetStream().Write(bytes, 0, bytes.Length);
+                client.GetStream().Flush();
+            }
         }
     }
 }

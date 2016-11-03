@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using SharedUtilities;
@@ -13,7 +14,7 @@ namespace ChoHan
         public readonly int MaxPlayers;
         public readonly List<Player> Players;
         private readonly Timer _awnserTimer = new Timer(15000);
-        private readonly Timer _startTimer = new Timer(15000);
+        private readonly Timer _startTimer = new Timer(5000);
         private bool _gameGateKeeper;
         private bool _startGame;
         private readonly Log _sessionLog;
@@ -46,17 +47,34 @@ namespace ChoHan
         {
             if (Players.Count <= MaxPlayers && !_gameStart)
             {
-                Players.Add(player);
-                UpdatePlayerPanel(player.Client, "Welcome to Cho Han");
-                Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
-                Server.SendSessions();
-                _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
+
+                try
+                {
+                    Players.Add(player);
+                    UpdatePlayerPanel(player.Client, "Welcome to Sho Han");
+                    Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
+                    Server.SendSessions();
+                    _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                    MurderDeadConnection(player);
+                }
             }
             else
             {
-                UpdatePlayerPanel(player.Client, "To many players or the game has already started");
-                Console.WriteLine("To many players or the game has already started.");
-                _sessionLog.AddLogEntry($"Failed to add player: {player.Naam}.");
+                try
+                {
+                    UpdatePlayerPanel(player.Client, "To many players or the game has already started");
+                    Console.WriteLine("To many players or the game has already started.");
+                    _sessionLog.AddLogEntry($"Failed to add player: {player.Naam}.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                    MurderDeadConnection(player);
+                }
             }
         }
 
@@ -88,21 +106,29 @@ namespace ChoHan
                         break;
                     }
                     answercount = 0;
-                    foreach (var c in Players)
+                    for (int i = 0; i < Players.Count; i++)
                     {
-                        _sessionLog.AddLogEntry($"Send a confirmation message to {c.Naam}.");
-                        SharedUtil.SendMessage(c.Client, new
+                        try
                         {
-                            id = "give/confirmation"
-                        });
-                        dynamic message = SharedUtil.ReadMessage(c.Client);
-                        bool answer = (bool) message.data.confirmation;
-                        if (answer)
-                        {
-                            answercount++;
+                            _sessionLog.AddLogEntry($"Send a confirmation message to {Players.ElementAt(i).Naam}.");
+                            SharedUtil.SendMessage(Players.ElementAt(i).Client, new
+                            {
+                                id = "give/confirmation"
+                            });
+                            dynamic message = SharedUtil.ReadMessage(Players.ElementAt(i).Client);
+                            bool answer = (bool) message.data.confirmation;
+                            if (answer)
+                            {
+                                answercount++;
+                            }
+                            Console.WriteLine(answercount);
+                            _sessionLog.AddLogEntry(Players.ElementAt(i).Naam, "Confirmed activity with the server.");
                         }
-                        Console.WriteLine(answercount);
-                        _sessionLog.AddLogEntry(c.Naam, "Confirmed activity with the server.");
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.StackTrace);
+                            MurderDeadConnection(Players.ElementAt(i));
+                        }
                     }
                 }
                 _awnserTimer.Stop();
@@ -112,84 +138,111 @@ namespace ChoHan
                 //send every client a message that they can send their answer
                 game.ThrowDice();
 
-                foreach (var c in Players)
+                for (int i = 0; i < Players.Count; i++)
                 {
-                    _sessionLog.AddLogEntry($"Asked {c.Naam} for a awnser.");
-                    SharedUtil.SendMessage(c.Client, new
+                    try
                     {
-                        id = "give/answer"
-                    });
+                        _sessionLog.AddLogEntry($"Asked {Players.ElementAt(i).Naam} for a awnser.");
+                        SharedUtil.SendMessage(Players.ElementAt(i).Client, new
+                        {
+                            id = "give/answer"
+                        });
 
-                    dynamic answer = SharedUtil.ReadMessage(c.Client);
-                    _sessionLog.AddLogEntry(c.Naam, "Gave the server an awnser.");
+                    dynamic answer = SharedUtil.ReadMessage(Players.ElementAt(i).Client);
+                    _sessionLog.AddLogEntry(Players.ElementAt(i).Naam, "Gave the server an awnser.");
                     if (!(bool) answer.data.check)
                     {
-                        UpdatePlayerPanel(c.Client, WittyAnswer.Idle());
-                        UpdatePlayers(c, false);
+                        UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Idle());
+                        UpdatePlayers(Players.ElementAt(i), false);
                         continue;
                     }
 
-                    if ((bool) answer.data.answer)
-                    {
-                        if (game.CheckResult(true))
+                        if ((bool) answer.data.answer)
                         {
-                            c.Score++;
-                            UpdatePlayers(c, true);
-                            UpdatePlayerPanel(c.Client, WittyAnswer.GoodAnswer());
+                            if (game.CheckResult(true))
+                            {
+                                Players.ElementAt(i).Score++;
+                                UpdatePlayers(Players.ElementAt(i), true);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.GoodAnswer());
+                            }
+                            else
+                            {
+                                UpdatePlayers(Players.ElementAt(i), false);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.WrongAnswer());
+                            }
+                            _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
                         }
                         else
                         {
-                            UpdatePlayers(c, false);
-                            UpdatePlayerPanel(c.Client, WittyAnswer.WrongAnswer());
+                            if (game.CheckResult(false))
+                            {
+                                Players.ElementAt(i).Score++;
+                                UpdatePlayers(Players.ElementAt(i), true);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.GoodAnswer());
+                            }
+                            else
+                            {
+                                UpdatePlayers(Players.ElementAt(i), false);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.WrongAnswer());
+                            }
+                            _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
                         }
-                    }
-                    else
+                    catch (Exception e)
                     {
-                        if (game.CheckResult(false))
-                        {
-                            c.Score++;
-                            UpdatePlayers(c, true);
-                            UpdatePlayerPanel(c.Client, WittyAnswer.GoodAnswer());
-                        }
-                        else
-                        {
-                            UpdatePlayers(c, false);
-                            UpdatePlayerPanel(c.Client, WittyAnswer.WrongAnswer());
-                        }
+                        Console.WriteLine(e.StackTrace);
+                        MurderDeadConnection(Players.ElementAt(i));
                     }
-                    Console.WriteLine("Scores send");
-                    _sessionLog.AddLogEntry($"{c.Naam}'s awnser has been proccesed.");
                 }
                 //Sorts list on score and send it to the clients
                 Players.Sort((x, y) => y.Score - x.Score);
                 UpdatePlayerList();
                 roundCount++;
             }
+            Result();
+            _sessionLog.PrintLog();
+            GameEnded();
+        }
+
+        private void Result()
+        {
+            //sorts the list on score
+
+            Players.Sort((x, y) => y.Score - x.Score);
 
             bool playerOneWin = true;
             _sessionLog.AddLogEntry("Ranked players.");
 
             //starts looking for the ties and loses
-            foreach (var c in Players)
+            for (int i = 0; i < Players.Count; i++)
             {
-                _sessionLog.AddLogEntry($"Calculating {c.Naam}'s score.");
-                if (c.Equals(Players.ElementAt(0))) continue;
-
-                if (c.Score - Players.ElementAt(0).Score == 0)
+                try
                 {
-                    UpdatePlayerPanel(c.Client, WittyAnswer.Tied());
-                    playerOneWin = false;
+                    _sessionLog.AddLogEntry($"Calculating {Players.ElementAt(i).Naam}'s score.");
+                    Console.WriteLine(Players.ElementAt(i).Score - Players.ElementAt(0).Score);
+                    if (Players.ElementAt(i).Equals(Players.ElementAt(0))) continue;
+                    Console.WriteLine("error");
+
+                    if (Players.ElementAt(i).Score - Players.ElementAt(0).Score == 0)
+                    {
+                        UpdatePlayerPanel(c.Client, WittyAnswer.Tied());
+                        playerOneWin = false;
+                    }
+
+                    else if (Players.ElementAt(i).Score - Players.ElementAt(0).Score < 0)
+                    {
+                        UpdatePlayerPanel(c.Client, WittyAnswer.Lose());
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("ffs are you here?!");
+                        UpdatePlayerPanel(Players.ElementAt(i).Client, "something went wrong here");
+                    }
                 }
-
-                else if (c.Score - Players.ElementAt(0).Score < 0)
+                catch (Exception e)
                 {
-                    UpdatePlayerPanel(c.Client, WittyAnswer.Lose());
-                }
-
-                else
-                {
-                    Console.WriteLine("ffs are you here?!");
-                    UpdatePlayerPanel(c.Client, "something went wrong here");
+                    Console.WriteLine(e.StackTrace);
+                    MurderDeadConnection(Players.ElementAt(i));
                 }
             }
             _sessionLog.AddLogEntry("Calculated the score of all players.");
@@ -197,43 +250,41 @@ namespace ChoHan
 
             //checks if the highest score doesn't tie with another one
             Console.WriteLine("Is there a winner?");
-
-            UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
+            try
+            {
+                UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                UpdatePlayerPanel(Players.ElementAt(1).Client, playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
+            }
 
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
 
-            foreach (var c in Players)
+            for (int i = 0; i < Players.Count; i++)
             {
-                _sessionLog.AddLogEntry($"Murdered {c.Naam}.");
-                SharedUtil.SendMessage(c.Client, new
+                try
                 {
-                    id = "session/leave"
-                });
-
+                    _sessionLog.AddLogEntry($"Murdered {Players.ElementAt(i).Naam}.");
+                    SharedUtil.SendMessage(Players.ElementAt(i).Client, new
+                    {
+                        id = "session/leave"
+                    });
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                    MurderDeadConnection(Players.ElementAt(i));
+                }
             }
-            //TODO: Should work
-            _sessionLog.PrintLog();
-            GameEnded();
         }
 
         public void UpdatePlayerPanel(TcpClient client, string text)
         {
-            SharedUtil.SendMessage(client, new
+            try
             {
-                id = "update/panel",
-                data = new
-                {
-                    text = text
-                }
-            });
-            SharedUtil.ReadMessage(client);
-        }
-
-        public void UpdateAllPanels(string text)
-        {
-            foreach (var c in Players)
-            {
-                SharedUtil.SendMessage(c.Client, new
+                SharedUtil.SendMessage(client, new
                 {
                     id = "update/panel",
                     data = new
@@ -241,22 +292,59 @@ namespace ChoHan
                         text = text
                     }
                 });
-                SharedUtil.ReadMessage(c.Client);
+                SharedUtil.ReadMessage(client);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                client.Close();
+            }
+        }
+
+        public void UpdateAllPanels(string text)
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+                try
+                {
+                    SharedUtil.SendMessage(Players.ElementAt(i).Client, new
+                    {
+                        id = "update/panel",
+                        data = new
+                        {
+                            text = text
+                        }
+                    });
+                    SharedUtil.ReadMessage(Players.ElementAt(i).Client);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                    Players.ElementAt(i).Client.Close();
+                }
             }
         }
 
         public void UpdatePlayers(Player player, bool answer)
         {
-            SharedUtil.SendMessage(player.Client, new
+            try
             {
-                id = "recieve/answer",
-                data = new
+                SharedUtil.SendMessage(player.Client, new
                 {
-                    score = player.Score,
-                    answer = answer
-                }
-            });
-            SharedUtil.ReadMessage(player.Client);
+                    id = "recieve/answer",
+                    data = new
+                    {
+                        score = player.Score,
+                        answer = answer
+                    }
+                });
+                SharedUtil.ReadMessage(player.Client);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                MurderDeadConnection(player);
+            }
         }
 
         public void SessionHandleThread()
@@ -290,18 +378,6 @@ namespace ChoHan
             }
         }
 
-        public void DeletePlayerFromSession(Player player)
-        {
-            Players.Remove(player);
-            if (Players.Count < 2)
-            {
-                _gameGoesOn = false;
-                UpdateAllPanels("Game has stopped and starts again");
-                GameEnded();
-            }
-
-        }
-
         public void GameEnded()
         {
             foreach (var c in Players)
@@ -311,6 +387,25 @@ namespace ChoHan
             }
             Players.Clear();
             Server.SendSessions();
+            
+        }
+
+        public void MurderDeadConnection(Player p)
+        {
+            _sessionLog.AddLogEntry($"Kicked {p.Naam} from the game.");
+            Players.RemoveAll(i => i.Equals(p));
+
+            if (Players.Count < 2)
+            {
+                _gameGoesOn = false;
+                UpdateAllPanels("Game has stopped and starts again");
+
+                _sessionLog.AddLogEntry("Not enough players, ending a game.");
+
+                Result();
+                _sessionLog.PrintLog();
+                GameEnded();
+            }
         }
     }
 }
