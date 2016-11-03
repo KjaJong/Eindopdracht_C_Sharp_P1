@@ -80,11 +80,6 @@ namespace ChoHan
 
         private void StartGame()
         {
-            _startTimer.Start();
-            while (!_startGame)
-            {
-            }
-            _startGame = false;
             int roundCount = 0;
             ChoHan game = new ChoHan();
 
@@ -189,15 +184,14 @@ namespace ChoHan
                         }
                     }
                     catch
-                    (Exception
-                        e)
+                    (Exception e)
                     {
                         Console.WriteLine(e.StackTrace);
                         MurderDeadConnection(Players.ElementAt(i));
                     }
+                    Players.Sort((x, y) => y.Score - x.Score);
                 }
                     //Sorts list on score and send it to the clients
-                Players.Sort((x, y) => y.Score - x.Score);
                 UpdatePlayerList();
                 roundCount++;
                 
@@ -210,10 +204,6 @@ namespace ChoHan
 
         private void Result()
         {
-            //sorts the list on score
-
-            Players.Sort((x, y) => y.Score - x.Score);
-
             bool playerOneWin = true;
             _sessionLog.AddLogEntry("Ranked players.");
 
@@ -223,9 +213,7 @@ namespace ChoHan
                 try
                 {
                     _sessionLog.AddLogEntry($"Calculating {Players.ElementAt(i).Naam}'s score.");
-                    Console.WriteLine(Players.ElementAt(i).Score - Players.ElementAt(0).Score);
                     if (Players.ElementAt(i).Equals(Players.ElementAt(0))) continue;
-                    Console.WriteLine("error");
 
                     if (Players.ElementAt(i).Score - Players.ElementAt(0).Score == 0)
                     {
@@ -358,7 +346,10 @@ namespace ChoHan
             {
                 _gameGoesOn = true;
                 _gameStart = false;
-                if (Players.Count < 2) continue;
+                if (Players.Count < 2)  continue;
+                _startTimer.Start();
+                if (!_startGame) continue;
+                _startGame = false;
                 StartGame();
             }
         }
