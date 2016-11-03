@@ -65,7 +65,9 @@ namespace ChoHan
             private void StartGame()
             {
                 _startTimer.Start();
-                while (!_startGame) { }
+                while (!_startGame)
+                {
+                }
                 _startGame = false;
                 int roundCount = 0;
                 ChoHan game = new ChoHan();
@@ -96,7 +98,7 @@ namespace ChoHan
                                 id = "give/confirmation"
                             });
                             dynamic message = SharedUtil.ReadMessage(c.Client);
-                            bool answer = (bool)message.data.confirmation;
+                            bool answer = (bool) message.data.confirmation;
                             if (answer)
                             {
                                 answercount++;
@@ -122,14 +124,14 @@ namespace ChoHan
 
                         dynamic answer = SharedUtil.ReadMessage(c.Client);
                         _sessionLog.AddLogEntry(c.Naam, "Gave the server an awnser.");
-                        if (!(bool)answer.data.check)
+                        if (!(bool) answer.data.check)
                         {
                             UpdatePlayerPanel(c.Client, WittyAnswer.Idle());
                             UpdatePlayers(c, false);
                             continue;
                         }
 
-                        if ((bool)answer.data.answer)
+                        if ((bool) answer.data.answer)
                         {
                             if (game.CheckResult(true))
                             {
@@ -314,3 +316,4 @@ namespace ChoHan
             }
         }
     }
+}
