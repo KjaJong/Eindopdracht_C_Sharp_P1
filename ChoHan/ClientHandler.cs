@@ -29,7 +29,7 @@ namespace ChoHan
                         Client.IsSession = true;
                         break;
                     case "session/leave":
-                        Server.FindSession((string)message.data.sessionname).DeletePlayerFromSession(Client);
+                        Server.FindSession((string)message.data.sessionname).MurderDeadConnection(Client);
                         break;
                     case "disconnect":
                         SharedUtil.SendMessage(Client.Client, new
