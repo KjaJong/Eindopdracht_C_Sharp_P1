@@ -13,6 +13,11 @@ namespace ChoHanClient.ClientForms
             //Fill messagebox with all avalible servers
         }
 
+        public static void RipAlles()
+        {
+            Environment.Exit(1);
+        }
+
         private void WelcomeText_Click(object sender, EventArgs e)
         {
             MessageBox.Show(

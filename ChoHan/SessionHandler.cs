@@ -47,6 +47,7 @@ namespace ChoHan
         {
             if (Players.Count <= MaxPlayers && !_gameStart)
             {
+
                 try
                 {
                     Players.Add(player);
@@ -147,19 +148,29 @@ namespace ChoHan
                             id = "give/answer"
                         });
 
-                        dynamic answer = SharedUtil.ReadMessage(Players.ElementAt(i).Client);
-                        _sessionLog.AddLogEntry(Players.ElementAt(i).Naam, "Gave the server an awnser.");
+                    dynamic answer = SharedUtil.ReadMessage(Players.ElementAt(i).Client);
+                    _sessionLog.AddLogEntry(Players.ElementAt(i).Naam, "Gave the server an awnser.");
+                    if (!(bool) answer.data.check)
+                    {
+                        UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Idle());
+                        UpdatePlayers(Players.ElementAt(i), false);
+                        continue;
+                    }
+
                         if ((bool) answer.data.answer)
                         {
                             if (game.CheckResult(true))
                             {
                                 Players.ElementAt(i).Score++;
                                 UpdatePlayers(Players.ElementAt(i), true);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.GoodAnswer());
                             }
                             else
                             {
                                 UpdatePlayers(Players.ElementAt(i), false);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.WrongAnswer());
                             }
+                            _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
                         }
                         else
                         {
@@ -167,21 +178,23 @@ namespace ChoHan
                             {
                                 Players.ElementAt(i).Score++;
                                 UpdatePlayers(Players.ElementAt(i), true);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.GoodAnswer());
                             }
                             else
                             {
                                 UpdatePlayers(Players.ElementAt(i), false);
+                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.WrongAnswer());
                             }
+                            _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
                         }
-                        Console.WriteLine("Scores send");
-                        _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
-                    }
                     catch (Exception e)
                     {
                         Console.WriteLine(e.StackTrace);
                         MurderDeadConnection(Players.ElementAt(i));
                     }
                 }
+                //Sorts list on score and send it to the clients
+                Players.Sort((x, y) => y.Score - x.Score);
                 UpdatePlayerList();
                 roundCount++;
             }
@@ -211,13 +224,13 @@ namespace ChoHan
 
                     if (Players.ElementAt(i).Score - Players.ElementAt(0).Score == 0)
                     {
-                        UpdatePlayerPanel(Players.ElementAt(i).Client, "you tied");
+                        UpdatePlayerPanel(c.Client, WittyAnswer.Tied());
                         playerOneWin = false;
                     }
 
                     else if (Players.ElementAt(i).Score - Players.ElementAt(0).Score < 0)
                     {
-                        UpdatePlayerPanel(Players.ElementAt(i).Client, "you lose");
+                        UpdatePlayerPanel(c.Client, WittyAnswer.Lose());
                     }
 
                     else
@@ -239,14 +252,13 @@ namespace ChoHan
             Console.WriteLine("Is there a winner?");
             try
             {
-                UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? "you win" : "you tied");
+                UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
-                UpdatePlayerPanel(Players.ElementAt(1).Client, playerOneWin ? "you win" : "you tied");
+                UpdatePlayerPanel(Players.ElementAt(1).Client, playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
             }
-
 
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
 
@@ -341,7 +353,7 @@ namespace ChoHan
             {
                 _gameGoesOn = true;
                 _gameStart = false;
-                if(Players.Count < 2) continue;
+                if (Players.Count < 2) continue;
                 StartGame();
             }
         }

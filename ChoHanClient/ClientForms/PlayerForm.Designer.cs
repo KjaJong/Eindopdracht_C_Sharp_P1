@@ -131,7 +131,7 @@
             "Sessions"});
             this.SessionListBox.Location = new System.Drawing.Point(172, 9);
             this.SessionListBox.Name = "SessionListBox";
-            this.SessionListBox.Size = new System.Drawing.Size(82, 121);
+            this.SessionListBox.Size = new System.Drawing.Size(142, 121);
             this.SessionListBox.TabIndex = 27;
             this.SessionListBox.SelectedIndexChanged += new System.EventHandler(this.SessionListBox_SelectedIndexChanged);
             // 
@@ -142,7 +142,7 @@
             "Players"});
             this.PlayerListBox.Location = new System.Drawing.Point(172, 9);
             this.PlayerListBox.Name = "PlayerListBox";
-            this.PlayerListBox.Size = new System.Drawing.Size(82, 121);
+            this.PlayerListBox.Size = new System.Drawing.Size(142, 121);
             this.PlayerListBox.TabIndex = 28;
             this.PlayerListBox.Visible = false;
             // 
@@ -150,7 +150,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(265, 143);
+            this.ClientSize = new System.Drawing.Size(326, 143);
             this.Controls.Add(this.PlayerListBox);
             this.Controls.Add(this.SessionListBox);
             this.Controls.Add(this.YourChoiceLabel);

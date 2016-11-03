@@ -14,6 +14,7 @@ namespace ChoHanClient
         public PlayerForm PlayerForm { get; set; }
         private readonly IPAddress _localIpAddress;
         private readonly TcpClient _client;
+        private Thread _thread;
         public string Name { get; set; }
 
         public Client(string name, LogInForm form)
@@ -56,8 +57,8 @@ namespace ChoHanClient
                         name = Name
                     }
                 });
-                Thread thread = new Thread(StartLoop);
-                thread.Start();
+                _thread = new Thread(StartLoop);
+                _thread.Start();
                 //Console.WriteLine("YAY! Senpai and I connected!");
                 LogInForm.Visible = false;
                 PlayerForm = new PlayerForm();
@@ -88,17 +89,19 @@ namespace ChoHanClient
                         });
                         break;
                     case "recieve/answer":
-                        PlayerForm.Update((bool) message.data.answer, (int) message.data.score);
+                        PlayerForm.Update((bool)message.data.answer, (int)message.data.score);
                         SendAck();
                         break;
                     case "give/answer":
                         bool answer = PlayerForm.Answer != null && (bool)PlayerForm.Answer;
+                        bool checkAnswer = PlayerForm.Answer != null && PlayerForm.ConfirmAnswer;
                         SharedUtil.SendMessage(_client, new
                         {
                             id = "send",
                             data = new
                             {
-                                answer = answer
+                                answer = answer,
+                                check = checkAnswer
                             }
                         });
                         break;
@@ -145,7 +148,7 @@ namespace ChoHanClient
             SharedUtil.SendMessage(_client, new
             {
                 id = "ack",
-                data= new
+                data = new
                 {
                     ack = true
                 }
@@ -171,9 +174,13 @@ namespace ChoHanClient
                 id = "disconnect"
             });
 
+            _thread.Interrupt();
+            _thread.Abort();
+
             _client.GetStream().Close();
             _client.Close();
-            Environment.Exit(0);
+
+            LogInForm.RipAlles();
         }
 
         public void JoinSession(string sessionName)

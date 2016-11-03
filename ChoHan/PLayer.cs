@@ -17,7 +17,7 @@ namespace ChoHan
         public  override string ToString()
         {
             return $"{Naam}," +
-                   $" Score: {Score}";
+                   $" score: {Score}";
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ChoHanClient
 {
     public partial class PlayerForm : Form
     {
-        public bool ?Answer { get; set; }
+        public bool? Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
         public string SessionName { get; set; }
 
@@ -16,6 +16,8 @@ namespace ChoHanClient
         delegate void SetCommentCallBack(string text);
 
         delegate void SetListCallBack(List<String> sessions);
+
+        delegate void SetSwitchBoxCallBack();
 
 
         public PlayerForm()
@@ -28,13 +30,12 @@ namespace ChoHanClient
 
         private void PlayerForm_FromClosing(object sender, FormClosingEventArgs e)
         {
-                LogInForm.Client.Disconnect();
-                Environment.Exit(1);
+            LogInForm.Client.Disconnect();
         }
 
         private void EvenButton_Click(object sender, EventArgs e)
         {
-            if(!ConfirmAnswer)
+            if (!ConfirmAnswer)
             {
                 Answer = true;
                 YourChoiceLabel.Text = "You choose: even";
@@ -61,8 +62,8 @@ namespace ChoHanClient
             }
             ConfirmAnswer = true;
         }
-       
-        public void Update(bool rightAnswerPlayerOne, int score )
+
+        public void Update(bool rightAnswerPlayerOne, int score)
         {
             if (this.ScorePlayerOneLabel.InvokeRequired)
             {
@@ -73,7 +74,7 @@ namespace ChoHanClient
             {
 
                 ScorePlayerOneLabel.Text = score.ToString();
-                
+
                 Answer = null;
                 ConfirmAnswer = false;
 
@@ -97,7 +98,7 @@ namespace ChoHanClient
             if (this.CommentLabel.InvokeRequired)
             {
                 SetCommentCallBack d = new SetCommentCallBack(UpdateMessageLabel);
-                this.Invoke(d, new object[] {text});
+                this.Invoke(d, new object[] { text });
             }
             else
             {
@@ -116,6 +117,7 @@ namespace ChoHanClient
             SessionName = SessionListBox.SelectedItem.ToString();
             if (SessionName.Equals("Sessions")) return;
             LogInForm.Client.JoinSession(SessionName);
+            ResetPanel();
             SwitchBox();
         }
 
@@ -157,8 +159,16 @@ namespace ChoHanClient
 
         public void SwitchBox()
         {
-            SessionListBox.Visible = !SessionListBox.Visible;
-            PlayerListBox.Visible = !PlayerListBox.Visible;
+            if (SessionListBox.InvokeRequired)
+            {
+                SetSwitchBoxCallBack d = new SetSwitchBoxCallBack(SwitchBox);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                SessionListBox.Visible = !SessionListBox.Visible;
+                PlayerListBox.Visible = !PlayerListBox.Visible;
+            }
         }
 
         private void CommentLabel_Click_1(object sender, EventArgs e)
@@ -168,6 +178,13 @@ namespace ChoHanClient
                 "After all players have made their choice, the die are thrown and the result is announced. " +
                 "The awnser must be given within 15 seconds.",
                 "A short explanation.");
+        }
+
+        public void ResetPanel()
+        {
+            WrongPlayerOneLabel.Visible = false;
+            RightPlayerOneLabel.Visible = false;
+            ScorePlayerOneLabel.Text = "0";
         }
     }
 }
