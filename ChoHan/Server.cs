@@ -11,11 +11,9 @@ namespace ChoHan
     class Server
     {
         private IPAddress _currentId;
-        public static List<ClientHandler> Handlers { get; set; }
-        public static List<SessionHandler> Sessions { get; set; }
-
-        public static List<Thread> ClientThreads { get; set; }
-        public static List<Thread> SessionThreads { get; set; }
+        
+        public static Dictionary<ClientHandler, Thread> Handlers { get; set; }
+        public static Dictionary<SessionHandler, Thread> Sessions { get; set; }
 
         private readonly Log _sessionLog;
 
@@ -25,10 +23,8 @@ namespace ChoHan
         {
             //looking for ip
             IPAddress localIp = GetLocalIpAddress();
-            Handlers = new List<ClientHandler>();
-            ClientThreads = new List<Thread>();
-            SessionThreads = new List<Thread>();
-            Sessions = new List<SessionHandler>();
+            Handlers = new Dictionary<ClientHandler, Thread>();
+            Sessions = new Dictionary<SessionHandler, Thread>();
 
             string logName = "SessionLog/" + DateTime.Today + "/" + DateTime.Now + "/ID=" + Handlers.Count;
             _sessionLog = new Log(logName);
@@ -58,8 +54,7 @@ namespace ChoHan
                 ClientHandler handler = new ClientHandler(CheckForPlayers(_listener), _sessionLog);
                 var thread = new Thread(handler.HandleClientThread);
                 thread.Start();
-                Handlers.Add(handler);
-                ClientThreads.Add(thread);
+                Handlers.Add(handler, thread);
                 SendSessions();
                 _sessionLog.AddLogEntry("Started a new thread");
             }
@@ -93,9 +88,9 @@ namespace ChoHan
             SessionHandler session = null;
             foreach (var s in Sessions)
             {
-                if (sessionName.Equals(s.SessionName))
+                if (sessionName.Equals(s.Key.SessionName))
                 {
-                    session = s;
+                    session = s.Key;
                 }
             }
             return session;
@@ -105,12 +100,12 @@ namespace ChoHan
         {
             foreach (var c in Handlers)
             {
-                SharedUtil.SendMessage(c.Client.Client, new
+                SharedUtil.SendMessage(c.Key.Client.Client, new
                 {
                     id = "send/session",
                     data = new
                     {
-                        sessions = Sessions.Select(s => s.ToString()).ToArray()
+                        sessions = Sessions.Keys.Select(s => s.ToString()).ToArray()
                     }
                 });
             }
@@ -127,7 +122,7 @@ namespace ChoHan
             bool allSessionsFull = true;
             foreach (var s in Sessions)
             {
-                if (s.MaxPlayers != s.Players.Count)
+                if (s.Key.MaxPlayers != s.Key.Players.Count)
                 {
                     allSessionsFull = false;
                 }
@@ -141,13 +136,12 @@ namespace ChoHan
 
         public static void AddSession()
         {
-            SessionHandler session1 = new SessionHandler($"General {Sessions.Count + 1}", 8);
-            Thread thread1 = new Thread(session1.SessionHandleThread);
+            SessionHandler session = new SessionHandler($"General {Sessions.Count + 1}", 8);
+            Thread thread = new Thread(session.SessionHandleThread);
 
-            thread1.Start();
+            thread.Start();
 
-            Server.Sessions.Add(session1);
-            Server.SessionThreads.Add(thread1);
+            Server.Sessions.Add(session, thread);
         }
 
     }

@@ -148,14 +148,14 @@ namespace ChoHan
                             id = "give/answer"
                         });
 
-                    dynamic answer = SharedUtil.ReadMessage(Players.ElementAt(i).Client);
-                    _sessionLog.AddLogEntry(Players.ElementAt(i).Naam, "Gave the server an awnser.");
-                    if (!(bool) answer.data.check)
-                    {
-                        UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Idle());
-                        UpdatePlayers(Players.ElementAt(i), false);
-                        continue;
-                    }
+                        dynamic answer = SharedUtil.ReadMessage(Players.ElementAt(i).Client);
+                        _sessionLog.AddLogEntry(Players.ElementAt(i).Naam, "Gave the server an awnser.");
+                        if (!(bool) answer.data.check)
+                        {
+                            UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Idle());
+                            UpdatePlayers(Players.ElementAt(i), false);
+                            continue;
+                        }
 
                         if ((bool) answer.data.answer)
                         {
@@ -187,21 +187,26 @@ namespace ChoHan
                             }
                             _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
                         }
-                    catch (Exception e)
+                    }
+                    catch
+                    (Exception
+                        e)
                     {
                         Console.WriteLine(e.StackTrace);
                         MurderDeadConnection(Players.ElementAt(i));
                     }
                 }
-                //Sorts list on score and send it to the clients
+                    //Sorts list on score and send it to the clients
                 Players.Sort((x, y) => y.Score - x.Score);
                 UpdatePlayerList();
                 roundCount++;
+                
+                Result();
+                _sessionLog.PrintLog();
+                GameEnded();
             }
-            Result();
-            _sessionLog.PrintLog();
-            GameEnded();
         }
+
 
         private void Result()
         {
@@ -224,13 +229,13 @@ namespace ChoHan
 
                     if (Players.ElementAt(i).Score - Players.ElementAt(0).Score == 0)
                     {
-                        UpdatePlayerPanel(c.Client, WittyAnswer.Tied());
+                        UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Tied());
                         playerOneWin = false;
                     }
 
                     else if (Players.ElementAt(i).Score - Players.ElementAt(0).Score < 0)
                     {
-                        UpdatePlayerPanel(c.Client, WittyAnswer.Lose());
+                        UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Lose());
                     }
 
                     else
@@ -387,7 +392,7 @@ namespace ChoHan
             }
             Players.Clear();
             Server.SendSessions();
-            
+
         }
 
         public void MurderDeadConnection(Player p)
@@ -409,3 +414,5 @@ namespace ChoHan
         }
     }
 }
+
+

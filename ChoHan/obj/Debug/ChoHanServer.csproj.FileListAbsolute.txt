@@ -58,3 +58,13 @@ F:\Projects\Git\C#Project\ChoHan\bin\Debug\ChoHanClient.exe
 F:\Projects\Git\C#Project\ChoHan\bin\Debug\Newtonsoft.Json.dll
 F:\Projects\Git\C#Project\ChoHan\bin\Debug\ChoHanClient.pdb
 F:\Projects\Git\C#Project\ChoHan\bin\Debug\Newtonsoft.Json.xml
+F:\GitHub\C# project\ChoHan\bin\Debug\ChoHan.exe.config
+F:\GitHub\C# project\ChoHan\obj\Debug\ChoHan.exe
+F:\GitHub\C# project\ChoHan\obj\Debug\ChoHan.pdb
+F:\GitHub\C# project\ChoHan\bin\Debug\ChoHan.exe
+F:\GitHub\C# project\ChoHan\bin\Debug\ChoHan.pdb
+F:\GitHub\C# project\ChoHan\bin\Debug\ChoHanClient.exe
+F:\GitHub\C# project\ChoHan\bin\Debug\Newtonsoft.Json.dll
+F:\GitHub\C# project\ChoHan\bin\Debug\ChoHanClient.pdb
+F:\GitHub\C# project\ChoHan\bin\Debug\Newtonsoft.Json.xml
+F:\GitHub\C# project\ChoHan\obj\Debug\ChoHanServer.csprojResolveAssemblyReference.cache

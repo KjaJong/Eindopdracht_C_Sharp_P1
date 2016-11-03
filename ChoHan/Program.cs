@@ -20,23 +20,20 @@ namespace ChoHan
             CreateSessions();
             ConsoleLoop();
 
-            foreach (var t in Server.SessionThreads)
+            foreach (var t in Server.Sessions)
             {
-                t.Interrupt();
-                t.Abort();
-            }
-
-            foreach (var t in Server.ClientThreads)
-            {
-                t.Interrupt();
-                t.Abort();
+                t.Value.Interrupt();
+                t.Value.Abort();
             }
 
             foreach (var c in Server.Handlers)
             {
-                c.Disconnect();
-                c.Client.Client.GetStream().Close();
-                c.Client.Client.Close();
+                c.Value.Interrupt();
+                c.Value.Abort();
+
+                c.Key.Disconnect();
+                c.Key.Client.Client.GetStream().Close();
+                c.Key.Client.Client.Close();
             }
 
             Environment.Exit(1);
@@ -93,7 +90,7 @@ namespace ChoHan
 
             foreach (var s in Server.Sessions)
             {
-                if (!name.Equals(s.SessionName)) continue;
+                if (!name.Equals(s.Key.SessionName)) continue;
                 Console.WriteLine("Name already exists: continue? [y/n]");
                 var answer = Console.ReadLine();
                 switch (answer.ToLower())
@@ -130,8 +127,7 @@ namespace ChoHan
             SessionHandler session = new SessionHandler(name, maxPlayers);
             var thread =  new Thread(session.SessionHandleThread);
             thread.Start();
-            Server.Sessions.Add(session);
-            Server.SessionThreads.Add(thread);
+            Server.Sessions.Add(session, thread);
             Console.WriteLine($"Session has been made: {session.SessionName} {session.Players.Count}/{session.MaxPlayers}");
             Server.SendSessions();
         }
@@ -141,7 +137,7 @@ namespace ChoHan
         {
             foreach (var s in Server.Sessions)
             {
-                Console.WriteLine($"{s.SessionName}: {s.Players.Count}/{s.MaxPlayers}");
+                Console.WriteLine($"{s.Key.SessionName}: {s.Key.Players.Count}/{s.Key.MaxPlayers}");
             }
         }
 
@@ -149,7 +145,7 @@ namespace ChoHan
         {
             foreach (var c in Server.Handlers)
             {
-                Console.WriteLine(c.Client.Naam);
+                Console.WriteLine(c.Key.Client.Naam);
             }
         }
 
@@ -159,9 +155,9 @@ namespace ChoHan
             SessionHandler killSession = null;
             foreach (var s in Server.Sessions)
             {
-                if (!target.Equals(s.SessionName)) continue;
+                if (!target.Equals(s.Key.SessionName)) continue;
                 Console.WriteLine("Killing session muhahaha");
-                killSession = s;
+                killSession = s.Key;
             }
             if (killSession == null)
             {
@@ -177,9 +173,9 @@ namespace ChoHan
             ClientHandler client = null;
             foreach (var s in Server.Handlers)
             {
-                if (target != null && !target.Equals(s.Client.Naam)) continue;
+                if (target != null && !target.Equals(s.Key.Client.Naam)) continue;
                 Console.WriteLine("Killing player muhahaha");
-                client = s;
+                client = s.Key;
             }
             if (client== null)
             {
@@ -197,8 +193,7 @@ namespace ChoHan
 
             thread1.Start();
 
-            Server.Sessions.Add(session1);
-            Server.SessionThreads.Add(thread1);
+            Server.Sessions.Add(session1, thread1);
         }
     }
 }
