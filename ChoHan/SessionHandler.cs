@@ -200,11 +200,10 @@ namespace ChoHan
                 Players.Sort((x, y) => y.Score - x.Score);
                 UpdatePlayerList();
                 roundCount++;
-                
-                Result();
-                _sessionLog.PrintLog();
-                GameEnded();
             }
+            Result();
+            _sessionLog.PrintLog();
+            GameEnded();
         }
 
 
