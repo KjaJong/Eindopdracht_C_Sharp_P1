@@ -86,3 +86,6 @@ F:\Projects\Git\C#Project\ChoHanClient\obj\Debug\ChoHanClient.ClientForms.LogInF
 F:\Projects\Git\C#Project\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
 F:\Projects\Git\C#Project\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
 F:\Projects\Git\C#Project\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache
+F:\GitHub\C# project\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+F:\GitHub\C# project\ChoHanClient\obj\Debug\ChoHanClient.exe
+F:\GitHub\C# project\ChoHanClient\obj\Debug\ChoHanClient.pdb
