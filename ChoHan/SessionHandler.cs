@@ -380,7 +380,6 @@ namespace ChoHan
         {
             MurderPlayers();
             Server.SendSessions();
-
         }
 
         private void SessionSepukku()
@@ -389,6 +388,7 @@ namespace ChoHan
             Server.Sessions[this].Interrupt();
             Server.Sessions[this].Abort();
             Server.Sessions.Remove(this);
+            Server.AddSession();
         }
 
         private void MurderPlayers()
