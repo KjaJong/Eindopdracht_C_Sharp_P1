@@ -7,7 +7,7 @@ namespace ChoHanClient
 {
     public partial class PlayerForm : Form
     {
-        public bool ?Answer { get; set; }
+        public bool? Answer { get; set; }
         public bool ConfirmAnswer { get; set; }
         public string SessionName { get; set; }
 
@@ -30,12 +30,12 @@ namespace ChoHanClient
 
         private void PlayerForm_FromClosing(object sender, FormClosingEventArgs e)
         {
-                LogInForm.Client.Disconnect();
+            LogInForm.Client.Disconnect();
         }
 
         private void EvenButton_Click(object sender, EventArgs e)
         {
-            if(!ConfirmAnswer)
+            if (!ConfirmAnswer)
             {
                 Answer = true;
                 YourChoiceLabel.Text = "You choose: even";
@@ -62,8 +62,8 @@ namespace ChoHanClient
             }
             ConfirmAnswer = true;
         }
-       
-        public void Update(bool rightAnswerPlayerOne, int score )
+
+        public void Update(bool rightAnswerPlayerOne, int score)
         {
             if (this.ScorePlayerOneLabel.InvokeRequired)
             {
@@ -74,7 +74,7 @@ namespace ChoHanClient
             {
 
                 ScorePlayerOneLabel.Text = score.ToString();
-                
+
                 Answer = null;
                 ConfirmAnswer = false;
 
@@ -98,7 +98,7 @@ namespace ChoHanClient
             if (this.CommentLabel.InvokeRequired)
             {
                 SetCommentCallBack d = new SetCommentCallBack(UpdateMessageLabel);
-                this.Invoke(d, new object[] {text});
+                this.Invoke(d, new object[] { text });
             }
             else
             {

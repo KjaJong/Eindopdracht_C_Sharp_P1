@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ChoHan
 {
-    public class WittyCommand
+    public class WittyAnswer
     {
         public static string WrongAnswer()
         {

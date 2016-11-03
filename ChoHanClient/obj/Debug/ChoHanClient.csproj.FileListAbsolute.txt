@@ -74,3 +74,6 @@ F:\Projects\Git\c#project clone\ChoHanClient\obj\Debug\ChoHanClient.csproj.Gener
 F:\GitHub\C#project clone\ChoHanClient\bin\Debug\ChoHanClient.exe.config
 F:\GitHub\C#project clone\ChoHanClient\obj\Debug\ChoHanClient.exe
 F:\GitHub\C#project clone\ChoHanClient\obj\Debug\ChoHanClient.pdb
+F:\Projects\Git\C#Project\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+F:\Projects\Git\C#Project\ChoHanClient\obj\Debug\ChoHanClient.exe
+F:\Projects\Git\C#Project\ChoHanClient\obj\Debug\ChoHanClient.pdb

@@ -89,17 +89,19 @@ namespace ChoHanClient
                         });
                         break;
                     case "recieve/answer":
-                        PlayerForm.Update((bool) message.data.answer, (int) message.data.score);
+                        PlayerForm.Update((bool)message.data.answer, (int)message.data.score);
                         SendAck();
                         break;
                     case "give/answer":
                         bool answer = PlayerForm.Answer != null && (bool)PlayerForm.Answer;
+                        bool checkAnswer = PlayerForm.Answer != null && PlayerForm.ConfirmAnswer;
                         SharedUtil.SendMessage(_client, new
                         {
                             id = "send",
                             data = new
                             {
-                                answer = answer
+                                answer = answer,
+                                check = checkAnswer
                             }
                         });
                         break;
@@ -146,7 +148,7 @@ namespace ChoHanClient
             SharedUtil.SendMessage(_client, new
             {
                 id = "ack",
-                data= new
+                data = new
                 {
                     ack = true
                 }
