@@ -193,24 +193,12 @@ namespace ChoHan
         public void CreateSessions()
         {
             SessionHandler session1 = new SessionHandler("General 1",8);
-            //SessionHandler session2 = new SessionHandler("General 2", 8);
-            //SessionHandler session3 = new SessionHandler("General 3", 8);
-
             Thread thread1 = new Thread(session1.SessionHandleThread);
-            //Thread thread2 = new Thread(session2.SessionHandleThread);
-            //Thread thread3 = new Thread(session3.SessionHandleThread);
 
             thread1.Start();
-            //thread2.Start();
-            //thread3.Start();
 
             Server.Sessions.Add(session1);
-            //Server.Sessions.Add(session2);
-            //Server.Sessions.Add(session3);
-
             Server.SessionThreads.Add(thread1);
-            //Server.SessionThreads.Add(thread2);
-            //Server.SessionThreads.Add(thread3);
         }
     }
 }

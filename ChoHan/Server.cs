@@ -116,5 +116,39 @@ namespace ChoHan
             }
         }
 
+        public static void CheckServers()
+        {
+            if (Sessions.Count == 0)
+            {
+                AddSession();
+                return;
+            }
+
+            bool allSessionsFull = true;
+            foreach (var s in Sessions)
+            {
+                if (s.MaxPlayers != s.Players.Count)
+                {
+                    allSessionsFull = false;
+                }
+            }
+
+            if (allSessionsFull)
+            {
+                AddSession();
+            }
+        }
+
+        public static void AddSession()
+        {
+            SessionHandler session1 = new SessionHandler($"General {Sessions.Count + 1}", 8);
+            Thread thread1 = new Thread(session1.SessionHandleThread);
+
+            thread1.Start();
+
+            Server.Sessions.Add(session1);
+            Server.SessionThreads.Add(thread1);
+        }
+
     }
 }
