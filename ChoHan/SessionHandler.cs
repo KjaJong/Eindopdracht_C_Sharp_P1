@@ -289,6 +289,8 @@ namespace ChoHan
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+
+                client.GetStream().Close();
                 client.Close();
             }
         }
@@ -312,6 +314,7 @@ namespace ChoHan
                 catch (Exception e)
                 {
                     Console.WriteLine(e.StackTrace);
+                    Players.ElementAt(i).Client.GetStream().Close();
                     Players.ElementAt(i).Client.Close();
                 }
             }
@@ -373,7 +376,22 @@ namespace ChoHan
             }
         }
 
-        public void GameEnded()
+        private void GameEnded()
+        {
+            MurderPlayers();
+            Server.SendSessions();
+
+        }
+
+        private void SessionSepukku()
+        {
+            MurderPlayers();
+            Server.Sessions[this].Interrupt();
+            Server.Sessions[this].Abort();
+            Server.Sessions.Remove(this);
+        }
+
+        private void MurderPlayers()
         {
             foreach (var c in Players)
             {
@@ -381,8 +399,6 @@ namespace ChoHan
                 c.Score = 0;
             }
             Players.Clear();
-            Server.SendSessions();
-
         }
 
         public void MurderDeadConnection(Player p)

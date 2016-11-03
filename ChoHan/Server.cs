@@ -143,6 +143,5 @@ namespace ChoHan
 
             Server.Sessions.Add(session, thread);
         }
-
     }
 }
