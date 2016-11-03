@@ -14,6 +14,7 @@ namespace ChoHanClient
         public PlayerForm PlayerForm { get; set; }
         private readonly IPAddress _localIpAddress;
         private readonly TcpClient _client;
+        private Thread _thread;
         public string Name { get; set; }
 
         public Client(string name, LogInForm form)
@@ -56,8 +57,8 @@ namespace ChoHanClient
                         name = Name
                     }
                 });
-                Thread thread = new Thread(StartLoop);
-                thread.Start();
+                _thread = new Thread(StartLoop);
+                _thread.Start();
                 //Console.WriteLine("YAY! Senpai and I connected!");
                 LogInForm.Visible = false;
                 PlayerForm = new PlayerForm();
@@ -171,9 +172,13 @@ namespace ChoHanClient
                 id = "disconnect"
             });
 
+            _thread.Interrupt();
+            _thread.Abort();
+
             _client.GetStream().Close();
             _client.Close();
-            Environment.Exit(0);
+
+            LogInForm.RipAlles();
         }
 
         public void JoinSession(string sessionName)
