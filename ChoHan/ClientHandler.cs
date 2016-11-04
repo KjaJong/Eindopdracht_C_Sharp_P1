@@ -33,8 +33,10 @@ namespace ChoHan
                         if (Server.FindSession(splitText[0])._isInterupted)
                         {
                            SendNotAck();
+                           SendNotAck();
                            continue;
                         }
+                        SendAck();
                         SendAck();
 
                         Server.FindSession(splitText[0]).AddPlayer(Client);

@@ -98,3 +98,15 @@ F:\GitHub\C# project\ChoHanClient\obj\Debug\ChoHanClient.ClientForms.LogInForm.r
 F:\GitHub\C# project\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
 F:\GitHub\C# project\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
 F:\GitHub\C# project\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\bin\Debug\ChoHanClient.exe.config
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\obj\Debug\ChoHanClient.exe
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\obj\Debug\ChoHanClient.pdb
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\bin\Debug\ChoHanClient.exe
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\bin\Debug\ChoHanClient.pdb
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\bin\Debug\Newtonsoft.Json.dll
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\bin\Debug\Newtonsoft.Json.xml
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\obj\Debug\ChoHanClient.csprojResolveAssemblyReference.cache
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\obj\Debug\ChoHanClient.ClientForms.LogInForm.resources
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\obj\Debug\ChoHanClient.PlayerForm.resources
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\obj\Debug\ChoHanClient.Properties.Resources.resources
+D:\Gijs\Documenten\Avans\CSharp\C# eindproject\ChoHanClient\obj\Debug\ChoHanClient.csproj.GenerateResource.Cache

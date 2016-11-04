@@ -197,10 +197,9 @@ namespace ChoHanClient
                     sessionname = sessionName
                 }
             });
-
             dynamic message = SharedUtil.ReadMessage(_client);
-            Console.WriteLine(message);
-            return _isSessionAvailable;
+            Console.WriteLine(_isSessionAvailable);
+            return (bool)message.data.ack;
         }
 
         public void LeaveSession(string session)

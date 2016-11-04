@@ -118,8 +118,8 @@ namespace ChoHanClient
             if (LogInForm.Client.JoinSession(SessionListBox.SelectedItem.ToString()))
             {
                 SessionName = SessionListBox.SelectedItem.ToString();
-                ResetPanel();
                 SwitchBox();
+                ResetPanel();
             }
             else
             {
@@ -186,8 +186,7 @@ namespace ChoHanClient
 
         private void CommentLabel_Click_1(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "In ChoHan a player chooses wheter a roll of a pair of die is odd (Cho) or even (Han). " +
+            MessageBox.Show("odd (Cho) or even (Han). " +
                 "After all players have made their choice, the die are thrown and the result is announced. " +
                 "The awnser must be given within 15 seconds.",
                 "A short explanation.");
