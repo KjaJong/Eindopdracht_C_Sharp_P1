@@ -114,11 +114,17 @@ namespace ChoHanClient
         private void SessionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (SessionListBox.SelectedIndex == -1) return;
-            SessionName = SessionListBox.SelectedItem.ToString();
-            if (SessionName.Equals("Sessions")) return;
-            LogInForm.Client.JoinSession(SessionName);
-            ResetPanel();
-            SwitchBox();
+            if (SessionListBox.SelectedItem.ToString().Equals("Sessions")) return;
+            if (LogInForm.Client.JoinSession(SessionListBox.SelectedItem.ToString()))
+            {
+                SessionName = SessionListBox.SelectedItem.ToString();
+                ResetPanel();
+                SwitchBox();
+            }
+            else
+            {
+                UpdateMessageLabel("Sorry, session intertupted");
+            }
         }
 
         public void FillPlayerBox(List<string> sessions)

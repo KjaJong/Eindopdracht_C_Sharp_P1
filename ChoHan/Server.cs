@@ -55,6 +55,7 @@ namespace ChoHan
                 var thread = new Thread(handler.HandleClientThread);
                 thread.Start();
                 Handlers.Add(handler, thread);
+                CheckSessions();
                 SendSessions();
                 _sessionLog.AddLogEntry("Started a new thread");
             }

@@ -14,6 +14,7 @@ namespace ChoHanClient
         public PlayerForm PlayerForm { get; set; }
         private readonly IPAddress _localIpAddress;
         private readonly TcpClient _client;
+        private bool _isSessionAvailable;
         private Thread _thread;
         public string Name { get; set; }
 
@@ -136,6 +137,9 @@ namespace ChoHanClient
                         _client.GetStream().Close();
                         _client.Close();
                         break;
+                    case "ack":
+                        _isSessionAvailable = (bool)message.data.ack;
+                        break;
                     default:
                         Console.WriteLine("You're not suposse to be here.");
                         break;
@@ -183,7 +187,7 @@ namespace ChoHanClient
             LogInForm.RipAlles();
         }
 
-        public void JoinSession(string sessionName)
+        public bool JoinSession(string sessionName)
         {
             SharedUtil.SendMessage(_client, new
             {
@@ -193,6 +197,10 @@ namespace ChoHanClient
                     sessionname = sessionName
                 }
             });
+
+            dynamic message = SharedUtil.ReadMessage(_client);
+            Console.WriteLine(message);
+            return _isSessionAvailable;
         }
 
         public void LeaveSession(string session)

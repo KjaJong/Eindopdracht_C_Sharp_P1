@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using SharedUtilities;
 
 namespace ChoHan
@@ -29,8 +30,16 @@ namespace ChoHan
                     case "session/join":
                         string text = (string) message.data.sessionname;
                         string[] splitText = text.Split(':');
+                        if (Server.FindSession(splitText[0])._isInterupted)
+                        {
+                           SendNotAck();
+                           continue;
+                        }
+                        SendAck();
+
                         Server.FindSession(splitText[0]).AddPlayer(Client);
                         Client.IsSession = true;
+
                         break;
                     case "session/leave":
                         Server.FindSession((string)message.data.sessionname).MurderDeadConnection(Client);
