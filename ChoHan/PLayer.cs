@@ -7,6 +7,7 @@ namespace ChoHan
         public string Naam { get; set; }
         public int Score { get; set; }
         public bool IsSession { get; set; }
+        public bool IsRipped { get; set; }
 
         public Player(string naam, TcpClient client, int score)
         {

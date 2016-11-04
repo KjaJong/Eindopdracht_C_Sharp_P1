@@ -51,7 +51,7 @@ namespace ChoHan
                 try
                 {
                     Players.Add(player);
-                    UpdatePlayerPanel(player.Client, "Welcome to Sho Han");
+                    UpdatePlayerPanel(player, "Welcome to Cho Han");
                     Console.WriteLine($"Player {player.Naam} has joined the game: {SessionName}");
                     Server.SendSessions();
                     _sessionLog.AddLogEntry($"Added a player: {player.Naam}.");
@@ -66,7 +66,7 @@ namespace ChoHan
             {
                 try
                 {
-                    UpdatePlayerPanel(player.Client, "To many players or the game has already started");
+                    UpdatePlayerPanel(player, "To many players or the game has already started");
                     Console.WriteLine("To many players or the game has already started.");
                     _sessionLog.AddLogEntry($"Failed to add player: {player.Naam}.");
                 }
@@ -147,7 +147,7 @@ namespace ChoHan
                         _sessionLog.AddLogEntry(Players.ElementAt(i).Naam, "Gave the server an awnser.");
                         if (!(bool) answer.data.check)
                         {
-                            UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Idle());
+                            UpdatePlayerPanel(Players.ElementAt(i), WittyAnswer.Idle());
                             UpdatePlayers(Players.ElementAt(i), false);
                             continue;
                         }
@@ -158,12 +158,12 @@ namespace ChoHan
                             {
                                 Players.ElementAt(i).Score++;
                                 UpdatePlayers(Players.ElementAt(i), true);
-                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.GoodAnswer());
+                                UpdatePlayerPanel(Players.ElementAt(i), WittyAnswer.GoodAnswer());
                             }
                             else
                             {
                                 UpdatePlayers(Players.ElementAt(i), false);
-                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.WrongAnswer());
+                                UpdatePlayerPanel(Players.ElementAt(i), WittyAnswer.WrongAnswer());
                             }
                             _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
                         }
@@ -173,12 +173,12 @@ namespace ChoHan
                             {
                                 Players.ElementAt(i).Score++;
                                 UpdatePlayers(Players.ElementAt(i), true);
-                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.GoodAnswer());
+                                UpdatePlayerPanel(Players.ElementAt(i), WittyAnswer.GoodAnswer());
                             }
                             else
                             {
                                 UpdatePlayers(Players.ElementAt(i), false);
-                                UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.WrongAnswer());
+                                UpdatePlayerPanel(Players.ElementAt(i), WittyAnswer.WrongAnswer());
                             }
                             _sessionLog.AddLogEntry($"{Players.ElementAt(i).Naam}'s awnser has been proccesed.");
                         }
@@ -216,19 +216,19 @@ namespace ChoHan
 
                     if (Players.ElementAt(i).Score - Players.ElementAt(0).Score == 0)
                     {
-                        UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Tied());
+                        UpdatePlayerPanel(Players.ElementAt(i), WittyAnswer.Tied());
                         playerOneWin = false;
                     }
 
                     else if (Players.ElementAt(i).Score - Players.ElementAt(0).Score < 0)
                     {
-                        UpdatePlayerPanel(Players.ElementAt(i).Client, WittyAnswer.Lose());
+                        UpdatePlayerPanel(Players.ElementAt(i), WittyAnswer.Lose());
                     }
 
                     else
                     {
                         Console.WriteLine("ffs are you here?!");
-                        UpdatePlayerPanel(Players.ElementAt(i).Client, "something went wrong here");
+                        UpdatePlayerPanel(Players.ElementAt(i), "something went wrong here");
                     }
                 }
                 catch (Exception e)
@@ -244,39 +244,22 @@ namespace ChoHan
             Console.WriteLine("Is there a winner?");
             try
             {
-                UpdatePlayerPanel(Players.ElementAt(0).Client, playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
+                UpdatePlayerPanel(Players.ElementAt(0), playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
-                UpdatePlayerPanel(Players.ElementAt(1).Client, playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
+                UpdatePlayerPanel(Players.ElementAt(1), playerOneWin ? WittyAnswer.Win() : WittyAnswer.Tied());
             }
 
             _sessionLog.AddLogEntry("Crowned one of the suckers as a winner.");
-
-            for (int i = 0; i < Players.Count; i++)
-            {
-                try
-                {
-                    _sessionLog.AddLogEntry($"Murdered {Players.ElementAt(i).Naam}.");
-                    SharedUtil.SendMessage(Players.ElementAt(i).Client, new
-                    {
-                        id = "session/leave"
-                    });
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.StackTrace);
-                    MurderDeadConnection(Players.ElementAt(i));
-                }
-            }
         }
 
-        public void UpdatePlayerPanel(TcpClient client, string text)
+        public void UpdatePlayerPanel(Player player, string text)
         {
             try
             {
-                SharedUtil.SendMessage(client, new
+                SharedUtil.SendMessage(player.Client, new
                 {
                     id = "update/panel",
                     data = new
@@ -284,14 +267,13 @@ namespace ChoHan
                         text = text
                     }
                 });
-                SharedUtil.ReadMessage(client);
+                SharedUtil.ReadMessage(player.Client);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
 
-                client.GetStream().Close();
-                client.Close();
+                MurderDeadConnection(player);
             }
         }
 
@@ -314,8 +296,7 @@ namespace ChoHan
                 catch (Exception e)
                 {
                     Console.WriteLine(e.StackTrace);
-                    Players.ElementAt(i).Client.GetStream().Close();
-                    Players.ElementAt(i).Client.Close();
+                    MurderDeadConnection(Players.ElementAt(1));
                 }
             }
         }
@@ -378,17 +359,28 @@ namespace ChoHan
 
         private void GameEnded()
         {
+            RemovePlayersFromSession();
             MurderPlayers();
-            Server.SendSessions();
         }
 
-        private void SessionSepukku()
+        private void RemovePlayersFromSession()
         {
-            MurderPlayers();
-            Server.Sessions[this].Interrupt();
-            Server.Sessions[this].Abort();
-            Server.Sessions.Remove(this);
-            Server.AddSession();
+            for (int i = 0; i < Players.Count; i++)
+            {
+                try
+                {
+                    _sessionLog.AddLogEntry($"Murdered {Players.ElementAt(i).Naam}.");
+                    SharedUtil.SendMessage(Players.ElementAt(i).Client, new
+                    {
+                        id = "session/leave"
+                    });
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                    MurderDeadConnection(Players.ElementAt(i));
+                }
+            }
         }
 
         private void MurderPlayers()
@@ -401,10 +393,13 @@ namespace ChoHan
             Players.Clear();
         }
 
+
         public void MurderDeadConnection(Player p)
         {
             _sessionLog.AddLogEntry($"Kicked {p.Naam} from the game.");
+            p.IsRipped = true;
             Players.RemoveAll(i => i.Equals(p));
+
 
             if (Players.Count < 2)
             {
@@ -412,10 +407,11 @@ namespace ChoHan
                 UpdateAllPanels("Game has stopped and starts again");
 
                 _sessionLog.AddLogEntry("Not enough players, ending a game.");
-
-                Result();
+                
+                UpdatePlayerPanel(Players.ElementAt(0), "Idiot has left the game");
                 _sessionLog.PrintLog();
                 GameEnded();
+                Server.DeleteSession(this);
             }
         }
     }

@@ -111,10 +111,25 @@ namespace ChoHan
             }
         }
 
-        public static void CheckServers()
+        public static void SendSessionsToClient(TcpClient client)
         {
+            SharedUtil.SendMessage(client, new
+            {
+                id = "send/session",
+                data = new
+                {
+                    sessions = Sessions.Keys.Select(s => s.ToString()).ToArray()
+                }
+            });
+        }
+
+        public static void CheckSessions()
+        {
+            Console.WriteLine("Error1");
+            Console.WriteLine(Sessions.Count);
             if (Sessions.Count == 0)
             {
+                Console.WriteLine("add session");
                 AddSession();
                 return;
             }
@@ -142,6 +157,15 @@ namespace ChoHan
             thread.Start();
 
             Server.Sessions.Add(session, thread);
+            SendSessions();
+        }
+
+        public static void DeleteSession(SessionHandler session)
+        {
+            Server.AddSession();
+            Server.Sessions[session].Interrupt();
+            Server.Sessions[session].Abort();
+            Server.Sessions.Remove(session);
         }
     }
 }

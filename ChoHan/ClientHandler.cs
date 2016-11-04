@@ -18,6 +18,10 @@ namespace ChoHan
         {
             while (Client.Client.Connected)
             {
+                if (Client.IsRipped)
+                {
+                    RipDisconnect();
+                }
                 if (Client.IsSession) continue;
                 dynamic message = SharedUtil.ReadMessage(Client.Client);
                 switch ((string) message.id)
@@ -31,6 +35,9 @@ namespace ChoHan
                     case "session/leave":
                         Server.FindSession((string)message.data.sessionname).MurderDeadConnection(Client);
                         break;
+                    case "refresh/sessions":
+                        Server.SendSessionsToClient(Client.Client);
+                        break;
                     case "disconnect":
                         SharedUtil.SendMessage(Client.Client, new
                         {
@@ -39,10 +46,8 @@ namespace ChoHan
 
                         Console.WriteLine($"player: {Client.Naam} has disconnected");
                         _sessionLog.AddLogEntry(Client.Naam, " Disconnected.");
-                        Client.Client.GetStream().Close();
-                        Client.Client.Close();
-   
-                        Server.Handlers.Remove(this);
+
+                        RipDisconnect();
                         break;
                     default:
                         Console.WriteLine(message.id);
@@ -51,12 +56,23 @@ namespace ChoHan
             }
         }
 
+
         public void Disconnect()
         {
             SharedUtil.SendMessage(Client.Client, new
             {
-                id = "disconnect"
+                id = "diconnect"
             });
+
+            RipDisconnect();
+        }
+
+        public void RipDisconnect()
+        {
+            Client.Client.GetStream().Close();
+            Client.Client.Close();
+
+            Server.Handlers.Remove(this);
         }
 
         public void SendAck()
