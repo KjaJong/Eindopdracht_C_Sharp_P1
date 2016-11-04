@@ -10,7 +10,8 @@ namespace ChoHan
 {
     public class SessionHandler
     {
-        public readonly string SessionName;
+        public bool _isInterupted { get; set; }
+        public string SessionName { get; set; }
         public readonly int MaxPlayers;
         public readonly List<Player> Players;
         private readonly Timer _awnserTimer = new Timer(15000);
@@ -361,6 +362,10 @@ namespace ChoHan
         {
             RemovePlayersFromSession();
             MurderPlayers();
+            if (_gameGoesOn)
+            {
+                Server.SendSessions();
+            }
         }
 
         private void RemovePlayersFromSession()
@@ -404,6 +409,7 @@ namespace ChoHan
             if (Players.Count < 2)
             {
                 _gameGoesOn = false;
+                _isInterupted = true;
                 UpdateAllPanels("Game has stopped and starts again");
 
                 _sessionLog.AddLogEntry("Not enough players, ending a game.");

@@ -36,6 +36,7 @@ namespace ChoHan
                         Server.FindSession((string)message.data.sessionname).MurderDeadConnection(Client);
                         break;
                     case "refresh/sessions":
+                        Server.CheckRemoveableSessions();
                         Server.SendSessionsToClient(Client.Client);
                         break;
                     case "disconnect":
@@ -48,6 +49,7 @@ namespace ChoHan
                         _sessionLog.AddLogEntry(Client.Naam, " Disconnected.");
 
                         RipDisconnect();
+                        Server.Handlers.Remove(this);
                         break;
                     default:
                         Console.WriteLine(message.id);
@@ -71,8 +73,6 @@ namespace ChoHan
         {
             Client.Client.GetStream().Close();
             Client.Client.Close();
-
-            Server.Handlers.Remove(this);
         }
 
         public void SendAck()

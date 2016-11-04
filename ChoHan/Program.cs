@@ -28,12 +28,11 @@ namespace ChoHan
 
             foreach (var c in Server.Handlers)
             {
+                c.Key.Disconnect();
+
                 c.Value.Interrupt();
                 c.Value.Abort();
 
-                c.Key.Disconnect();
-                c.Key.Client.Client.GetStream().Close();
-                c.Key.Client.Client.Close();
             }
 
             Environment.Exit(1);

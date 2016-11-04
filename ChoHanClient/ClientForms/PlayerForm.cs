@@ -130,8 +130,7 @@ namespace ChoHanClient
             }
             else
             {
-                PlayerListBox.Items.Clear();
-                PlayerListBox.Items.Add("Player");
+                ResetPlayerListBox();
                 foreach (var s in sessions)
                 {
                     PlayerListBox.Items.Add(s);
@@ -157,6 +156,12 @@ namespace ChoHanClient
             }
         }
 
+        public void ResetPlayerListBox()
+        {
+            PlayerListBox.Items.Clear();
+            PlayerListBox.Items.Add("Player");
+        }
+
         public void SwitchBox()
         {
             if (SessionListBox.InvokeRequired)
@@ -168,6 +173,8 @@ namespace ChoHanClient
             {
                 SessionListBox.Visible = !SessionListBox.Visible;
                 PlayerListBox.Visible = !PlayerListBox.Visible;
+                RefreshButton.Visible = !RefreshButton.Visible;
+                ResetPlayerListBox();
             }
         }
 
@@ -185,6 +192,11 @@ namespace ChoHanClient
             WrongPlayerOneLabel.Visible = false;
             RightPlayerOneLabel.Visible = false;
             ScorePlayerOneLabel.Text = "0";
+        }
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            LogInForm.Client.RefreshSessions();
         }
     }
 }

@@ -125,8 +125,6 @@ namespace ChoHan
 
         public static void CheckSessions()
         {
-            Console.WriteLine("Error1");
-            Console.WriteLine(Sessions.Count);
             if (Sessions.Count == 0)
             {
                 Console.WriteLine("add session");
@@ -149,6 +147,34 @@ namespace ChoHan
             }
         }
 
+        public static void CheckRemoveableSessions()
+        {
+            SessionHandler removeSession = null;
+            foreach (var s in Sessions)
+            {
+                if (s.Key._isInterupted)
+                {
+                    removeSession = s.Key;
+                }
+            }
+
+            if (removeSession != null)
+            {
+                Sessions.Remove(removeSession);
+                CheckRemoveableSessions();
+            }
+            RenameSessions();
+        }
+
+        public static void RenameSessions()
+        {
+            int i = 1;
+            foreach (var s in Sessions)
+            {
+                s.Key.SessionName = $"General {i}";
+            }
+        }
+
         public static void AddSession()
         {
             SessionHandler session = new SessionHandler($"General {Sessions.Count + 1}", 8);
@@ -165,7 +191,6 @@ namespace ChoHan
             Server.AddSession();
             Server.Sessions[session].Interrupt();
             Server.Sessions[session].Abort();
-            Server.Sessions.Remove(session);
         }
     }
 }

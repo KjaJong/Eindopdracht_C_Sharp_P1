@@ -207,6 +207,14 @@ namespace ChoHanClient
             });
         }
 
+        public void RefreshSessions()
+        {
+            SharedUtil.SendMessage(_client,new
+            {
+              id = "refresh/sessions"
+            });
+        }
+
         public static IPAddress GetLocalIpAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());

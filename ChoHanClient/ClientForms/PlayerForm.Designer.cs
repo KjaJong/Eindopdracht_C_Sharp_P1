@@ -39,11 +39,12 @@
             this.YourChoiceLabel = new System.Windows.Forms.Label();
             this.SessionListBox = new System.Windows.Forms.ListBox();
             this.PlayerListBox = new System.Windows.Forms.ListBox();
+            this.RefreshButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ConfirmButton
             // 
-            this.ConfirmButton.Location = new System.Drawing.Point(56, 110);
+            this.ConfirmButton.Location = new System.Drawing.Point(12, 110);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(74, 20);
             this.ConfirmButton.TabIndex = 24;
@@ -146,11 +147,22 @@
             this.PlayerListBox.TabIndex = 28;
             this.PlayerListBox.Visible = false;
             // 
+            // RefreshButton
+            // 
+            this.RefreshButton.Location = new System.Drawing.Point(92, 110);
+            this.RefreshButton.Name = "RefreshButton";
+            this.RefreshButton.Size = new System.Drawing.Size(74, 20);
+            this.RefreshButton.TabIndex = 29;
+            this.RefreshButton.Text = "Refresh";
+            this.RefreshButton.UseVisualStyleBackColor = true;
+            this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
+            // 
             // PlayerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(326, 143);
+            this.Controls.Add(this.RefreshButton);
             this.Controls.Add(this.PlayerListBox);
             this.Controls.Add(this.SessionListBox);
             this.Controls.Add(this.YourChoiceLabel);
@@ -180,5 +192,6 @@
         private System.Windows.Forms.Label YourChoiceLabel;
         private System.Windows.Forms.ListBox SessionListBox;
         private System.Windows.Forms.ListBox PlayerListBox;
+        private System.Windows.Forms.Button RefreshButton;
     }
 }
